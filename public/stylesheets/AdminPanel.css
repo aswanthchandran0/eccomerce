@@ -1,0 +1,43 @@
+
+body{
+    padding: 0px;
+    margin: 0px;
+}
+.container-fluid{
+    height: 100vh;
+    background-color: antiquewhite;
+}
+
+.Navbar{
+     background-color: rgba(116, 102, 102, 1);
+    height: 100vh;
+}
+.Navbar .col{
+    width:300px;
+}
+
+.dashboard{
+    background-color:rgba(209, 209, 209, 1);
+    height: 22vh;
+}
+
+.content{
+    background-color: rgba(0, 0, 0, 1);
+    margin-top: 159px;
+    height: 73vh;
+    border-radius: 10px;
+
+}
+
+
+/* ------- Navbar -----*/
+
+.svg-image{
+    margin-top: 30px;
+    fill: rgba(255, 255, 255, 1);
+
+}
+.logo{
+    margin-top: 30px;
+    color:rgba(255, 255, 255, 1) ;
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Lexxive</title>
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Molla - Bootstrap eCommerce Template">
+    <meta name="author" content="p-themes">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://localhost:3000/assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://localhost:3000/assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://localhost:3000/assets/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="https://localhost:3000/assets/images/icons/site.html">
+    <link rel="mask-icon" href="https://localhost:3000/assets/images/icons/safari-pinned-tab.svg" color="#666666">
+    <link rel="shortcut icon" href="https://localhost:3000/assets/images/icons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Molla">
+    <meta name="application-name" content="Molla">
+    <meta name="msapplication-TileColor" content="#cc9966">
+    <meta name="msapplication-config" content="https://localhost:3000/assets/images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="https://localhost:3000/assets/css/bootstrap.min.css">
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="https://localhost:3000/assets/css/style.css">
+    
+</head>
+<body>
+
+
+    <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('https://localhost:3000/assets/images/backgrounds/login-bg.jpg')">
+        <div class="container">
+            <div class="form-box">
+                <div class="form-tab">
+                    
+                    <div class="tab-content">
+                        
+                        <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
+                            <form action="/otp/otpValidation" method="post" >
+                                <div class="form-group">
+                                    
+                                    <label for="register-email-2" style="font-size: larger;">OTP VERIFICATION</label>
+                                    <input type="text" class="form-control" id="otp" name="otp">
+                                    <% if (otpError) { %>
+                                        <p style="color: tomato;"><%= otpError %></p>
+                                      <% } %>
+                                      
+                                </div><!-- End .form-group -->               
+<div class="form-footer">
+<button type="submit" class="btn btn-outline-primary-2">
+    <span>SIGN UP</span>
+    <i class="icon-long-arrow-right"></i>
+</button>
+<form action="/otp/resend-otp" method="post">
+   <button  type="submit" style="  color: rgba(165, 153, 44, 0.87); background:none;border: none; margin-left: 80%; ">Resend otp</button>
+</form>
+   
+</div><!-- End .form-footer -->
+</form>
+                          
+                                    </div><!-- End .col-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .form-choice -->
+                        </div><!-- .End .tab-pane -->
+                    </div><!-- End .tab-content -->
+                </div><!-- End .form-tab -->
+            </div><!-- End .form-box -->
+        </div><!-- End .container -->
+    </div><!-- End .login-page section-bg -->
+</main><!-- End .main -->
+
+
+
+
+
+
+
+
+
+
+
+    
+    <!-- Plugins JS File -->
+    <script src="https://localhost:3000/assets/js/jquery.min.js"></script>
+    <script src="https://localhost:3000/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://localhost:3000/assets/js/jquery.hoverIntent.min.js"></script>
+    <script src="https://localhost:3000/assets/js/jquery.waypoints.min.js"></script>
+    <script src="https://localhost:3000/assets/js/superfish.min.js"></script>
+    <script src="https://localhost:3000/assets/js/owl.carousel.min.js"></script>
+    <!-- Main JS File -->
+    <script src="https://localhost:3000/assets/js/main.js"></script>
+
+</body>
+</html>

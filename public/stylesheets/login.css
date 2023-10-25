@@ -1,0 +1,103 @@
+
+body{
+    padding: 0px;
+    margin: 0px;
+}
+
+section{
+    height: 100vh;
+    background-color:rgba(147, 145, 145, 1);
+
+    width: 100%;
+  
+  display: flex;
+ justify-content:center ;
+ align-items: center;
+}
+
+section svg {
+    fill: rgba(255, 255, 255, 1);
+}
+
+section .svg-container {
+    width: 30%;
+    height: 30%px;
+position: absolute;
+top: 13%;
+left: 33%;
+}
+
+
+@font-face {
+    font-family: 'Noticia Text'; /* Choose a name for your font family */
+    src: url('fonts/your-font-file.woff2') format('woff2'), /* Define paths to your font files */
+         url('fonts/your-font-file.woff') format('woff');
+    font-weight: normal; /* or font-weight: bold; if it's a bold font */
+    font-style: normal;
+}
+
+section .element{
+    font-family: 'Noticia Text' serif;
+    font-size: 64px;
+    font-weight: normal;
+    line-height: 1.2;
+    color: rgba(255, 255, 255, 1);
+    padding-top: 33%;
+    margin-left: -3%;
+}
+
+
+@media (max-width: 768px) {
+    .svg-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .col-6 {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+section .formfield{
+    background-color: rgba(217, 217, 217, 1);
+    width: 53%;
+    height:50px;
+    margin-top: 25px;
+    margin-left: 54%;
+    border-radius: 10px;
+}
+
+section .formfield label {
+    margin-top: 25px;
+ color: rgba(255, 255, 255, 1);
+ font-size: small;
+ font-family: Arial, Helvetica, sans-serif;
+}
+section .formfield label a {
+    color: rgba(255, 255, 255, 1);
+}
+
+.sign-in{
+display: none;
+margin-top: -40px;
+}
+
+.sign-in .formfield{
+    width: 60%;
+    height:50px;
+}
+
+.sign-in label{
+    margin-top: 10px;
+    margin-left: 240px;
+    font-size: smaller;
+    color: rgba(255, 255, 255, 1);
+}
+
+.sign-in label a {
+
+    color: rgba(255, 255, 255, 1);
+}
+
+
