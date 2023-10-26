@@ -10,4 +10,5 @@ router.get('/',checkSession, (req, res, next)=> {
 });
 
 router.get('/logout',checkSession, controller.AdminPanel.logout)
+
 module.exports = router;

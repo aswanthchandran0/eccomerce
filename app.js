@@ -28,6 +28,7 @@ var userDetailsRouter = require('./routes/userDetails');
 var productAddRouter = require('./routes/productAdd')
 var adminLoginRouter = require('./routes/adminLogin')
 var categoryRouter = require('./routes/catagory')
+var addCatagoryRouter = require('./routes/addCatagory')
 var app = express();
  
 // view engine setup
@@ -67,7 +68,7 @@ app.use(cors({
       scriptSrc: ["'self'", "'unsafe-inline'", "ajax.example.com", "localhost:3000", "code.jquery.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "localhost:3000", "stackpath.bootstrapcdn.com"],
       // ... other directives
-  }
+  } 
 }));
 
 */
@@ -78,7 +79,7 @@ app.use(session({
   saveUninitialized: true
 }))
 
-
+ 
 app.use('/',checkUserStatus, indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
@@ -87,7 +88,8 @@ app.use('/otp',otpRouter)
 app.use('/userDetails',checkSession,userDetailsRouter)
 app.use('/productAdd',checkSession,productAddRouter)
 app.use('/adminLogin',   adminLoginRouter)
-app.use('/catagory', categoryRouter)
+app.use('/catagory',checkSession, categoryRouter)
+app.use('/addCatagory',checkSession, addCatagoryRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
