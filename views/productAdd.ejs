@@ -41,7 +41,7 @@
         
              <input  type="file" class="form-control"  placeholder="Upload Image" name="images" class="file-upload-default" multiple onchange="updateImageList(this)">
               <span class="input-group-append">
-                <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                
               </span>
             </div> 
           </div>
@@ -75,16 +75,35 @@
       }
       }
 
-      const productNameValue = document.getElementById('exampleInputName1').value;
-const productPriceValue = document.getElementById('exampleInputEmail3').value;
-const productDiscountValue = document.getElementById('exampleInputPassword4').value;
-// ... other form fields ...
-
-const formData = new FormData();
-formData.append('ProductName', productNameValue);
-formData.append('ProductPrice', productPriceValue);
-formData.append('ProductDiscount', productDiscountValue);
+     
 // ... append other form fields to formData ...
+function handleFileSelect(event) {
+  const files = event.target.files;
+  for (let i = 0; i < files.length; i++) {
+    formData.append('images', files[i]);
+  }
+}
+
+const fileInput = document.querySelector('input[name="images"]');
+fileInput.addEventListener('change', handleFileSelect);
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  // Perform form submission with fetch or other AJAX methods
+  try {
+    const response = await fetch('/productAdd/addProduct', {
+      method: 'POST',
+      body: formData,
+    });
+
+    // Handle response as needed
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+
 
     </script>
  

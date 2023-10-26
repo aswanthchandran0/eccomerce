@@ -1,9 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const controller = require('../controller/indexControler')
 const {checkUserStatus} = require('../controller/middleware')
-/* GET home page. */
-router.get('/',checkUserStatus, function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
 
+router.get('/', checkUserStatus, controller.homePage.showProducts);
 module.exports = router; 

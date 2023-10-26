@@ -17,7 +17,7 @@ const productController = {
                 Catagory:Catagory
                })
                await newProduct.save()
-            res.status(201).json({ message: 'Product added successfully!' });
+           res.redirect('/productDetails')
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Internal Server Error' });
