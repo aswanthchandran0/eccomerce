@@ -39,28 +39,27 @@
                                     <th> # </th>
                                     <th> Catagory </th>
                                     <th></th>
-                                    <th></th>
+                                 
                                     <th><a href="/addCatagory"
-                                        style="color:rgba(107, 235, 164, 1); background: none; border: none;">Add</a></th>
+                                        style="color:rgba(107, 235, 164, 1); background: none; border: none; margin-left: 10px;">Add</a></th>
                                 </tr>
                             </thead>
                             <tbody id="#list">
+                                <% Catagories.forEach((category, index) => { %>
                                 <tr class="user-row">
-                                    <td id="displayedIndex"> </td>
+                                    <td id="displayedIndex"><%= index + 1 %></td>
+                                    <td id="name"><%= category.name %> </td>
                                     <td>
                                 
-                                    <td><a href=""
-                                            style="color:rgba(107, 235, 164, 1); background: none; border: none;">Edit</a>
-                                    </td>
                                     <td>
-                                        <form action="" method="POST" style="display: inline;">
+                                        <form action="/catagory/delete/<%= category._id %>" method="POST" style="display: inline;">
                                             <button type="submit"
                                                 style="color: rgba(245, 37, 37, 1); background: none; border: none;">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
-
-
+                              
+                                <% }); %>
                             </tbody>
                         </table>
                     </div>

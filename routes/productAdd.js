@@ -5,8 +5,14 @@ const multer = require('multer')
 const path = require('path');
 const productController = require('../controller/productController');
 
-router.get('/',(req,res)=>{
- res.render('productAdd',{title:'productAdd'})
+const catagoryModel = require('../models/catagoryModel')
+
+
+router.get('/', async (req,res)=>{
+    const Catagories = await catagoryModel.find({}) 
+
+    console.log(Catagories);
+ res.render('productAdd',{Catagories})
 })
 
 //router.post('/addProduct', productController.addproduct)

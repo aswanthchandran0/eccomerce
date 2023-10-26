@@ -1,9 +1,11 @@
 
 const ProductDetails = require('../models/productModel');
 
+
 const productController = {
     addproduct: async (req, res) => {
         try {
+            
             const { ProductName, ProductPrice, ProductDiscount, Catagory, ProductDiscription } = req.body;
                const images = req.files.map(file => file.path);
                const newProduct = new ProductDetails({
@@ -11,7 +13,8 @@ const productController = {
                 ProductName:ProductName,
                 ProductDiscription:ProductDiscription,
                 ProductPrice:ProductPrice,
-                ProductDiscount:ProductDiscount
+                ProductDiscount:ProductDiscount,
+                Catagory:Catagory
                })
                await newProduct.save()
             res.status(201).json({ message: 'Product added successfully!' });

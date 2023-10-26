@@ -29,6 +29,7 @@ var productAddRouter = require('./routes/productAdd')
 var adminLoginRouter = require('./routes/adminLogin')
 var categoryRouter = require('./routes/catagory')
 var addCatagoryRouter = require('./routes/addCatagory')
+var productDetailsRouter = require('./routes/productDetails')
 var app = express();
  
 // view engine setup
@@ -90,6 +91,7 @@ app.use('/productAdd',checkSession,productAddRouter)
 app.use('/adminLogin',   adminLoginRouter)
 app.use('/catagory',checkSession, categoryRouter)
 app.use('/addCatagory',checkSession, addCatagoryRouter)
+app.use('/productDetails', productDetailsRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

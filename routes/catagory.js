@@ -1,12 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const {checkUserStatus} = require('../controller/middleware')
+const controller = require('../controller/catagoryController')
 
-
-router.get('/',checkUserStatus, function(req, res, next) {
-  res.render('catagory', { title: 'Express' });
-});
-
-
+router.get('/',controller.catagoryData.getAllCatagory)
+router.post('/delete/:id',controller.catagoryData.deleteCatagory)
 
 module.exports = router; 
