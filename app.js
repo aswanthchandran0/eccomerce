@@ -30,6 +30,7 @@ var adminLoginRouter = require('./routes/adminLogin')
 var categoryRouter = require('./routes/catagory')
 var addCatagoryRouter = require('./routes/addCatagory')
 var productDetailsRouter = require('./routes/productDetails')
+var productListRouter = require('./routes/productList')
 var app = express();
  
 // view engine setup
@@ -43,6 +44,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static('uploads'));
+
 
 //app.use(upload.single('productImage'));
 //app.use(express.static('public'));
@@ -92,6 +95,7 @@ app.use('/adminLogin',   adminLoginRouter)
 app.use('/catagory',checkSession, categoryRouter)
 app.use('/addCatagory',checkSession, addCatagoryRouter)
 app.use('/productDetails', productDetailsRouter)
+app.use('/productList', productListRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

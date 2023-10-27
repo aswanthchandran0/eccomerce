@@ -1036,9 +1036,9 @@
                                     <div class="product product-2">
                                         <figure class="product-media">
                                             <a href="product.html">
-                                                <img src="https://localhost:3000/uploads/images-1698346056331-568100633.webp " alt="Product image" class="product-image">
+                                                <img src="<%= product.images[0] %>" alt="Product image" class="product-image">
 
-                                                <img src="/uploads/<%= product.images[0] %>" alt="Product image" class="product-image-hover">
+                                                <img src="<%= product.images[1] %>" alt="Product image" class="product-image-hover">
                                             </a>
 
                                             <div class="product-action-vertical">
@@ -1370,7 +1370,7 @@
                 </div><!-- End .tab-content -->
 
                 <div class="more-container text-center mt-1 mb-3">
-                    <a href="#" class="btn btn-outline-primary-2 btn-round btn-more">Load more</a>
+                    <a href="/productList" class="btn btn-outline-primary-2 btn-round btn-more">Load more</a>
                 </div><!-- End .more-container -->
             </div><!-- End .container -->
                 
