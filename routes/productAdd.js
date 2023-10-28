@@ -4,15 +4,17 @@ const router = express.Router();
 const multer = require('multer')
 const path = require('path');
 const productController = require('../controller/productController');
-
+const productModel = require('../models/productModel')
 const catagoryModel = require('../models/catagoryModel')
 
 
 router.get('/', async (req,res)=>{
+    const ProductId = req.query.id
+    
     const Catagories = await catagoryModel.find({}) 
-
+  const product = await productModel.findById(ProductId)
     console.log(Catagories);
- res.render('productAdd',{Catagories})
+ res.render('productAdd',{Catagories,product})
 })
 
 //router.post('/addProduct', productController.addproduct)
@@ -32,5 +34,6 @@ const upload = multer({storage:storage})
 
 
 router.post('/addProduct', upload.array('images', 4), productController.addproduct);  
+router.delete('/deleteImage', productController.deleteImage);
 
 module.exports = router;

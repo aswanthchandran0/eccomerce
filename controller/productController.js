@@ -1,6 +1,6 @@
 
 const ProductDetails = require('../models/productModel');
-
+ 
 
 const productController = {
     addproduct: async (req, res) => {
@@ -14,7 +14,7 @@ const productController = {
                 ProductDiscription:ProductDiscription,
                 ProductPrice:ProductPrice,
                 ProductDiscount:ProductDiscount,
-                Catagory:Catagory
+                Catagory:Catagory  
                })
                await newProduct.save()
            res.redirect('/productDetails')
@@ -22,7 +22,19 @@ const productController = {
             console.error(error);
             res.status(500).json({ error: 'Internal Server Error' });
         }
+    },
+    deleteImage: async (req, res) => {
+        const { fileName } = req.query;
+
+        try {
+            await fs.unlink(`/uploads${fileName}`);
+            res.status(200).json({ message: 'Image deleted successfully' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
+
 }
 
 

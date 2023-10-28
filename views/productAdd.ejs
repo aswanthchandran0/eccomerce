@@ -12,15 +12,15 @@
         <form class="forms-sample" action="/productAdd/addProduct" method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label for="exampleInputName1"> Product Name</label>
-            <input type="text" class="form-control" id="exampleInputName1" name="ProductName" placeholder="Product Name">
+            <input type="text" class="form-control" id="exampleInputName1" name="ProductName"  value="<%= product ? product.ProductName : '' %>" placeholder="Product Name">
           </div>
           <div class="form-group">
             <label for="exampleInputEmail3">Product Price</label>
-            <input type="number" class="form-control" id="exampleInputEmail3" name="ProductPrice" placeholder="$:0.00">
+            <input type="number" class="form-control" id="exampleInputEmail3"  value="<%= product ? product.ProductPrice : '' %>" name="ProductPrice" placeholder="$:0.00">
           </div>
           <div class="form-group">
             <label for="exampleInputPassword4">Product Discount</label>
-            <input type="number" class="form-control" id="exampleInputPassword4" name="ProductDiscount" placeholder="$:0.00">
+            <input type="number" class="form-control" id="exampleInputPassword4"  value="<%= product ? product.ProductDiscount :'' %>" name="ProductDiscount" placeholder="$:0.00">
           </div>
           <div class="form-group">
             <label for="exampleSelectGender">Catagory</label>
@@ -33,9 +33,18 @@
           <div class="form-group" >
             <label>Image upload</label>
             
-            
-            
-                <ul id="image-list"></ul>     
+            <div class="container" style="margin: 0;">
+              <div class="row " id="image-list">
+                <% if (product && product.images && product.images.length > 0) { %>
+                  <% product.images.forEach((image,index) => { %>
+                    <div class="col"> <%= image %></div>
+                    <button class="delete-button" style="border: none; background: none;" data-index="<%= index %>"><i class="fa-solid fa-xmark" style="color: #ffffff; "></i></button>
+                    <% }); %>
+                    <% } %>
+                  </div>
+            </div>
+               
+
             <div class="input-group col-xs-12" style="width: 50%;" >
               <input  style="background: none;" type="file"  name="images[]" class="file-upload-default" multiple onchange="updateImageList(this)">
         
@@ -48,34 +57,73 @@
         
           <div class="form-group">
             <label for="exampleTextarea1">Product Discription</label>
-            <textarea class="form-control" id="exampleTextarea1" name="ProductDiscription" rows="4"></textarea>
+            <textarea class="form-control" id="exampleTextarea1" name="ProductDiscription"  value="<%= product ? product.ProductDiscription : '' %>" rows="4"></textarea>
           </div>
           <button type="submit" class="btn btn-primary mr-2">Submit</button>
-          <button class="btn btn-dark">Cancel</button>
+          <button type="button" class="btn btn-dark  cancelButton">Cancel</button>
         </form>
+         
+        
+        
       </div>
     </div>
     <script>
-      function updateImageList(input){
-        const maxImages = 4;
-        const fileList = input.files;
-        const imageList = document.getElementById('image-list')
-      
-        if (fileList.length > maxImages) {
-    alert(`You can only upload ${maxImages} images.`);
-    input.value = ''; 
-    document.querySelector('.form-control.file-upload-default').value = '';
-    return;
-  }
-  
-      for(i=0;i<fileList.length;i++){
-        const listItem = document.createElement('li')
-        listItem.textContent = fileList[i].name;
-        imageList.appendChild(listItem)
-      }
-      }
+function updateImageList(input) {
+    const maxImages = 4;
+    const fileList = input.files;
+    const imageList = document.getElementById('image-list');
+    imageList.innerHTML = '';
 
-     
+    if (fileList.length > maxImages) {
+        alert(`You can only upload ${maxImages} images.`);
+        input.value = ''; // Clear the file input
+        return;
+    }
+
+    for (let i = 0; i < Math.min(fileList.length, maxImages); i++) {
+        const listItem = document.createElement('li');
+        listItem.style.listStyleType = 'none';
+        const image = document.createElement('img');
+        image.src = URL.createObjectURL(fileList[i]);
+        image.style.width = '100px'; // Set the desired width for the displayed image
+        listItem.appendChild(image);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'delete-button';
+        deleteButton.style = 'background:none;border:none;';
+        deleteButton.dataset.index = i;
+        deleteButton.innerHTML = '<i class="fa-solid fa-xmark" style="color: #ff0000;"></i>';
+        listItem.appendChild(deleteButton);
+
+        deleteButton.addEventListener('click',async function () {
+            const index = parseInt(this.getAttribute('data-index'));
+            // Remove the selected file from the input element
+            input.files = Array.from(input.files).filter((_, i) => i !== index);
+            // Update the displayed images
+            updateImageList(input);
+            try {
+            // Send an AJAX request to delete the file on the server
+            const response = await fetch(`/deleteImage?fileName=${fileName}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                console.log('Image deleted successfully');
+            } else {
+                console.error('Failed to delete image');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+
+        });
+
+        imageList.appendChild(listItem);
+    }
+}
+
+
 // ... append other form fields to formData ...
 function handleFileSelect(event) {
   const files = event.target.files;

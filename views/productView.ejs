@@ -590,8 +590,11 @@
                                 <div class="product-gallery product-gallery-vertical">
                                     <div class="row">
                                         <figure class="product-main-image">
+                                            <% if (product && product.images && product.images[0]) { %>
                                             <img id="product-zoom" src="<%= product.images[0] %>" data-zoom-image="<%= product.images[0] %>" alt="product image">
-
+                                            <% } else { %>
+                                                <p>Product image not available</p>
+                                            <% } %>
                                             <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                                 <i class="icon-arrows"></i>
                                             </a>
@@ -1151,10 +1154,10 @@
                 <div class="col-6">
                     <figure class="product-media">
                         <a href="product.html">
-                            <img src="assets/images/products/sticky/product-1.jpg" alt="Product image">
+                            <img src="<%= product.images[0] %>" alt="Product image">
                         </a>
                     </figure><!-- End .product-media -->
-                    <h4 class="product-title"><a href="product.html">Dark yellow lace cut out swing dress</a></h4><!-- End .product-title -->
+                    <h4 class="product-title"><a href="product.html"><%= product.ProductName %></a></h4><!-- End .product-title -->
                 </div><!-- End .col-6 -->
 
                 <div class="col-6 justify-content-end">
