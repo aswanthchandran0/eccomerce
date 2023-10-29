@@ -35,12 +35,10 @@
             
             <div class="container" style="margin: 0;">
               <div class="row " id="image-list">
-                <% if (product && product.images && product.images.length > 0) { %>
-                  <% product.images.forEach((image,index) => { %>
-                    <div class="col"> <%= image %></div>
-                    <button class="delete-button" style="border: none; background: none;" data-index="<%= index %>"><i class="fa-solid fa-xmark" style="color: #ffffff; "></i></button>
-                    <% }); %>
-                    <% } %>
+                
+                    <div  class="col image-preview" id="image-preview" style=" width: 100px; height: auto;margin-right: 10px; "> </div>
+                    <button class="delete-button" id="deleteButton" style="border: none; background: none;" data-index=""><i class="fa-solid fa-xmark" style="color: #ffffff; "></i></button>
+                    
                   </div>
             </div>
                
@@ -68,61 +66,58 @@
       </div>
     </div>
     <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+  const formData = new FormData(); 
+  
 function updateImageList(input) {
     const maxImages = 4;
     const fileList = input.files;
-    const imageList = document.getElementById('image-list');
+    const imageList = document.querySelector('.image-list');
+    const previewContainer = document.querySelector('.image-preview');
     imageList.innerHTML = '';
+    previewContainer.innerHTML = '';
 
-    if (fileList.length > maxImages) {
+       
+       if (fileList.length > maxImages) {
         alert(`You can only upload ${maxImages} images.`);
         input.value = ''; // Clear the file input
         return;
     }
 
     for (let i = 0; i < Math.min(fileList.length, maxImages); i++) {
-        const listItem = document.createElement('li');
-        listItem.style.listStyleType = 'none';
-        const image = document.createElement('img');
-        image.src = URL.createObjectURL(fileList[i]);
-        image.style.width = '100px'; // Set the desired width for the displayed image
-        listItem.appendChild(image);
+            const reader = new FileReader();
 
-        const deleteButton = document.createElement('button');
-        deleteButton.className = 'delete-button';
-        deleteButton.style = 'background:none;border:none;';
-        deleteButton.dataset.index = i;
-        deleteButton.innerHTML = '<i class="fa-solid fa-xmark" style="color: #ff0000;"></i>';
-        listItem.appendChild(deleteButton);
+            reader.onload = function(event) {
+                const imageUrl = event.target.result;
+                const imgElement = document.createElement('img');
+                imgElement.src = imageUrl;
+                imgElement.className = 'preview-image';
+                previewContainer.appendChild(imgElement);
+            };
 
-        deleteButton.addEventListener('click',async function () {
-            const index = parseInt(this.getAttribute('data-index'));
-            // Remove the selected file from the input element
-            input.files = Array.from(input.files).filter((_, i) => i !== index);
-            // Update the displayed images
-            updateImageList(input);
-            try {
-            // Send an AJAX request to delete the file on the server
-            const response = await fetch(`/deleteImage?fileName=${fileName}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                console.log('Image deleted successfully');
-            } else {
-                console.error('Failed to delete image');
-            }
-        } catch (error) {
-            console.error(error);
+            reader.readAsDataURL(fileList[i]);
         }
-
-
-        });
-
-        imageList.appendChild(listItem);
     }
-}
 
+
+  const files = input.files;
+  for (let i = 0; i < files.length; i++) {
+    formData.append('images', fileList[i]);
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+      const imageUrl = event.target.result;
+      const imgElement = document.createElement('img');
+      imgElement.src = imageUrl;
+      imgElement.className = 'preview-image'; 
+      previewContainer.appendChild(imgElement);
+    };
+
+    reader.readAsDataURL(files[i]);
+  }
+
+});
 
 // ... append other form fields to formData ...
 function handleFileSelect(event) {
@@ -130,11 +125,15 @@ function handleFileSelect(event) {
   for (let i = 0; i < files.length; i++) {
     formData.append('images', files[i]);
   }
-}
+
 
 const fileInput = document.querySelector('input[name="images"]');
-fileInput.addEventListener('change', handleFileSelect);
+fileInput.addEventListener('change', function(event) {
+        updateImageList(event.target); // Call the updateImageList function when files are selected
+        handleFileSelect(event); // Call the handleFileSelect function to append files to formData
+    });
 
+const form = document.querySelector('form');
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
@@ -151,6 +150,7 @@ form.addEventListener('submit', async (event) => {
   }
 });
 
+};
 
 
     </script>
