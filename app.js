@@ -7,8 +7,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const session = require('express-session')
+var session = require('express-session')
 const {checkSession,checkUserStatus} = require('./controller/middleware')
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
+
 const mongoose =require('mongoose')
 mongoose.connect('mongodb://127.0.0.1:27017/dress_eccomerse',{ useNewUrlParser: true,
 useUnifiedTopology: true
@@ -32,7 +35,7 @@ var addCatagoryRouter = require('./routes/addCatagory')
 var productDetailsRouter = require('./routes/productDetails')
 var productListRouter = require('./routes/productList')
 var productViewRouter = require('./routes/productView')
-
+var userProfileRouter = require('./routes/userProfile')
 const { product } = require('./controller/productDetailsController');
 var app = express();
  
@@ -69,6 +72,9 @@ app.use(cors({
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 }));
+
+
+
 /*app.use(helmet.contentSecurityPolicy({
   directives: {
       defaultSrc: ["'self'"],
@@ -81,7 +87,8 @@ app.use(cors({
 */
 
 app.use(session({
-  secret: '130130',
+  secret: 'Key',
+  cookie:{maxAge:600000},
   resave: false,
   saveUninitialized: true
 }))
@@ -100,6 +107,7 @@ app.use('/addCatagory',checkSession, addCatagoryRouter)
 app.use('/productDetails',checkSession, productDetailsRouter)
 app.use('/productList', productListRouter)
 app.use('/productView',productViewRouter)
+app.use('/userProfile',userProfileRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -34,19 +34,19 @@
             <label>Image upload</label>
             
             <div class="container" style="margin: 0;">
-              <div class="row " id="image-list">
+              <div class="row " id="image-list"></div>
                 
                     <div  class="col image-preview" id="image-preview" style=" width: 100px; height: auto;margin-right: 10px; "> </div>
                     <button class="delete-button" id="deleteButton" style="border: none; background: none;" data-index=""><i class="fa-solid fa-xmark" style="color: #ffffff; "></i></button>
                     
-                  </div>
+                  
             </div>
                
 
             <div class="input-group col-xs-12" style="width: 50%;" >
-              <input  style="background: none;" type="file"  name="images[]" class="file-upload-default" multiple onchange="updateImageList(this)">
+              <input  style="background: none;" type="file" id="imageInput" name="images[]" class="file-upload-default" multiple onchange="updateImageList(this)">
         
-             <input  type="file" class="form-control"  placeholder="Upload Image" name="images" class="file-upload-default" multiple onchange="updateImageList(this)">
+             <input  type="file" class="form-control"  id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple onchange="updateImageList(this)">
               <span class="input-group-append">
                 
               </span>
@@ -66,94 +66,50 @@
       </div>
     </div>
     <script>
-
-document.addEventListener("DOMContentLoaded", function() {
-  const formData = new FormData(); 
+      document.addEventListener("DOMContentLoaded", function() {
+          const formData = new FormData();
+          const imageInput = document.getElementById('imageInput');
+          const imageList = document.getElementById('image-list');
   
-function updateImageList(input) {
-    const maxImages = 4;
-    const fileList = input.files;
-    const imageList = document.querySelector('.image-list');
-    const previewContainer = document.querySelector('.image-preview');
-    imageList.innerHTML = '';
-    previewContainer.innerHTML = '';
+          imageInput.addEventListener("change", function(event) {
+              const files = event.target.files;
+              imageList.innerHTML = "";
+  
+              for (const file of files) {
+                  const reader = new FileReader();
+  
+                  reader.onload = function(event) {
+                      const imageUrl = event.target.result;
+                      const imgElement = document.createElement("img");
+                      imgElement.src = imageUrl;
+                      imgElement.className = "preview-image";
+                      imageList.appendChild(imgElement);
+                  };
+  
+                  reader.readAsDataURL(file);
+              }
+          });
+  
+          const form = document.querySelector('form');
+          form.addEventListener('submit', async (event) => {
+              event.preventDefault();
+  
+              try {
+                  const response = await fetch('/productAdd/addProduct', {
+                      method: 'POST',
+                      body: formData,
+                  });
+  
+                  // Handle response as needed
+              } catch (error) {
+                  console.error(error);
+              }
+          });
+      });
+  </script>
 
-       
-       if (fileList.length > maxImages) {
-        alert(`You can only upload ${maxImages} images.`);
-        input.value = ''; // Clear the file input
-        return;
-    }
-
-    for (let i = 0; i < Math.min(fileList.length, maxImages); i++) {
-            const reader = new FileReader();
-
-            reader.onload = function(event) {
-                const imageUrl = event.target.result;
-                const imgElement = document.createElement('img');
-                imgElement.src = imageUrl;
-                imgElement.className = 'preview-image';
-                previewContainer.appendChild(imgElement);
-            };
-
-            reader.readAsDataURL(fileList[i]);
-        }
-    }
-
-
-  const files = input.files;
-  for (let i = 0; i < files.length; i++) {
-    formData.append('images', fileList[i]);
-    const reader = new FileReader();
-
-    reader.onload = function(event) {
-      const imageUrl = event.target.result;
-      const imgElement = document.createElement('img');
-      imgElement.src = imageUrl;
-      imgElement.className = 'preview-image'; 
-      previewContainer.appendChild(imgElement);
-    };
-
-    reader.readAsDataURL(files[i]);
-  }
-
-});
-
-// ... append other form fields to formData ...
-function handleFileSelect(event) {
-  const files = event.target.files;
-  for (let i = 0; i < files.length; i++) {
-    formData.append('images', files[i]);
-  }
-
-
-const fileInput = document.querySelector('input[name="images"]');
-fileInput.addEventListener('change', function(event) {
-        updateImageList(event.target); // Call the updateImageList function when files are selected
-        handleFileSelect(event); // Call the handleFileSelect function to append files to formData
-    });
-
-const form = document.querySelector('form');
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-
-  // Perform form submission with fetch or other AJAX methods
-  try {
-    const response = await fetch('/productAdd/addProduct', {
-      method: 'POST',
-      body: formData,
-    });
-
-    // Handle response as needed
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-};
-
-
-    </script>
+  
+    
  
 
 <%- include('./adminFooter.ejs')-%>

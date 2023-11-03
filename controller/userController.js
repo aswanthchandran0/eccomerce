@@ -4,6 +4,7 @@ const nodemailer= require('nodemailer')
 const { isValidFname,isValidEmail,isValidPhoneNumber,isValidPassword,isPasswordMatch}= require('../validators/userValidators')
 const crypto = require('crypto');
 const otpGenerator = require('./otpGenerator')
+const { log } = require('console');
 
     let generatedOtp 
     let otpTimestamb
@@ -18,6 +19,7 @@ const otpGenerator = require('./otpGenerator')
         PhoneNumber,
         Password:hashedPassword, 
       });
+      console.log(newUser);
       await newUser.save();
       return newUser
     } catch (error) {
@@ -28,15 +30,27 @@ const otpGenerator = require('./otpGenerator')
    const loginController = async(req,res) =>{
     try {
       const { Email, Password } = req.body;
-      const user = await User.findOne({Email:Email, Password:Password})
+      const user = await User.findOne({Email:Email})
+     
       if (user) {
+
+      const passwordMatch = await bcrypt.compare(Password, user.Password)
+
+      if(passwordMatch){
         if (user.userStatus === 'active') {
+          req.session.loggedIn = true
           req.session.user = user; 
+        
             return res.redirect('/');
         } else {
             const errors = { login: 'Account is banned. Please contact support.' };
             return res.render('login', { errors });
         }
+      }else{
+        const errors = { login: 'Invalid email or password.' };
+        return res.render('login', { errors });
+      }
+        
     } else {
         const errors = { login: 'Invalid email or password.' };
         return res.render('login', { errors });
@@ -77,12 +91,13 @@ const otpGenerator = require('./otpGenerator')
     }
 
     // If validation passes, create a new user and send OTP
-   
+    
    
     try {
         await otpGenerator.sendOtpEmail(Email,generatedOtp)
-        const hashedPassword = await bcrypt.hash(Password, 10);
-        const newUser = await User.create({ Fname, Email, PhoneNumber, Password });
+     
+        const newUser = await createUser( Fname, Email, PhoneNumber, Password);
+        req.session.loggedIn = true
         req.session.user = newUser;
         res.redirect('/otp');
         return Email;
