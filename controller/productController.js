@@ -1,22 +1,36 @@
 
 const ProductDetails = require('../models/productModel');
- 
+  
 
 const productController = {
     addproduct: async (req, res) => {
-        try {
+        try { 
             
             const { ProductName, ProductPrice, ProductDiscount, Catagory, ProductDiscription } = req.body;
-               const images = req.files.map(file => file.path);
-               const newProduct = new ProductDetails({
-                images:images,
-                ProductName:ProductName,
-                ProductDiscription:ProductDiscription,
-                ProductPrice:ProductPrice,
-                ProductDiscount:ProductDiscount,
-                Catagory:Catagory  
-               })
-               await newProduct.save()
+            const existingImages = req.product.images || [];
+            const removedImages = req.body.removedImages || [];
+            const updatedImages = existingImages.filter(image => !removedImages.includes(image));
+
+               const newImages = req.files.map(file => file.path);
+               updatedImages.push(...newImages);
+
+               let product;
+
+               if (req.product) {
+
+                product = req.product;
+            } else {
+                product = new ProductDetails();
+            } 
+            product.ProductName = ProductName;
+            product.ProductPrice = ProductPrice;
+            product.ProductDiscount = ProductDiscount;
+            product.Catagory = Catagory;
+            product.ProductDiscription = ProductDiscription;
+            product.images = updatedImages;
+            
+            await product.save();
+           
            res.redirect('/productDetails')
         } catch (error) {
             console.error(error);

@@ -6,14 +6,13 @@ const path = require('path');
 const productController = require('../controller/productController');
 const productModel = require('../models/productModel')
 const catagoryModel = require('../models/catagoryModel')
-
+       
 
 router.get('/', async (req,res)=>{
     const ProductId = req.query.id
     
     const Catagories = await catagoryModel.find({}) 
   const product = await productModel.findById(ProductId)
-    console.log(Catagories);
  res.render('productAdd',{Catagories,product})
 })
 
