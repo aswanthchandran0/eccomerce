@@ -626,69 +626,11 @@
 								    			<div class="card card-dashboard">
 								    				<div class="card-body">
 								    					<h3 class="card-title">Address</h3><!-- End .card-title -->
-                                                        <% if(userdata && userdata.Fname !== null && userdata.Fname !== undefined){ %>
-                                                            <p>Name: <%= userdata.Fname %><br></p>
-                                                        <% } else { %>
-                                                            <p>Name: N/A<br></p>
+                                                        <% if (userdata !== null && userdata !== undefined) { %>
+                                                            <% userdata.forEach(function(address) { %>
+                                                                <p>Name: <%= address.Fname %></p>
+                                                            <% }); %>
                                                         <% } %>
-                                                            <% if(userdata && userdata.Email){ %>
-                                                                <p>Email: <%=userdata.Email %><br>
-                                                                    <%}
-                                                                    else { %>
-                                                                        email<br>
-                                                                   <% }
-                                                                    %>
-														
-
-                                                                    <% if(userdata && userdata.PhoneNumber){ %>
-                                                                        <p>PhoneNumber: <%=userdata.PhoneNumber %><br>
-                                                                            <%}
-                                                                            else { %>
-                                                                                PhoneNumber<br>
-                                                                           <% }
-                                                                            %>
-
-                                                                            <% if(userdata && userdata.Pincode){ %>
-                                                                                <p>Pincode: <%=userdata.Pincode %><br>
-                                                                                    <%}
-                                                                                    else { %>
-                                                                                        Pincode<br>
-                                                                                   <% }
-                                                                                    %>
-                                                                                    
-                                                                                    <% if(userdata && userdata.Place){ %>
-                                                                                        <p>Address: <%=userdata.Place %><br>
-                                                                                            <%}
-                                                                                            else { %>
-                                                                                                Place<br>
-                                                                                           <% }
-                                                                                            %>
-
-                                                                                             
-                                                                                    <% if(userdata && userdata.state){ %>
-                                                                                        <p>state: <%=userdata.state %><br>
-                                                                                            <%}
-                                                                                            else { %>
-                                                                                                state<br>
-                                                                                           <% }
-                                                                                            %>
-                                                                                      
-                                                                                            <% if(userdata && userdata.LandMark){ %>
-                                                                                                <p>state: <%=userdata.LandMark %><br>
-                                                                                                    <%}
-                                                                                                    else { %>
-                                                                                                        LandMark<br>
-                                                                                                   <% }
-                                                                                                    %>
-                                                                                                    
-                                                                                                    
-                                                                                            <% if(userdata && userdata.AphoneNumber){ %>
-                                                                                                <p>state: <%=userdata.AphoneNumber %><br>
-                                                                                                    <%}
-                                                                                                    else { %>
-                                                                                                        AphoneNumber<br>
-                                                                                                   <% }
-                                                                                                    %>
 														<a href="#">Edit <i class="icon-edit"></i></a></p>
 								    				</div><!-- End .card-body -->
 								    			</div><!-- End .card-dashboard -->

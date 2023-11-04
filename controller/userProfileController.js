@@ -13,7 +13,7 @@ const userProfile = {
              
               const userId = req.session.user._id;
               const userAddress = await AddressModel.findOne({ user: userId });
-               res.render('userProfile',{ user: req.session.user, AddressValidationErrors:req.session.loginErr,userdata: userAddress})
+               res.render('userProfile',{ user: req.session.user, AddressValidationErrors:req.session.loginErr,userdata: [userAddress]})
                req.session.AddressValidationErrors = null;
                
             }
