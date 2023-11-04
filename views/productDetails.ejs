@@ -75,8 +75,8 @@
                 <td><a href="./productAdd?id=<%= product._id %>" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Edit</a>      
                     </td>                  
                     <td>
-                        <form action="/productDetails/delete/<%= product._id %>" method="POST" style="display: inline;">
-                           <button type="submit"style="color: rgba(245, 37, 37, 1); background: none; border: none;">Delete</button>
+                        <form   action="/productDetails/delete/<%= product._id %>" method="POST" style="display: inline;">
+                           <button type="submit"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick=" return confirmDelete('<%= product._id %>', '<%= product.productName %>')">Delete</button>
                            
                           </form>
                      
@@ -92,6 +92,12 @@
     </div>
   </div>
 
+  <script>
+    function confirmDelete(productId,productName){
+     var result = `are you sure you want to delete ${productName}`
+     return result
+    }
+  </script>
 
 
 

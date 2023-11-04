@@ -54,7 +54,7 @@
                                     <td>
                                         <form action="/catagory/delete/<%= category._id %>" method="POST" style="display: inline;">
                                             <button type="submit"
-                                                style="color: rgba(245, 37, 37, 1); background: none; border: none;">Delete</button>
+                                                style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick=" return confirmDelete('<%= category._id %>','<%= category.name %>')">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -68,6 +68,12 @@
     </div>
 
 
+    <script>
+        function confirmDelete(cartId,cartName){
+            var result = confirm(`are you sure you want to delete ${cartName} ?`)
+            return result
+        }
+    </script>
 
 
     <script>
