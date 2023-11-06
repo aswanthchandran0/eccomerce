@@ -7,27 +7,25 @@ const productController = {
         try { 
             
             const { ProductName, ProductPrice, ProductDiscount, Catagory, ProductDiscription } = req.body;
-            const existingImages = req.product.images || [];
-            const removedImages = req.body.removedImages || [];
-            const updatedImages = existingImages.filter(image => !removedImages.includes(image));
+       //     const existingImages = req.product.images || [];
+         //   const removedImages = req.body.removedImages || [];
+           // const updatedImages = existingImages.filter(image => !removedImages.includes(image));
 
                const newImages = req.files.map(file => file.path);
-               updatedImages.push(...newImages);
+             //  updatedImages.push(...newImages);
 
-               let product;
+           
 
-               if (req.product) {
-
-                product = req.product;
-            } else {
-                product = new ProductDetails();
-            } 
-            product.ProductName = ProductName;
-            product.ProductPrice = ProductPrice;
-            product.ProductDiscount = ProductDiscount;
-            product.Catagory = Catagory;
-            product.ProductDiscription = ProductDiscription;
-            product.images = updatedImages;
+              const  product = new ProductDetails({
+                ProductName:ProductName,
+                ProductPrice:ProductPrice,
+                ProductDiscount:ProductDiscount,
+                Catagory:Catagory,
+                ProductDiscription:ProductDiscription,
+                 images:newImages,
+              });
+          
+       
             
             await product.save();
            
