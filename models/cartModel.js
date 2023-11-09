@@ -1,21 +1,23 @@
-class Cart {
-    constructor() {
-        this.products = []; 
+const mongoose = require('mongoose')
+
+const cartSchema = new mongoose.Schema({
+    userId:{
+        type:String,
+        required:true
+    },
+    products:[{
+     productId:{
+      type:String,
+      required:true
+     },
+     quantity:{
+        type: Number,
+        default:1,
+        required:true
+     }
     }
-
-    addProduct(productId, price, quantity) {
-      
-        this.products.push({
-            productId: _id,
-            name: ProductName,
-            description: ProductDescription,
-            price: ProductPrice,
-            discount: ProductDiscount,
-            category: Category,
-            quantity: quantity
-        });
-    }
-
-}
-
-module.exports = Cart;
+    ]
+})
+        cart = mongoose.model('Cart', cartSchema)
+  
+module.exports = cart

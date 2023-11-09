@@ -8,5 +8,6 @@ const middleware = require('../middlewares/userMiddlewares')
 router.get('/', controller.userProfile.profile,)
 
 router.post('/address',controller.userProfile.userAddress)
+router.get('/signout', controller.userProfile.signout)
 
 module.exports = router; 

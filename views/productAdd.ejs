@@ -16,11 +16,11 @@
           </div>
           <div class="form-group">
             <label for="exampleInputEmail3">Product Price</label>
-            <input type="number" class="form-control" id="exampleInputEmail3"  value="<%= product ? product.ProductPrice : '' %>" name="ProductPrice" placeholder="$:0.00">
+            <input type="number" class="form-control" id="exampleInputEmail3"  value="<%= product ? product.ProductPrice : '' %>" name="ProductPrice" placeholder="$:0.00" min="1">
           </div>
           <div class="form-group">
             <label for="exampleInputPassword4">Product Discount</label>
-            <input type="number" class="form-control" id="exampleInputPassword4"  value="<%= product ? product.ProductDiscount :'' %>" name="ProductDiscount" placeholder="$:0.00">
+            <input type="number" class="form-control" id="exampleInputPassword4"  value="<%= product ? product.ProductDiscount :'' %>" name="ProductDiscount" placeholder="$:0.00" min="5">
           </div>
           <div class="form-group">
             <label for="exampleSelectGender">Catagory</label>
@@ -32,6 +32,7 @@
           </div>
           <div class="form-group" >
             <label>Image upload</label>
+           <!-- <ul id="imgView"></ul> -->
             <div class="existing-images row">
               <% if (product && product.images && product.images.length > 0) { %>
                   <% product.images.forEach((image, index) => { %>
@@ -50,9 +51,9 @@
                
 
             <div class="input-group col-xs-12" style="width: 50%;" >
-              <input  style="background: none;" type="file" id="imageInput" name="images[]" class="file-upload-default" multiple onchange="updateImageList(this)">
+              <input  style="background: none;" type="file" id="imageInput" name="images[]" class="file-upload-default" multiple onchange="viewImage(event)">
         
-             <input  type="file" class="form-control"  id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple onchange="updateImageList(this)">
+             <input  type="file" class="form-control"  id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple  onchange="viewImage(event)">
               <span class="input-group-append">
                 
               </span>
@@ -64,57 +65,76 @@
             <textarea class="form-control" id="exampleTextarea1" name="ProductDiscription"  value="<%= product ? product.ProductDiscription : '' %>" rows="4"></textarea>
           </div>
           <button type="submit" class="btn btn-primary mr-2">Submit</button>
-          <button type="button" class="btn btn-dark  cancelButton">Cancel</button>
+          <button type="button" class="btn btn-dark  " id="cancelBtn">Cancel</button>
         </form>
          
         
         
       </div>
     </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-          const formData = new FormData();
-          const imageInput = document.getElementById('imageInput');
-          const imageList = document.getElementById('image-list');
-  
-          imageInput.addEventListener("change", function(event) {
-              const files = event.target.files;
-              imageList.innerHTML = "";
-  
-              for (const file of files) {
-                  const reader = new FileReader();
-  
-                  reader.onload = function(event) {
-                      const imageUrl = event.target.result;
-                      const imgElement = document.createElement("img");
-                      imgElement.src = imageUrl;
-                      imgElement.className = "preview-image";
-                      imageList.appendChild(imgElement);
-                  };
-  
-                  reader.readAsDataURL(file);
-              }
-          });
-  
-          const form = document.querySelector('form');
-          form.addEventListener('submit', async (event) => {
-              event.preventDefault();
-              const formData = new FormData(form);
-              try {
-                  const response = await fetch('/productAdd/addProduct', {
-                      method: 'POST',   
-                      body: formData,
-                  });
-  
-                  // Handle response as needed
-              } catch (error) {
-                  console.error(error);
-              }
-          });
-      });
+
+<script>
+  function viewImage(event){
+    document.getElementById('imgView').src=URL.createObjectURL(event.target.files)
+  }
+</script>
+
+
+  <script>
+ document.addEventListener('DOMContentLoaded', function(){
+  const cancelBtn = document.getElementById('cancelBtn')
+  cancelBtn.addEventListener('click', function(){
+    window.location.href = "productDetails"
+  })
+ })
   </script>
 
+<script>
+  function updateImageList(input){
+    const maxImages = 4;
+    const fileList = input.files;
+    const imageList = document.getElementById('image-list')
   
+    if (fileList.length > maxImages) {
+alert(`You can only upload ${maxImages} images.`);
+input.value = ''; 
+document.querySelector('.form-control.file-upload-default').value = '';
+return;
+}
+
+  for(i=0;i<fileList.length;i++){
+    const listItem = document.createElement('li')
+    listItem.textContent = fileList[i].name;
+    imageList.appendChild(listItem)
+  }
+  }
+ 
+// ... append other form fields to formData ...
+function handleFileSelect(event) {
+const files = event.target.files;
+for (let i = 0; i < files.length; i++) {
+formData.append('images', files[i]);
+}
+}
+const fileInput = document.querySelector('input[name="images"]');
+fileInput.addEventListener('change', handleFileSelect);
+form.addEventListener('submit', async (event) => {
+event.preventDefault();
+// Perform form submission with fetch or other AJAX methods
+try {
+const response = await fetch('/productAdd/addProduct', {
+  method: 'POST',
+  body: formData,
+});
+// Handle response as needed
+} catch (error) {
+console.error(error);
+}
+});
+
+
+</script>
+
     
  
 

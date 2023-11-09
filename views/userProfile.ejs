@@ -595,7 +595,9 @@
 								        <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
 								    </li>
 								    <li class="nav-item">
-								        <a class="nav-link" href="#">Sign Out</a>
+                                          <form action="/userProfile/signout" method="get">
+                                              <button type="submit" class="nav-link" style="background: none;  border: none;">Sign Out</button>
+                                            </form>
 								    </li>
 								</ul>
 	                		</aside><!-- End .col-lg-3 -->
@@ -626,69 +628,25 @@
 								    			<div class="card card-dashboard">
 								    				<div class="card-body">
 								    					<h3 class="card-title">Address</h3><!-- End .card-title -->
-                                                        <% if(userdata && userdata.Fname !== null && userdata.Fname !== undefined){ %>
-                                                            <p>Name: <%= userdata.Fname %><br></p>
+                                                      
+                                                        <% if (userdata) { %>
+                                                            <% userdata.address.forEach(address => { %>
+                                                                <p>Name:<%= address.Fname %></p>
+                                                                <p>Email:<%= address.Email %></p>
+                                                                <p>PhoneNumber:<%= address.PhoneNumber %></p>
+                                                                <p>Pincode:<%= address.Pincode %></p>
+                                                                <p>Address:<%= address.Addresse %></p>
+                                                                <p>Place:<%= address.Place %></p>
+                                                                <p>state:<%= address.state %></p>
+                                                                <p>LandMark:<%= address.LandMark %></p>
+                                                                <p>SecondNumber:<%= address.AphoneNumber %></p>
+                                                                <p>AddressType:<%= address.AddressType %></p>
+                                                               
+                                                            <% }); %>
                                                         <% } else { %>
-                                                            <p>Name: N/A<br></p>
+                                                            <p>Address not found</p>
                                                         <% } %>
-                                                            <% if(userdata && userdata.Email){ %>
-                                                                <p>Email: <%=userdata.Email %><br>
-                                                                    <%}
-                                                                    else { %>
-                                                                        email<br>
-                                                                   <% }
-                                                                    %>
-														
 
-                                                                    <% if(userdata && userdata.PhoneNumber){ %>
-                                                                        <p>PhoneNumber: <%=userdata.PhoneNumber %><br>
-                                                                            <%}
-                                                                            else { %>
-                                                                                PhoneNumber<br>
-                                                                           <% }
-                                                                            %>
-
-                                                                            <% if(userdata && userdata.Pincode){ %>
-                                                                                <p>Pincode: <%=userdata.Pincode %><br>
-                                                                                    <%}
-                                                                                    else { %>
-                                                                                        Pincode<br>
-                                                                                   <% }
-                                                                                    %>
-                                                                                    
-                                                                                    <% if(userdata && userdata.Place){ %>
-                                                                                        <p>Address: <%=userdata.Place %><br>
-                                                                                            <%}
-                                                                                            else { %>
-                                                                                                Place<br>
-                                                                                           <% }
-                                                                                            %>
-
-                                                                                             
-                                                                                    <% if(userdata && userdata.state){ %>
-                                                                                        <p>state: <%=userdata.state %><br>
-                                                                                            <%}
-                                                                                            else { %>
-                                                                                                state<br>
-                                                                                           <% }
-                                                                                            %>
-                                                                                      
-                                                                                            <% if(userdata && userdata.LandMark){ %>
-                                                                                                <p>state: <%=userdata.LandMark %><br>
-                                                                                                    <%}
-                                                                                                    else { %>
-                                                                                                        LandMark<br>
-                                                                                                   <% }
-                                                                                                    %>
-                                                                                                    
-                                                                                                    
-                                                                                            <% if(userdata && userdata.AphoneNumber){ %>
-                                                                                                <p>state: <%=userdata.AphoneNumber %><br>
-                                                                                                    <%}
-                                                                                                    else { %>
-                                                                                                        AphoneNumber<br>
-                                                                                                   <% }
-                                                                                                    %>
 														<a href="#">Edit <i class="icon-edit"></i></a></p>
 								    				</div><!-- End .card-body -->
 								    			</div><!-- End .card-dashboard -->
@@ -729,41 +687,41 @@
     
                                             <label>Pincode</label>
                                             <input type="number" class="form-control" name="Pincode" >
-                                            <% if (AddressValidationErrors && AddressValidationErrors.Pincode) { %>
-                                                <p style="color: red;"><%= AddressValidationErrors.Pincode%></p>
+                                            <% if (ValidationErr && ValidationErr.Pincode) { %>
+                                                <p style="color: red;"><%= ValidationErr.Pincode%></p>
                                             <% } %>
 
                                             <label>Address</label>
                                             <input type="text" class="form-control" name="Address" >
-                                            <% if (AddressValidationErrors && AddressValidationErrors.Address) { %>
-                                                <p style="color: red;"><%= AddressValidationErrors.Address%></p>
+                                            <% if (ValidationErr && ValidationErr.Address) { %>
+                                                <p style="color: red;"><%= ValidationErr.Address%></p>
                                             <% } %>
                                         
                                            
                                            <label>Place</label>
                                             <input type="text" class="form-control" name="Place" >
-                                            <% if (AddressValidationErrors && AddressValidationErrors.Place) { %>
-                                                <p style="color: red;"><%= AddressValidationErrors.Place%></p>
+                                            <% if (ValidationErr && ValidationErr.Place) { %>
+                                                <p style="color: red;"><%= ValidationErr.Place%></p>
                                             <% } %>
                                         
                                             <label>State</label>
                                             <input type="text" class="form-control" name="state" >
-                                            <% if (AddressValidationErrors && AddressValidationErrors.state) { %>
-                                                <p style="color: red;"><%= AddressValidationErrors.state%></p>
+                                            <% if (ValidationErr && ValidationErr.state) { %>
+                                                <p style="color: red;"><%= ValidationErr.state%></p>
                                             <% } %>
                                         
                                             
                                            <label>LandMark</label>
                                            <input type="text" class="form-control" name="LandMark" >
-                                           <% if (AddressValidationErrors && AddressValidationErrors.LandMark) { %>
-                                            <p style="color: red;"><%= AddressValidationErrors.LandMark%></p>
+                                           <% if (ValidationErr && ValidationErr.LandMark) { %>
+                                            <p style="color: red;"><%= ValidationErr.LandMark%></p>
                                         <% } %>
                                     
                                            
                                            <label>Second PhoneNumber</label>
                                             <input type="text" class="form-control" name="AphoneNumber" >
-                                            <% if (AddressValidationErrors && AddressValidationErrors.AphoneNumber) { %>
-                                                <p style="color: red;"><%= AddressValidationErrors.AphoneNumber%></p>
+                                            <% if (ValidationErr &&ValidationErr.AphoneNumber) { %>
+                                                <p style="color: red;"><%= ValidationErr.AphoneNumber%></p>
                                             <% } %>
                                         
                                             <label>Address type</label><br>
