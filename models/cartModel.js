@@ -16,8 +16,13 @@ const cartSchema = new mongoose.Schema({
         required:true
      }
     }
-    ]
+    ],shippingPrice: {
+        type:Number,
+        default:0,
+        required:true
+    }
 })
+    
         cart = mongoose.model('Cart', cartSchema)
   
 module.exports = cart

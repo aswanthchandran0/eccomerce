@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Molla - Bootstrap eCommerce Template</title>
+    <title>Lexxive</title>
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Molla - Bootstrap eCommerce Template">
     <meta name="author" content="p-themes">
@@ -581,76 +581,88 @@
             					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
             				</form>
             			</div><!-- End .checkout-discount -->
-            			<form action="#">
+            			
 		                	<div class="row">
 		                		<div class="col-lg-9">
 		                			<h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
-		                				<div class="row">
-		                					<div class="col-sm-6">
-		                						<label>First Name *</label>
-		                						<input type="text" class="form-control" required>
-		                					</div><!-- End .col-sm-6 -->
+		                			
+	            					 <!-------------------------------------
+                          --------------------------------------------------------
+                        ------------------------------------------------------------
+                    ---------------------------------------------------------------------
+                ------------------------------------------------------------------------------------->
+                <form action="/order/order" method="post" id="orderForm">
+                <% if(address !==null && address !==undefined){%>
+                    <% address.address.forEach((address,index)=>{%>
+                             
+                                    <div class="summary summary-cart">
+                                  
+                                       
+                                    
+                                        <table class="table table-summary">
+                                            <tbody>
+                                            
+                                                <tr class="summary-shipping-row">
+                                                    <td >
+                                                        
+                                                        <div class="custom-control custom-radio">
+                                                         
+                                                            <input type="radio" id="<%= 'address-radio-' + address._id %>"  name="selectedAddress" class="custom-control-input" onclick="selectAddress('<%= address._id %>')"  >
+                                                    
+                                                            <label class="custom-control-label" for="<%= 'address-radio-' + address._id %>">Address</label>
+                                                       
+                                                            <p>Name: <%= address.Fname %></p>
+                                                            <p>Email: <%= address.Email %></p>
+                                                            <p>Phone Number: <%= address.PhoneNumber %></p>
+                                                            <p>Pincode: <%= address.Pincode %></p>
+                                                            <p>Place: <%= address.Place %></p>
+                                                          
+                                                            <p>LandMark: <%= address.LandMark %></p>
+                                                            <p>Second Number: <%= address.AphoneNumber %></p>
+                                                            <p>Type: <%= address.AddressType %></p>
 
-		                					<div class="col-sm-6">
-		                						<label>Last Name *</label>
-		                						<input type="text" class="form-control" required>
-		                					</div><!-- End .col-sm-6 -->
-		                				</div><!-- End .row -->
+                                                        </div><!-- End .custom-control -->
+                                                    </td>
+                                                    <td ></td>
+                                                </tr><!-- End .summary-shipping-row -->
+    
+    
+                                            </tbody>
+                                        </table><!-- End .table table-summary -->
+    
+                                      
+                                    </div><!-- End .summary -->
 
-	            						<label>Company Name (Optional)</label>
-	            						<input type="text" class="form-control">
+                               
+  
+                                    <%})%>
+                                             
+                                    <%} %>
 
-	            						<label>Country *</label>
-	            						<input type="text" class="form-control" required>
+                                   
 
-	            						<label>Street address *</label>
-	            						<input type="text" class="form-control" placeholder="House number and Street name" required>
-	            						<input type="text" class="form-control" placeholder="Appartments, suite, unit etc ..." required>
-
-	            						<div class="row">
-		                					<div class="col-sm-6">
-		                						<label>Town / City *</label>
-		                						<input type="text" class="form-control" required>
-		                					</div><!-- End .col-sm-6 -->
-
-		                					<div class="col-sm-6">
-		                						<label>State / County *</label>
-		                						<input type="text" class="form-control" required>
-		                					</div><!-- End .col-sm-6 -->
-		                				</div><!-- End .row -->
-
-		                				<div class="row">
-		                					<div class="col-sm-6">
-		                						<label>Postcode / ZIP *</label>
-		                						<input type="text" class="form-control" required>
-		                					</div><!-- End .col-sm-6 -->
-
-		                					<div class="col-sm-6">
-		                						<label>Phone *</label>
-		                						<input type="tel" class="form-control" required>
-		                					</div><!-- End .col-sm-6 -->
-		                				</div><!-- End .row -->
-
-	                					<label>Email address *</label>
-	        							<input type="email" class="form-control" required>
+                              
+                                       <!-------------------------------------
+                          --------------------------------------------------------
+                        ------------------------------------------------------------
+                    ---------------------------------------------------------------------
+                ------------------------------------------------------------------------------------->
+                                            
 
 	        							<div class="custom-control custom-checkbox">
 											<input type="checkbox" class="custom-control-input" id="checkout-create-acc">
-											<label class="custom-control-label" for="checkout-create-acc">Create an account?</label>
+											<!--<label class="custom-control-label" for="checkout-create-acc">Create an account?</label> -->
 										</div><!-- End .custom-checkbox -->
 
-										<div class="custom-control custom-checkbox">
-											<input type="checkbox" class="custom-control-input" id="checkout-diff-address">
-											<label class="custom-control-label" for="checkout-diff-address">Ship to a different address?</label>
-										</div><!-- End .custom-checkbox -->
 
-	                					<label>Order notes (optional)</label>
-	        							<textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
+	            
 		                		</div><!-- End .col-lg-9 -->
 		                		<aside class="col-lg-3">
 		                			<div class="summary">
 		                				<h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
-
+                                        <% let totalProductPrice = 0; %>
+                                      <% if(products !==null && products !==undefined){%>
+                                        
 		                				<table class="table table-summary">
 		                					<thead>
 		                						<tr>
@@ -660,26 +672,25 @@
 		                					</thead>
 
 		                					<tbody>
+                                                <% products.forEach((product,index)=>{%>
+                                                  
 		                						<tr>
-		                							<td><a href="#">Beige knitted elastic runner shoes</a></td>
-		                							<td>$84.00</td>
+		                							<td><a href="#"><%= product.ProductName %></a></td>
+		                							<td>$<%= individualTotalArray[index] %></td>
 		                						</tr>
-
-		                						<tr>
-		                							<td><a href="#">Blue utility pinafore denimdress</a></td>
-		                							<td>$76,00</td>
-		                						</tr>
+                                                <% product.ProductPrice; %>
+                                                <%})  %>
 		                						<tr class="summary-subtotal">
 		                							<td>Subtotal:</td>
-		                							<td>$160.00</td>
+		                							<td>$<%= totalPrice %></td>
 		                						</tr><!-- End .summary-subtotal -->
 		                						<tr>
 		                							<td>Shipping:</td>
-		                							<td>Free shipping</td>
+		                							<td>$<%= shippingPrice %></td>
 		                						</tr>
 		                						<tr class="summary-total">
 		                							<td>Total:</td>
-		                							<td>$160.00</td>
+		                							<td>$<%= allTotal %></td>
 		                						</tr><!-- End .summary-total -->
 		                					</tbody>
 		                				</table><!-- End .table table-summary -->
@@ -718,13 +729,13 @@
 										    <div class="card">
 										        <div class="card-header" id="heading-3">
 										            <h2 class="card-title">
-										                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+										                <a class="collapsed" role="button" data-payment="COD" onclick="selectPaymentMethod('COD')" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
 										                    Cash on delivery
 										                </a>
 										            </h2>
 										        </div><!-- End .card-header -->
 										        <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
-										            <div class="card-body">Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
+										            <div class="card-body">only pay when the product reached in you home. product reach within 7 days
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
 										    </div><!-- End .card -->
@@ -764,10 +775,19 @@
 		                					<span class="btn-text">Place Order</span>
 		                					<span class="btn-hover-text">Proceed to Checkout</span>
 		                				</button>
+                                
+                                        <%} %>
 		                			</div><!-- End .summary -->
 		                		</aside><!-- End .col-lg-3 -->
 		                	</div><!-- End .row -->
-            			</form>
+                            <input type="hidden" id="selectedAddressId" name="selectedAddressId" value="">
+                            <input type="hidden" id="selectedAddressName" name="selectedAddressName" value="">
+                            <input type="hidden" id="selectedPaymentMethod" name="selectedPaymentMethod" value="">
+                    </form>
+
+
+
+                        
 	                </div><!-- End .container -->
                 </div><!-- End .checkout -->
             </div><!-- End .page-content -->
@@ -1145,6 +1165,29 @@
     <script src="assets/js/owl.carousel.min.js"></script>
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
+
+
+    <script>
+        function selectAddress(addressId) {
+            console.log('Selected Address ID:', addressId);
+    
+            document.getElementById('selectedAddressId').value = addressId;
+            document.getElementById('selectedAddressName').value = '<%= address.Fname %>'; // Example, update with the actual field you want to send
+        }
+        function selectPaymentMethod(paymentMethod) {
+    document.getElementById('selectedPaymentMethod').value = paymentMethod;
+    console.log('Selected Payment Method:', paymentMethod);
+  }
+    </script>
+
+    <script>
+        function Paymentmethod(value){
+            console.log(value);
+        }
+        function address(addressId){
+       
+        }
+    </script>
 </body>
 
 

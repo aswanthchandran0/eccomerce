@@ -5,7 +5,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const helmet = require('helmet');
+const helmet = require('helmet'); 
 const cors = require('cors');
 var session = require('express-session')
 const {checkSession,checkUserStatus} = require('./controller/middleware')
@@ -24,7 +24,7 @@ console.error('Error connecting to MongoDB', err);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var loginRouter = require('./routes/login');
+var loginRouter = require('./routes/login'); 
 var AdminPanelRouter = require('./routes/AdminPanel')
 var otpRouter = require('./routes/otp')
 var userDetailsRouter = require('./routes/userDetails');
@@ -37,6 +37,8 @@ var productListRouter = require('./routes/productList')
 var productViewRouter = require('./routes/productView')
 var userProfileRouter = require('./routes/userProfile')
 var cartRouter = require('./routes/cart')
+var orderRouter = require('./routes/orderPage')
+var orderSucessRouter = require('./routes/orderSucess'); 
 const { product } = require('./controller/productDetailsController');
 var app = express();
  
@@ -110,7 +112,8 @@ app.use('/productList', productListRouter)
 app.use('/productView',productViewRouter)
 app.use('/userProfile',userProfileRouter)
 app.use('/cart',cartRouter)
-
+app.use('/order', orderRouter)
+app.use('/orderSucess', orderSucessRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

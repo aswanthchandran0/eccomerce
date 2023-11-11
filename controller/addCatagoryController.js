@@ -3,7 +3,7 @@ const catagoryData= {
    createCatagory : async (req,res)=>{
     
     const Name= req.body.Name
-     console.log(Name)
+    
      try{
         
         if(!Name){

@@ -10,4 +10,6 @@ router.get('/addToCart/:id',controller.cart.addToCart)
 //router.post('/updateTotalPrice',controller.cart.updateTotalPrice)
 router.get('/deleteCart/:id', controller.cart.deleteCart);
 router.get('/updatePrice/:quantityChange/:productId/:productPrice',controller.cart.updatePrice)
+router.get('/orderData/:totalPrice/:subtotalPrice/:shippingPrice/:quantity', controller.cart.orderData);
+router.post('/shippingPrice',controller.cart.shippingPrice)
 module.exports = router; 

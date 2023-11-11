@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Molla - Bootstrap eCommerce Template</title>
+    <title>Lexxive</title>
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Molla - Bootstrap eCommerce Template">
     <meta name="author" content="p-themes">
@@ -615,7 +615,7 @@
                     <div class="input-group-prepend">
                         <button style="min-width: 26px" class="btn btn-decrement btn-spinner" type="button" onclick="changeQuantity(-1, '<%= Product._id %>','<%= Product.ProductPrice %>')"><i class="icon-minus"></i></button>
                     </div>
-                    <input  type="text" style="text-align: center;" class="form-control" id="quantityValue" value="<%= Product.quantity %>" min="1" max="10" required>
+                    <input  type="text" style="text-align: center;" class="form-control" id="<%= Product._id %>" value="1" min="1" max="10" required>
                     <div class="input-group-append">
                         <button style="min-width: 26px" class="btn btn-increment btn-spinner" type="button" onclick="changeQuantity(1, '<%= Product._id %>','<%= Product.ProductPrice %>')"><i class="icon-plus"></i></button>
                     </div>
@@ -626,7 +626,7 @@
 
                                                 </div><!-- End .cart-product-quantity -->                                 
                                             </td>
-											<td  class="total-col amount-<%= Product._id %>" id="total-price">$</td>
+											<td  class="total-col amount-<%= Product._id %>" id="total-price">$<%= Product.ProductPrice%></td>
                                             <form action="/cart/deleteCart/<%= Product._id %>" method="GET">
                                             <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
                                         </form>
@@ -676,7 +676,7 @@
 	                						</tr>
 
 	                						<tr class="summary-shipping-row">
-	                							<td  onclick="shipping(0)">
+	                							<td   onclick="shipping(0)">
 													<div class="custom-control custom-radio">
 														<input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
 														<label class="custom-control-label" for="free-shipping">Free Shipping</label>
@@ -720,8 +720,11 @@
 	                					</tbody>
 	                				</table><!-- End .table table-summary -->
 
-	                				<a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+	                				<a href="./order" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
 	                			</div><!-- End .summary -->
+
+
+                                
 
 		            			<a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
 	                		</aside><!-- End .col-lg-3 -->
@@ -1117,10 +1120,13 @@
 
 
 
-     function changeQuantity(quantityChange,productId,productPrice){
+     function changeQuantity(quantityChange,productId,productPrice,shippingValue){
   const url = `/cart/updatePrice/${quantityChange}/${productId}/${productPrice}`
   const priceElementId = `productPrice_${productId}`
   const productPriceElement = document.getElementById(priceElementId)
+console.log('shipping value djld',shippingValue);
+
+
   if(productPriceElement){
     const productPriceValue = productPriceElement.innerText
     const productPrice = parseFloat(productPriceValue.replace('$',''))
@@ -1128,6 +1134,7 @@
   console.log(productPrice);
   console.log(quantityChange);
   console.log(productId);
+ 
   
   $.ajax({
     method:'GET',
@@ -1138,22 +1145,25 @@
     if(response.quantity !== undefined && response.totalPrice !== undefined){
         console.log('hello');
         $('#entireDiv').load('/cart #entireDiv', function(){
-            $('#quantityValue').val(response.quantity)
+            $(`#${productId}`).val(response.quantity)
             $('.total-col.amount-' + productId).text('$' + response.totalPrice); 
-        })
+        }) 
 
        
-
+        //shipping(productPriceValue * quantityChange);
       
     }
-    shipping()
+ 
+    const updatedShippingValue = shipping(shippingValue);
+console.log('Updated Shipping value in changeQuantity:', updatedShippingValue);
+  
 }
   })
 
   
      }
      function shipping(value) {
-    console.log(value);
+   // console.log(value);
     const subtotalElement = document.getElementById('subTotal');
     const subtotalValueText = subtotalElement.innerText.trim().replace('$', '');
 
@@ -1163,7 +1173,38 @@
 
     const totalElement = document.getElementById('totalAmount');
     totalElement.innerText = '$' + totalValue.toFixed(2);
+    
+ //  sendPricesToServer(totalValue, subtotalValue, value);
+ const xhr = new XMLHttpRequest();
+xhr.open('POST', '/cart/shippingPrice', true);
+xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 300) {
+        const response = JSON.parse(xhr.responseText);
+        console.log('Server response:', response);
+    } else {
+        console.error('Server returned an error:', xhr.statusText);
+    }
+};
+xhr.send(JSON.stringify({ shippingValue: value }));
 }
+
+
+/*
+function sendPricesToServer(totalPrice, subtotalPrice,value) {
+    $.ajax({
+        method: 'GET',
+        url: `/cart/orderData/${totalPrice}/${subtotalPrice}/${value}`,
+         
+        success: function (response) {
+            console.log('Total and subtotal prices sent to the server successfully.');
+        },
+        error: function (error) {
+            console.error('Error sending total and subtotal prices to the server:', error);
+        }
+    });
+}
+*/
 
 </script>
 

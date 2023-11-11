@@ -64,10 +64,10 @@ const userProfile = {
 
     try{
 
-
-   const userAddress = new AddressModel({
-    user: req.session.user._id,
-    address:[{
+const userAddress = await AddressModel.updateOne(
+  {user:req.session.user._id},
+  {
+    $addToSet:{address:{
       Fname:Fname,
       Email:Email,
       PhoneNumber:PhoneNumber,
@@ -79,9 +79,13 @@ const userProfile = {
       AphoneNumber:AphoneNumber, 
       AddressType:AddressType
 
-   }] 
-   })
-   await userAddress.save();
+   }}
+  },
+  {upsert: true}
+)
+
+
+  // await userAddress.save();
    res.redirect('/userProfile')
 
   }catch(error){
