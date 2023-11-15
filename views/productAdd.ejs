@@ -30,6 +30,10 @@
             <% }); %>
             </select>
           </div>
+          <div class="form-group">
+            <label for="exampleInputPassword4">Product Count</label>
+            <input style="width: 10%;" type="number" class="form-control" id="exampleInputPassword4"  value="<%= product ? product.ProductCount :'1' %>" name="ProductCount"  min="1">
+          </div>
           <div class="form-group" >
             <label>Image upload</label>
            <!-- <ul id="imgView"></ul> -->

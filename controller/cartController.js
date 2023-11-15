@@ -26,7 +26,7 @@ const cart = {
       }
 
       if (products) {
-        res.render('cart', { products, totalPrice });
+        res.render('cart', { products, totalPrice: totalPrice });
       } else {
         res.render('cart', { products: null });
       }

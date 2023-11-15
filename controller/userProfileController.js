@@ -1,5 +1,7 @@
 const model = require('../models/userModel')
 const AddressModel = require('../models/userAddressModel')
+const orderData = require('../models/orderModel')
+const productModel = require('../models/productModel')
 const {isValidFname,isValidEmail,isValidPhoneNumber, isValidPincode,isValidAddress,isValidPlace,isValidstate,isValidLandMark,isValidAphoneNumber} = require('../validators/userAddressValidator');
 const { session } = require('passport');
 
@@ -9,11 +11,15 @@ const userProfile = {
         try{
         errors = null; 
             if(req.session.user){
-                
-             
               const userId = req.session.user._id;
+           
+              const orderDetails = await orderData.find({userId:userId})
+              const productIds = orderDetails.map(order => order.productId).flat();
+              const productDetails = await productModel.find({ _id: { $in: productIds } });
+              console.log('product details'+productDetails);
+console.log('order details'+orderDetails);
               const userAddress = await AddressModel.findOne({ user: userId });
-               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress})
+               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails})
                req.session.AddressValidationErrors = null;
                
             }
@@ -97,6 +103,10 @@ const userAddress = await AddressModel.updateOne(
    signout: async (req,res)=>{
       req.session.destroy()
       res.redirect('/')
+   },
+   cancelOrder: async (req,res)=>{
+    console.log('req reached');
+    res.redirect('/userProfile')
    }
 
   }

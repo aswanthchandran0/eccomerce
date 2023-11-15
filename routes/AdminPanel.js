@@ -5,9 +5,7 @@ var {checkSession} = require('../controller/middleware')
 
 
 
-router.get('/',checkSession, (req, res, next)=> {
-  res.render('AdminPanel', { title: 'Express' });
-});
+router.get('/',checkSession, controller.AdminPanel.adminPanel);
 
 router.get('/logout',checkSession, controller.AdminPanel.logout)
 

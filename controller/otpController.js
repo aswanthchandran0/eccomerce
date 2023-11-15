@@ -2,6 +2,7 @@ const { isValidOtp } = require('../validators/userValidators');
 const userController = require('../controller/userController');
 const otpGenerator = require('./otpGenerator')
 const crypto = require('crypto');
+const userModel = require('../models/userModel')
 
 const otp_Expire_Duration = 2 * 60 * 1000
 const otpTimestamb = userController.otpGeneratedTime();
@@ -28,7 +29,12 @@ async function validateOtp(req, res) {
 }
 
 const resendOtp = async (req,res)=>{
-  const { email } = req.params;
+
+  const userId = req.session.user._id
+  const user = await userModel.findById(userId)
+  const email = user.Email
+  console.log('user email'+email);
+
   const resendOtpGenerated = crypto.randomInt(100000,999999)
   resendOtpTimestamb = Date.now()
 

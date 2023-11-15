@@ -67,8 +67,18 @@ const orderSchema = mongoose.Schema({
      paymentMethod:{
         type:String,
         required:true
-     }
-
+     },
+     orderStatus:{
+      type:String,
+      default:'active',
+      required:true
+     },
+     orderDate:{
+      type: Date,
+      required:true
+     },
+     
+     
     
      
 })

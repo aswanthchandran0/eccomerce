@@ -5,4 +5,5 @@ const userValidationMiddleware = require('../middlewares/userMiddlewares')
 router.get('/',userValidationMiddleware.userMiddleware.verifiy, controller.order.orderPage)
  
 router.post('/order', controller.order.order)
-module.exports = router; 
+router.post('/verifiy-payment', controller.order.verfiyPayment)
+module.exports = router;    

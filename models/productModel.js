@@ -25,6 +25,10 @@ const productSchema = new mongoose.Schema({
     Catagory:{
         type:String,
         required:true
+    },
+    ProductCount:{
+        type:Number,
+        required:true
     }
 })
 

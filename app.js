@@ -39,6 +39,7 @@ var userProfileRouter = require('./routes/userProfile')
 var cartRouter = require('./routes/cart')
 var orderRouter = require('./routes/orderPage')
 var orderSucessRouter = require('./routes/orderSucess'); 
+var orderDetailsRouter = require('./routes/orderDetails')
 const { product } = require('./controller/productDetailsController');
 var app = express();
  
@@ -114,6 +115,8 @@ app.use('/userProfile',userProfileRouter)
 app.use('/cart',cartRouter)
 app.use('/order', orderRouter)
 app.use('/orderSucess', orderSucessRouter);
+app.use('/orderDetails', orderDetailsRouter)
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -126,8 +129,17 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.locals.title = 'Error';
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+
+  if(err.status ===404){
+    res.status(404).render('404error')
+  }
+  else{
+
+    res.status(err.status || 500);
+    res.render('error');
+
+  }
+ 
 });
 
 

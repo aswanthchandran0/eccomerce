@@ -591,7 +591,7 @@
                         ------------------------------------------------------------
                     ---------------------------------------------------------------------
                 ------------------------------------------------------------------------------------->
-                <form action="/order/order" method="post" id="orderForm">
+                <form action="/order/order" method="post" id="orderForm" onsubmit="makePayment(event)">
                 <% if(address !==null && address !==undefined){%>
                     <% address.address.forEach((address,index)=>{%>
                              
@@ -729,7 +729,7 @@
 										    <div class="card">
 										        <div class="card-header" id="heading-3">
 										            <h2 class="card-title">
-										                <a class="collapsed" role="button" data-payment="COD" onclick="selectPaymentMethod('COD')" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+										                <a class="collapsed" role="button" data-payment="Cash on Delivery" onclick="selectPaymentMethod('Cash on Delivery')" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
 										                    Cash on delivery
 										                </a>
 										            </h2>
@@ -743,8 +743,8 @@
 										    <div class="card">
 										        <div class="card-header" id="heading-4">
 										            <h2 class="card-title">
-										                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
-										                    PayPal <small class="float-right paypal-link">What is PayPal?</small>
+										                <a class="collapsed" role="button"   data-payment="Online Payment" onclick="selectPaymentMethod('Online Payment')" data-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
+										                    online payment <small class="float-right paypal-link">What is PayPal?</small>
 										                </a>
 										            </h2>
 										        </div><!-- End .card-header -->
@@ -1165,9 +1165,107 @@
     <script src="assets/js/owl.carousel.min.js"></script>
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
     <script>
+  function selectPaymentMethod(paymentMethod) {
+    document.getElementById('selectedPaymentMethod').value = paymentMethod;
+    console.log('Selected Payment Method:', paymentMethod);
+  }
+
+     
+  function selectAddress(addressId) {
+            console.log('Selected Address ID:', addressId);
+    
+            document.getElementById('selectedAddressId').value = addressId;
+            document.getElementById('selectedAddressName').value = '<%= address.Fname %>'; // Example, update with the actual field you want to send
+        }
+
+        function makePayment(event) {
+  event.preventDefault();
+  const selectedAddressId = document.getElementById('selectedAddressId').value;
+  const paymentMethod = document.getElementById('selectedPaymentMethod').value;
+
+  $.ajax({
+    type: 'POST',
+    url: '/order/order',
+    data: {
+      selectedAddressId: selectedAddressId,
+      paymentMethod: paymentMethod,
+    },
+    success: function (response) {
+      console.log('response', response);
+      if (response.codSucess) {
+        location.href = '/orderSucess';
+      } else {
+        razorpayPayment(response);
+      }
+    },
+    error: function (error) {
+      console.error('AJAX Error:', error);
+     
+    },
+  });
+}
+
+
+        function razorpayPayment(response){
+  console.log('Razorpay Order Response:', response);
+  const order = response.data
+  console.log('Order ID:', order.id);
+  console.log('Order Amount:', order.amount);
+  console.log('Converted Amount:', order.amount * 100);
+
+            var options = {
+    "key": "rzp_test_SoEmBjOco04Lhe", // Enter the Key ID generated from the Dashboard
+    "amount": order.amount*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Lexxive", //your business name
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature)
+
+        verifyPayment(response,order)
+    },
+    "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+        "name": "Gaurav Kumar", //your customer's name
+        "email": "gaurav.kumar@example.com", 
+        "contact": "9000090000"  //Provide the customer's phone number for better conversion rates 
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+
+var rzp1 = new Razorpay(options);
+rzp1.open();
+        }
+function verifyPayment(payment,order){
+     $.ajax({
+        method: 'POST',
+        url: '/order/verify-payment',
+        data:{
+            payment,
+            order
+        },
+        
+     })
+}
+    </script>
+    
+
+
+    <script>
+        /*
+        
         function selectAddress(addressId) {
             console.log('Selected Address ID:', addressId);
     
@@ -1177,18 +1275,23 @@
         function selectPaymentMethod(paymentMethod) {
     document.getElementById('selectedPaymentMethod').value = paymentMethod;
     console.log('Selected Payment Method:', paymentMethod);
+  
   }
-    </script>
+  */
+    </script> 
 
     <script>
+        /*
         function Paymentmethod(value){
             console.log(value);
         }
         function address(addressId){
        
         }
+        */
     </script>
 </body>
+
 
 
 <!-- molla/checkout.html  22 Nov 2019 09:55:06 GMT -->

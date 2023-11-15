@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="https://localhost:3000/assets/css/bootstrap.min.css">
     <!-- Main CSS File -->
     <link rel="stylesheet" href="https://localhost:3000/assets/css/style.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -589,9 +589,11 @@
                                           
                                         </div><!-- End .form-group -->
 
-							    		<div class="form-group">
+							    		<div class="form-group position-relative">
 							    			<label for="singin-password-2">Password *</label>
-							    			<input type="password" class="form-control" id="singin-password-2" name="Password" >
+                                          
+							    			<input type="password" class="form-control  p-r-40" id="singin-password-2" name="Password" >
+                                            <span id="eyeIcon" class="fa-solid fa-eye-slash password-icon"  onclick="toggleIcon()" style="position: absolute; top: 75%; transform: translateY(-50%); right: 10px; cursor: pointer; color: rgba(0, 0, 0, 0.466);"></span>
                                             <% if (errors && errors.login) { %>
                                                 <p style="color: red;"><%= errors.login %></p>
                                             <% } %> 		
@@ -652,7 +654,7 @@
 
                                         <div class="form-group">
 							    			<label for="register-email-2">Phone Number</label>
-							    			<input  type="number" class="form-control" id="register-PhoneNumber-2" name="PhoneNumber">
+							    			<input  type="tel" class="form-control" id="register-PhoneNumber-2" name="PhoneNumber">
                                             <% if (errors.PhoneNumber) { %>
                                                 <p style="color: tomato;"><%= errors.PhoneNumber %></p>
                                               <% } %>
@@ -660,9 +662,16 @@
                                         </div><!-- End .form-group -->
 
 
-							    		<div class="form-group">
+
+
+                                    
+
+
+
+							    		<div class="form-group position-relative">
 							    			<label for="register-password-2">Password *</label>
-							    			<input type="password" class="form-control" id="register-password-2" name="Password">
+                                            <span id="register-eyeIcon" class="fa-solid fa-eye-slash password-icon"  onclick="toggleIcon2()" style="position: absolute; top: 55%; transform: translateY(-50%); right: 10px; cursor: pointer; color: rgba(0, 0, 0, 0.466);"></span>
+							    			<input type="password" class="form-control p-r-40" id="register-password-2" name="Password">
                                             <% if (errors.Password) { %>
                                                 <p style="color: tomato;"><%= errors.Password %></p>
                                               <% } %>
@@ -715,80 +724,6 @@
             </div><!-- End .login-page section-bg -->
         </main><!-- End .main -->
 
-        <footer class="footer">
-        	<div class="footer-middle">
-	            <div class="container">
-	            	<div class="row">
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget widget-about">
-	            				<img src="https://localhost:3000/assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
-	            				<p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
-
-	            				<div class="social-icons">
-	            					<a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
-	            					<a href="#" class="social-icon" target="_blank" title="Pinterest"><i class="icon-pinterest"></i></a>
-	            				</div><!-- End .soial-icons -->
-	            			</div><!-- End .widget about-widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
-
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget">
-	            				<h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
-
-	            				<ul class="widget-list">
-	            					<li><a href="about.html">About Molla</a></li>
-	            					<li><a href="#">How to shop on Molla</a></li>
-	            					<li><a href="#">FAQ</a></li>
-	            					<li><a href="contact.html">Contact us</a></li>
-	            					<li><a href="login.html">Log in</a></li>
-	            				</ul><!-- End .widget-list -->
-	            			</div><!-- End .widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
-
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget">
-	            				<h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
-
-	            				<ul class="widget-list">
-	            					<li><a href="#">Payment Methods</a></li>
-	            					<li><a href="#">Money-back guarantee!</a></li>
-	            					<li><a href="#">Returns</a></li>
-	            					<li><a href="#">Shipping</a></li>
-	            					<li><a href="#">Terms and conditions</a></li>
-	            					<li><a href="#">Privacy Policy</a></li>
-	            				</ul><!-- End .widget-list -->
-	            			</div><!-- End .widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
-
-	            		<div class="col-sm-6 col-lg-3">
-	            			<div class="widget">
-	            				<h4 class="widget-title">My Account</h4><!-- End .widget-title -->
-
-	            				<ul class="widget-list">
-	            					<li><a href="#">Sign In</a></li>
-	            					<li><a href="cart.html">View Cart</a></li>
-	            					<li><a href="#">My Wishlist</a></li>
-	            					<li><a href="#">Track My Order</a></li>
-	            					<li><a href="#">Help</a></li>
-	            				</ul><!-- End .widget-list -->
-	            			</div><!-- End .widget -->
-	            		</div><!-- End .col-sm-6 col-lg-3 -->
-	            	</div><!-- End .row -->
-	            </div><!-- End .container -->
-	        </div><!-- End .footer-middle -->
-
-	        <div class="footer-bottom">
-	        	<div class="container">
-	        		<p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p><!-- End .footer-copyright -->
-	        		<figure class="footer-payments">
-	        			<img src="https://localhost:3000/assets/images/payments.png" alt="Payment methods" width="272" height="20">
-	        		</figure><!-- End .footer-payments -->
-	        	</div><!-- End .container -->
-	        </div><!-- End .footer-bottom -->
-        </footer><!-- End .footer -->
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
@@ -1087,6 +1022,46 @@
     <script src="https://localhost:3000/assets/js/owl.carousel.min.js"></script>
     <!-- Main JS File -->
     <script src="https://localhost:3000/assets/js/main.js"></script>
+
+    <script>
+        function toggleIcon(){
+            const eyeIcon = document.getElementById('eyeIcon')
+            if(eyeIcon.className === 'fa-solid fa-eye '){
+                eyeIcon.className = 'fa-solid fa-eye-slash'
+            }else{
+                eyeIcon.className = 'fa-solid fa-eye '
+            }
+        }
+
+        function toggleIcon2(){
+            const eyeIcon = document.getElementById('register-eyeIcon')
+            if(eyeIcon.className === 'fa-solid fa-eye '){
+                eyeIcon.className = 'fa-solid fa-eye-slash'
+            }else{
+                eyeIcon.className = 'fa-solid fa-eye '
+            }
+        }
+    </script>
+
+    <script>
+        document.querySelector('.password-icon').addEventListener('click', function(){
+            var input = document.getElementById("singin-password-2");
+            if (input.type === "password") {
+                input.type = "text";
+            } else {
+                input.type = "password";
+            }
+        });
+
+        document.querySelector('.password-icon').addEventListener('click',function (){
+            var input = document.getElementById("register-password-2");
+            if (input.type === "password") {
+                input.type = "text";
+            } else {
+                input.type = "password";
+            }
+        })
+        </script>
 
 </body>
 
