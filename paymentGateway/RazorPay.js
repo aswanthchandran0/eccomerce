@@ -1,5 +1,9 @@
 const Razorpay = require('razorpay');
-
+const crypto = require('crypto')
+const orderModel = require('../models/orderModel');
+const order = require('../models/orderModel');
+const cartModel = require('../models/cartModel')
+const productModel = require('../models/productModel')
 const paymentGateway = { 
   generateRazorPay: async (orderId, totalPrice) => {
     console.log('orderId:', orderId);
@@ -27,6 +31,46 @@ const paymentGateway = {
       console.error(error);
     }
   },
+  verifyPayment: async (req,res)=>{
+    const userId= req.session.user._id
+    console.log('user id');
+    console.log(userId);
+    console.log('payment verify');
+    console.log(req.body);
+   let hmac = crypto.createHmac('sha256', '0sk7KMqW8V3HthmebsRFLx5A')
+     hmac.update(req.body['payment[razorpay_order_id]']+'|'+ req.body['payment[razorpay_payment_id]'])
+     hmac = hmac.digest('hex')  
+     if(hmac === req.body['payment[razorpay_signature]']){
+ console.log('payment order');
+ 
+
+ const userCart = await cartModel.findOne({userId})
+                if(userCart){
+                const cartProductInfo = await Promise.all(
+                  userCart.products.map(async (info)=>{
+                    const product = await productModel.findOne({_id:info.productId})
+                    let ProductCount = product.ProductCount
+                        ProductCount -= info.quantity 
+                        await productModel.findByIdAndUpdate({_id:info.productId},{$set:{ProductCount:ProductCount}},{new:true})
+                  })
+                ) 
+                }
+ 
+ 
+ await cartModel.updateOne({ userId }, { $unset: { products: 1 } });
+
+ const order = await orderModel.findOneAndUpdate(
+  { userId: userId },
+  { $set: {paymentStatus: 'Approved' } },
+
+);
+    console.log(order.paymentStatus);
+    res.json({status:true})
+     }else{
+     order.paymentStatus = 'Rejected'
+       res.json({status:false,errMsg:''})
+     }
+  }
 };
 
 module.exports = { paymentGateway };

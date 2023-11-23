@@ -6,7 +6,7 @@ const productController = {
     addproduct: async (req, res) => {
         try { 
             
-            const { ProductName, ProductPrice, ProductDiscount, Catagory,ProductCount, ProductDiscription } = req.body;
+            const { ProductName, ProductPrice, ProductExpense, Catagory,ProductCount, ProductDiscription } = req.body;
        //     const existingImages = req.product.images || [];
          //   const removedImages = req.body.removedImages || [];
            // const updatedImages = existingImages.filter(image => !removedImages.includes(image));
@@ -19,7 +19,7 @@ const productController = {
               const  product = new ProductDetails({
                 ProductName:ProductName,
                 ProductPrice:ProductPrice,
-                ProductDiscount:ProductDiscount,
+                ProductExpense:ProductExpense,
                 Catagory:Catagory,
                 ProductCount:ProductCount,
                 ProductDiscription:ProductDiscription,

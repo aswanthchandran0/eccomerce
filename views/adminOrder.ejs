@@ -209,7 +209,7 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
-                      <h4 class="card-title mb-1">User</h4>
+                      <h4 class="card-title mb-1">Order Status</h4>
                       <p class="text-muted mb-1"></p>
                     </div>
                     <div class="row">
@@ -217,63 +217,54 @@
                         <div class="preview-list">
                           <!---->
                          
-                          
+                          <div class="table-responsive ">
 
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th> # </th>
-                <th> First name </th>
-                <th> Email </th>
-                <th> PhoneNumber </th>
-                <th> User Status </th>
-                <th>  </th>
-                <th>  </th>
-                <th>  </th>
-                <th>  </th>
-                <th>  </th>
             
-              </tr>
-            </thead>
-            <tbody id="#list" >
-                <% Users.forEach((user, index) => { %>
-                  
-                    <tr class="user-row">
-                      <td id="displayedIndex"> <%= index + 1 %> </td>
-                      <td id="name"> <%= user.Fname %> </td>
-                      <td id="email"> <%= user.Email %> </td>
-                      <td> <%= user.PhoneNumber %> </td>
-                      <td>
-                        <% if (user.userStatus === 'active') { %>
-                            <form action="/userDetails/user/block/<%= user._id %>" method="POST">
-                                <button type="submit" style="color: rgba(245, 37, 37, 1); background: none; border: none;">Block</button>
-                            </form>
-                        <% } else { %>
-                            <form action="/userDetails/user/unblock/<%= user._id %>" method="POST">
-                                <button type="submit" class="edit-btn" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Active</button>
-                            </form>
-                        <% } %>
- 
-                <td><a href="/userDetails/edit/<%= user._id %>" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Edit</a>      
-                    </td>                  
-                    <td>
-                        <form action="/userDetails/delete/<%= user._id %>" method="POST" style="display: inline;">
-                           <button type="submit"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick="return confirmDelete('<%= user._id %>', '<%= user.Fname %>')">Delete</button>
-                        </form>
-                    </td>
-                    </tr>
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  
+                                  <th>Order No</th>
+                                  <th>Client Name</th>
+                                  <th> Product Cost </th>
+                                  <th> Start Date </th>
+                                  <th> Payment Mode </th>
+                                  <th> Product </th>
+                                  <th> Status </th>
+                                  <th> Payment Status </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% if(orderData !==null && orderData!== undefined){%>
+                                  <% orderData.forEach((order,index)=>{%>
+                                <tr>
                  
-                  <% }); %>
-
-            </tbody>
-          </table>
-        </div>
+                                  <td>
+                 
+                                    <span class="pl-2"><%= index+1 %></span>
+                                  </td>
+                                  <td><%= order.address.Fname %></td>
+                                  <td> $<%= order.Total %></td>
+                                  <td><%= order.orderDate.toLocaleDateString(); %></td>
+                                  <td> <%=  order.paymentMethod %></td>
+                                  <td>
+                                    <a href="#">&nbsp&nbspview</a>
+                                  </td>
+                                    <td> <%= order.orderStatus %> </td>
+                                  <td>
+                                    <div class="<%= order.paymentStatus ==='Approved' ? 'badge badge-outline-success' : 'badge badge-outline-warning' %> "><%= order.paymentStatus %></div>
+                                  </td>
+                                </tr>
+                
+                                <%})%>
+                            
+                                <%}%>
+                              </tbody>
+                            </table>
+                          </div>
                             
                                
                                
-                               
-                          
                        
             
                          <!---->
@@ -299,63 +290,6 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
-
-
-    <script>
-      function confirmDelete(userId, userName) {
-       
-          var result = confirm(`Are you sure you want to delete ${userName}?`);
-          return result;
-      }
-  </script>
-  
-  
-  
-  
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-  
-          // Select the search input field
-          const productSearchInput = document.getElementById('searchInput');
-  
-          // Select all product rows
-          const productRows = document.querySelectorAll('.user-row');
-  
-          productSearchInput.addEventListener('input', () => {
-              const searchTerm = productSearchInput.value.toLowerCase();
-  
-              // Loop through all product rows and hide those that don't match the search term
-              productRows.forEach((row,index) => {
-                  const productName = row.querySelector('#name').textContent.toLowerCase();
-                  const productCategory = row.querySelector('#email').textContent.toLowerCase();
-  
-                  if (
-                      productName.includes(searchTerm) ||
-                      productCategory.includes(searchTerm)
-                  ) {
-                      row.style.display = 'table-row';
-                      const displayedIndex = index + 1;
-                      row.querySelector('#displayedIndex').textContent = displayedIndex;
-                  } else {
-                      row.style.display = 'none';
-                  }
-              });
-          });
-  
-      })
-      </script>
-      
-      
-      
-
-
-
-
-
-
-
-
-
 
 
 

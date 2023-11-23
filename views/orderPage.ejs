@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <!-- Main CSS File -->
     <link rel="stylesheet" href="assets/css/style.css">
+    
 </head>
 
 <body>
@@ -585,7 +586,8 @@
 		                	<div class="row">
 		                		<div class="col-lg-9">
 		                			<h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
-		                			
+                                 
+                                        
 	            					 <!-------------------------------------
                           --------------------------------------------------------
                         ------------------------------------------------------------
@@ -700,32 +702,18 @@
 										        <div class="card-header" id="heading-1">
 										            <h2 class="card-title">
 										                <a role="button" data-toggle="collapse" href="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
-										                    Direct bank transfer
+										                    Wallet
 										                </a>
 										            </h2>
 										        </div><!-- End .card-header -->
 										        <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion-payment">
 										            <div class="card-body">
-										                Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
+										              you can  directly purchase the product using wallet 
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
 										    </div><!-- End .card -->
 
-										    <div class="card">
-										        <div class="card-header" id="heading-2">
-										            <h2 class="card-title">
-										                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
-										                    Check payments
-										                </a>
-										            </h2>
-										        </div><!-- End .card-header -->
-										        <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion-payment">
-										            <div class="card-body">
-										                Ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. 
-										            </div><!-- End .card-body -->
-										        </div><!-- End .collapse -->
-										    </div><!-- End .card -->
-
+										 
 										    <div class="card">
 										        <div class="card-header" id="heading-3">
 										            <h2 class="card-title">
@@ -744,31 +732,18 @@
 										        <div class="card-header" id="heading-4">
 										            <h2 class="card-title">
 										                <a class="collapsed" role="button"   data-payment="Online Payment" onclick="selectPaymentMethod('Online Payment')" data-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
-										                    online payment <small class="float-right paypal-link">What is PayPal?</small>
+										                    online payment <small class="float-right paypal-link">What is RazorPay?</small>
 										                </a>
 										            </h2>
 										        </div><!-- End .card-header -->
 										        <div id="collapse-4" class="collapse" aria-labelledby="heading-4" data-parent="#accordion-payment">
 										            <div class="card-body">
-										                Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum.
+									                 pay the product through online using Razorpay
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
 										    </div><!-- End .card -->
 
-										    <div class="card">
-										        <div class="card-header" id="heading-5">
-										            <h2 class="card-title">
-										                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
-										                    Credit Card (Stripe)
-										                    <img src="assets/images/payments-summary.png" alt="payments cards">
-										                </a>
-										            </h2>
-										        </div><!-- End .card-header -->
-										        <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion-payment">
-										            <div class="card-body"> Donec nec justo eget felis facilisis fermentum.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Lorem ipsum dolor sit ame.
-										            </div><!-- End .card-body -->
-										        </div><!-- End .collapse -->
-										    </div><!-- End .card -->
+										 
 										</div><!-- End .accordion -->
 
 		                				<button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
@@ -1166,7 +1141,8 @@
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css">
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.all.min.js"></script>  
 
     <script>
   function selectPaymentMethod(paymentMethod) {
@@ -1176,16 +1152,61 @@
 
      
   function selectAddress(addressId) {
-            console.log('Selected Address ID:', addressId);
-    
-            document.getElementById('selectedAddressId').value = addressId;
-            document.getElementById('selectedAddressName').value = '<%= address.Fname %>'; // Example, update with the actual field you want to send
-        }
+
+ 
+        console.log('Selected Address ID:', addressId);
+        document.getElementById('selectedAddressId').value = addressId;
+        document.getElementById('selectedAddressName').value = '<%= address.Fname %>'; // Example, update with the actual field you want to send
+    } 
+       
+
+
 
         function makePayment(event) {
   event.preventDefault();
+  
   const selectedAddressId = document.getElementById('selectedAddressId').value;
   const paymentMethod = document.getElementById('selectedPaymentMethod').value;
+
+  if(!selectedAddressId){
+    Swal.fire({
+  title: "Please Select Any Address",
+  showClass: {
+    popup: `
+      animate__animated
+      animate__fadeInUp
+      animate__faster
+    `
+  },
+  hideClass: {
+    popup: `
+      animate__animated
+      animate__fadeOutDown
+      animate__faster
+    `
+  }
+});
+  }
+
+  if(!paymentMethod){
+    Swal.fire({
+  title: "Please chose any payment method",
+  showClass: {
+    popup: `
+      animate__animated
+      animate__fadeInUp
+      animate__faster
+    `
+  },
+  hideClass: {
+    popup: `
+      animate__animated
+      animate__fadeOutDown
+      animate__faster
+    `
+  }
+});
+  }
 
   $.ajax({
     type: 'POST',
@@ -1226,9 +1247,7 @@
     "image": "https://example.com/your_logo",
     "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
     "handler": function (response){
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature)
+       
 
         verifyPayment(response,order)
     },
@@ -1249,13 +1268,21 @@ var rzp1 = new Razorpay(options);
 rzp1.open();
         }
 function verifyPayment(payment,order){
+
      $.ajax({
         method: 'POST',
-        url: '/order/verify-payment',
+        url: '/order/verifyPayment',
         data:{
             payment,
-            order
+            order, 
         },
+        success:(response)=>{
+            if(response.status){
+                location.href = '/orderSucess';
+            }else{
+                alert('payment failed')
+            }
+        }
         
      })
 }

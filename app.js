@@ -40,6 +40,7 @@ var cartRouter = require('./routes/cart')
 var orderRouter = require('./routes/orderPage')
 var orderSucessRouter = require('./routes/orderSucess'); 
 var orderDetailsRouter = require('./routes/orderDetails')
+var adminOrderRouter = require('./routes/adminOrder')
 const { product } = require('./controller/productDetailsController');
 var app = express();
  
@@ -116,7 +117,7 @@ app.use('/cart',cartRouter)
 app.use('/order', orderRouter)
 app.use('/orderSucess', orderSucessRouter);
 app.use('/orderDetails', orderDetailsRouter)
-
+app.use('/adminOrder',adminOrderRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

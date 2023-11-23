@@ -1,12 +1,17 @@
 const product = require('../models/productModel')
 const cartModel = require('../models/cartModel');
-
+const productModel = require('../models/productModel');
+const { urlencoded } = require('express');
 const cart = {
   cartPage: async (req, res) => {
     try {
       if(!req.session.user._id ){
         res.redirect('/')
       }
+      const empty = req.query.empty
+      let error = req.query.error ? JSON.parse(decodeURIComponent(req.query.error)) : null;
+      console.log(`errors in cart page: ${JSON.stringify(error)}`);
+
       const userCart = await cartModel.findOne({ userId: req.session.user._id });
       let products = null;
       let totalPrice = 0;
@@ -20,13 +25,19 @@ const cart = {
           }
           quantity= cartProduct.quantity
         }
-         
+          
         const productIds = userCart.products.map(product => product.productId);
         products = await product.find({ _id: { $in: productIds } });
       }
 
       if (products) {
-        res.render('cart', { products, totalPrice: totalPrice });
+        if(error){
+          console.log('errors reached'+error);
+          res.render('cart', { products, totalPrice: totalPrice ,error,empty});
+        
+        }else{
+        res.render('cart', { products, totalPrice: totalPrice ,error:null});
+        }
       } else {
         res.render('cart', { products: null });
       }
@@ -98,7 +109,7 @@ const cart = {
 
   deleteCart: async (req, res) => {
    
-    const userId = req.session.user._id
+    const userId = req.session.user._id 
     const productId = req.params.id
   
     try {
@@ -179,6 +190,53 @@ shippingPrice: async (req,res)=>{
 
     
   res.json({ status: 'success', message: 'Shipping price received on the server.' });
+},
+processToCheckout: async(req,res)=>{
+  try{
+    let cartProductInfo = []
+  const userId = req.session.user._id
+  const userCart = await cartModel.findOne({userId:userId})
+  console.log('user cart ',userCart);
+  if(userCart.products.length ==0){
+
+    console.log('request reached inside this');
+    const error = true
+    return res.redirect('/cart?empty='+ urlencoded(error))
+  }
+     cartProductInfo = await Promise.all(
+     userCart.products.map(async (info)=>{
+      const productInfo = await productModel.findOne({_id:info.productId})
+      return { productId:info.productId,productCount:productInfo.ProductCount,quantity:info.quantity}
+     })
+ )
+  
+ console.log('cartProductInfo', cartProductInfo);
+ 
+let errors = []
+console.log('cart info length',cartProductInfo.length);
+for(let i=0;i<cartProductInfo.length;i++){
+  console.log('request reached inside the loop');
+  if(cartProductInfo[i].quantity > cartProductInfo[i].productCount){
+    const product = await productModel.findOne({_id:cartProductInfo[i].productId})
+   errors.push({productId:cartProductInfo[i].productId,error:'not enough stock',productName:product.ProductName})
+   
+  }
+}
+
+if(errors.length>0){
+  console.log('request reached in the if condition');
+  const errorsString = encodeURIComponent(JSON.stringify(errors));
+  await res.redirect(`/cart?error=${errorsString}`);
+}else{
+  res.redirect('/order')
+}
+
+  }catch(error){
+    console.log(error)
+    res.status(500).send('internal server error') 
+  }
+  
+
 }
 
 

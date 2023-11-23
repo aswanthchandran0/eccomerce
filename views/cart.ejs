@@ -581,6 +581,7 @@
 									<thead>
 										<tr>
 											<th>Product</th>
+                                           
 											<th>Price</th>
 											<th>Quantity</th>
 											<th>Total</th>
@@ -589,6 +590,8 @@
 									</thead>
 
 									<tbody >
+                                    
+
 									      <% if(products && products !== null && products !== undefined){ %>
                                             <% products.forEach((Product) => { %> 
 											<td class="product-col">
@@ -601,9 +604,12 @@
 
 													<h3 class="product-title">
 														<a href="#"><%= Product.ProductName %></a>
+                                                    
+                                                    
 													</h3><!-- End .product-title -->
-												</div><!-- End .product -->
+                                                 
 											</td>
+                                            
 											<td class="price-col" >$<%= Product.ProductPrice %></td>
 											<td class="quantity-col">
                                                 <div class="cart-product-quantity">
@@ -633,8 +639,14 @@
                                          
 										</tr>					<tr>
                                             <%})%>
-                                        <% }
-					                   %>
+                                        <% }  
+                                        else { %>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <h1>Cart is empty</h1>
+                                                </td>
+                                            </tr>
+                                        <% } %> 
 									</tbody>
 								</table><!-- End .table table-wishlist -->
 
@@ -678,7 +690,7 @@
 	                						<tr class="summary-shipping-row">
 	                							<td   onclick="shipping(0)">
 													<div class="custom-control custom-radio">
-														<input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
+														<input type="radio" id="free-shipping" name="shipping" class="custom-control-input" >
 														<label class="custom-control-label" for="free-shipping">Free Shipping</label>
 													</div><!-- End .custom-control -->
 	                							</td>
@@ -720,13 +732,13 @@
 	                					</tbody>
 	                				</table><!-- End .table table-summary -->
 
-	                				<a href="./order" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+	                				<a href="/cart/processToCheckout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
 	                			</div><!-- End .summary -->
 
 
                                 
 
-		            			<a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+		            			<a href="./productList" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
 	                		</aside><!-- End .col-lg-3 -->
 
 
@@ -1115,16 +1127,16 @@
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.all.min.js"></script>
 
-<script>
-
-
-
+    
+<script> 
      function changeQuantity(quantityChange,productId,productPrice,shippingValue){
   const url = `/cart/updatePrice/${quantityChange}/${productId}/${productPrice}`
   const priceElementId = `productPrice_${productId}`
   const productPriceElement = document.getElementById(priceElementId)
 console.log('shipping value djld',shippingValue);
+
 
 
   if(productPriceElement){
@@ -1188,119 +1200,35 @@ xhr.onload = function () {
 };
 xhr.send(JSON.stringify({ shippingValue: value }));
 }
-
-
-/*
-function sendPricesToServer(totalPrice, subtotalPrice,value) {
-    $.ajax({
-        method: 'GET',
-        url: `/cart/orderData/${totalPrice}/${subtotalPrice}/${value}`,
-         
-        success: function (response) {
-            console.log('Total and subtotal prices sent to the server successfully.');
-        },
-        error: function (error) {
-            console.error('Error sending total and subtotal prices to the server:', error);
-        }
-    });
-}
-*/
-
 </script>
 
-
-
-
-
+  
+  
 <script>
-
-/*
-
-    function updateTotalPrice(productId) {
-        const quantityInput = document.querySelector(`#quantity-${productId}`);
-        const quantity = parseInt(quantityInput.value);
-        const productPrice = parseFloat(quantityInput.getAttribute('data-product-price'));
-
-        $.ajax({
-            type: 'POST',
-            url: '/cart/updateTotalPrice',
-            data: { productId, quantity, productPrice },
-            success: function(response) {
-                document.querySelector(`#total-price-${productId}`).innerHTML = `$${response.totalPrice.toFixed(2)}`;
-                // Reload the page after updating the total price
-              document.querySelector('.summary-subtotal td:last-child').innerHTML = `$${response.cartTotal.toFixed(2)}`;
-              
-             updatCartTotal()
-            },
-            error: function(error) {
-                console.error(error);
-            }
+    <% if(error) { %>
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "not enough stock!",
         });
-
-        /*const cartData = JSON.parse(localStorage.getItem('cart')) || { products: [] };
-    const existingProductIndex = cartData.products.findIndex(product => product.productId === productId);
-    if (existingProductIndex !== -1) {
-        cartData.products[existingProductIndex].quantity = quantity;
-    } else {
-        cartData.products.push({ productId, quantity });
-    }
-    localStorage.setItem('cart', JSON.stringify(cartData));
-    }
-
-
-   
-    function updateCartTotal(){
-        let cartTotal = 0;
-              const totalElements = document.querySelectorAll('[id^="total-price-"]')
-              totalElements.forEach(element => {
-                const price = parseFloat(element.innerHTML.replace('$', ''));
-                cartTotal += price;
+        
+        <% error.forEach((err) => { %>
+            Swal.fire({
+                icon: "error",
+                title: "not enough stock",
+                text: "<%= err.productName %>",
+                footer: '<a href="#">Why do I have this issue?</a>'
             });
-
-            document.querySelector('.summary-subtotal td:last-child').innerHTML = `$${cartTotal.toFixed(2)}`;
-    }
-/*
-    function updateCartAndSaveToStorage(cartData){
-               cartData.products.forEach(product =>{
-                const productId = product.productId
-                const quantity = product.quantity
-                const productPrice = parseFloat(document.querySelector(`#quantity-${productId}`).getAttribute('data-product-price'));
-                document.querySelector(`#quantity-${productId}`).value = quantity;
-                document.querySelector(`#total-price-${productId}`).innerHTML = `$${(quantity * productPrice).toFixed(2)}`;
-               
-
-               })
-               
-               localStorage.setItem('cart', JSON.stringify(cartData))
-    }
-
-    function loadCartFromStorage (){
-        const cartData = JSON.parse(localStorage.getItem('cart')) || { products: [] };
-        console.log('Cart Data from Local Storage:', cartData);
-        updateCartTotal(cartData); 
-    }
-    window.onload = function (){
-          loadCartFromStorage()
-    }
-
-    }
- /*
-
-window.onload = function () {
-    // Load cart data from localStorage when the page loads
-    const cartData = JSON.parse(localStorage.getItem('cart')) || { products: [] };
-    cartData.products.forEach(product => {
-        const productId = product.productId;
-        const quantity = product.quantity;
-        document.querySelector(`#quantity-${productId}`).value = quantity;
-        updateTotalPrice(productId); // Call the updateTotalPrice function to update the total price and cart total
-    });
-};
-*/
-
+        <% }); %>
+    <% } %>
 </script>
-
-
+<% if (typeof empty !== 'undefined' && empty) { %>
+   
+    <div class="alert alert-danger" role="alert">
+      Custom animation with Animate.css
+    </div>
+  <% } %>
+  
 
 </body>
 </html>

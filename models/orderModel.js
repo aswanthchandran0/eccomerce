@@ -5,10 +5,18 @@ const orderSchema = mongoose.Schema({
         type:String,
         required:true
        },  
-       productId:[{
-        type:String,
-        required:true
-    },],
+       productDetails: [
+         {
+           productId: {
+             type: String,
+             required: true,
+           },
+           purchasedCount: {
+             type: Number,
+             required: true,
+           },
+         },
+       ],
        
     address:{
         
@@ -66,8 +74,8 @@ const orderSchema = mongoose.Schema({
      },
      paymentMethod:{
         type:String,
-        required:true
-     },
+        required:true  
+     }, 
      orderStatus:{
       type:String,
       default:'active',
@@ -77,7 +85,13 @@ const orderSchema = mongoose.Schema({
       type: Date,
       required:true
      },
-     
+     paymentStatus:{
+      type:String,
+      default:'Pending',
+      required:true
+     },
+    
+    
      
     
      
