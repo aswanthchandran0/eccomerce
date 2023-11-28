@@ -14,13 +14,14 @@ const userProfile = {
               const userId = req.session.user._id;
               const user = await model.findOne({ _id: userId });
               const wallet = user.Wallet
+              const walletTransactions = user.walletStatus;
               console.log('wallet',wallet);
               const orderDetails = await orderData.find({userId:userId})
               const productIds = orderDetails.map(order => order.productId).flat();
               const productDetails = await productModel.find({ _id: { $in: productIds } });
               console.log('product details'+productDetails);
               const userAddress = await AddressModel.findOne({ user: userId });
-               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet})
+               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet,walletTransactions})
                req.session.AddressValidationErrors = null;
                
             }

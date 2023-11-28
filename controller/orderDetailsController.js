@@ -37,11 +37,20 @@ const orderDetails = {
       if(updatedOrder.paymentMethod === 'Online Payment' &&  updatedOrder.orderStatus === 'canceled'){
           const user = await userData.findById(userId)
             const wallet = user.Wallet
-            const updatedWallet = wallet+updatedOrder.Total
-            await userData.findByIdAndUpdate(userId,{Wallet:updatedWallet},{new:true})
+            const updatedMoney = updatedOrder.Total
+            const updatedWallet = wallet+updatedMoney
+
+            const creditedTransaction = {status:'credited',amount: updatedMoney, timestamp: new Date()}
+            await userData.updateOne(
+                { _id: userId },
+                { $push: { walletStatus: creditedTransaction } }
+              );
+              await userData.findByIdAndUpdate(userId,{Wallet:updatedWallet},{new:true}) 
+
             await orderData.findByIdAndUpdate(orderId,{Total:0,paymentStatus:'Returned'},{new:true})
-        
-      }
+            
+        console.log('user',user);
+      }    
             console.log('orderstatus',updatedOrder.orderStatus);
 
         res.json({sucess:true})

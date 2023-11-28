@@ -153,8 +153,18 @@ const order = {
              console.log('total price of the product ', totalPrice);
              if(userWallet >= totalPrice){
                const updatedWallet = userWallet-totalPrice
-              await userData.findByIdAndUpdate(userId,{Wallet:updatedWallet},{new:true}) 
-              await cartModel.updateOne({ userId }, { $unset: { products: 1 } });
+               console.log('updated wallet',updatedWallet);
+             
+
+               const debitTransaction = {status:'debited',amount: totalPrice, timestamp: new Date()}
+               console.log('debit transaction',debitTransaction);
+               await userData.updateOne(
+                { _id: userId },
+                { $push: { walletStatus: debitTransaction } }
+              );
+               await userData.findByIdAndUpdate(userId,{Wallet:updatedWallet},{new:true}) 
+               console.log('user',user);
+           await cartModel.updateOne({ userId }, { $unset: { products: 1 } });
               await orderModel.findOneAndUpdate(
                 { _id: orderId },
                 { $set: {paymentStatus: 'Approved' } },

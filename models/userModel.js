@@ -1,5 +1,23 @@
 const mongoose = require('mongoose');
 
+
+const walletTransactionSchema = new mongoose.Schema({
+    status: {
+        type: String,
+        enum: ['credited', 'debited'],
+        required: true
+    },
+    amount:{
+        type: Number,
+        required: true
+    },
+    timestamp: {
+        type: Date
+    },
+   
+}, { _id: false });
+
+
 const userSchema = new mongoose.Schema({
     Fname:{
      type:String,
@@ -27,6 +45,9 @@ const userSchema = new mongoose.Schema({
         default:0,
         required:true
     },
+    walletStatus:{
+        type:[walletTransactionSchema],
+    }
 })
 
 

@@ -93,7 +93,6 @@ const cart = {
         { new: true }
       );
 
-
       let cartTotal = 0;
       updatedCart.products.forEach(product => {
         cartTotal += product.quantity * parseFloat(productPrice);

@@ -712,22 +712,32 @@
 
                 <div class="col-md-7 grid-margin stretch-card">
                     <div class="card">
-                      <div class="card-body" style=" background-color: rgba(147, 145, 145, 1); border-radius: 10px;">
+                      <div class="card-body" style="background-color: rgba(147, 145, 145, 1); border-radius: 10px;">
                         <div class="d-flex flex-row justify-content-between">
-                          <h4 style="color: rgba(241, 241, 241, 1); margin-top: 4%; margin-left: 3%; " class="card-title mb-1">Transation </h4> 
-                      
+                          <h4 style="color: rgba(241, 241, 241, 1); margin-top: 4%; margin-left: 3%;" class="card-title mb-1">Transaction</h4>
                         </div>
-                        <p style="color: rgba(241, 241, 241, 1);">jkk</p>
+                       
+<ul style="color: rgba(241, 241, 241, 1); list-style-type: none;">
+    <% for (const transaction of walletTransactions) { %>
+      <li>
+        Transaction:<%= transaction.status %>,
+        Amount:<%= transaction.amount %>,
+        Time:<%= new Date(transaction.timestamp).toLocaleString() %>
+      </li>
+    <% } %>
+  </ul>
+  
                         <div class="row">
                           <div class="col-12">
                             <div class="preview-list">
-                            
+                              <!-- Your transaction details go here -->
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  
 
 
 
