@@ -12,14 +12,15 @@ const userProfile = {
         errors = null; 
             if(req.session.user){
               const userId = req.session.user._id;
-           
+              const user = await model.findOne({ _id: userId });
+              const wallet = user.Wallet
+              console.log('wallet',wallet);
               const orderDetails = await orderData.find({userId:userId})
               const productIds = orderDetails.map(order => order.productId).flat();
               const productDetails = await productModel.find({ _id: { $in: productIds } });
               console.log('product details'+productDetails);
-console.log('order details'+orderDetails);
               const userAddress = await AddressModel.findOne({ user: userId });
-               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails})
+               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet})
                req.session.AddressValidationErrors = null;
                
             }
@@ -94,6 +95,7 @@ const userAddress = await AddressModel.updateOne(
   // await userAddress.save();
    res.redirect('/userProfile')
 
+
   }catch(error){
     console.log(error);
     res.status(500).send('internal server error')
@@ -107,8 +109,8 @@ const userAddress = await AddressModel.updateOne(
    cancelOrder: async (req,res)=>{
     console.log('req reached');
     res.redirect('/userProfile')
-   }
-
+   },
+  
   }
 
 

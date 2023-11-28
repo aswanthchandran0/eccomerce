@@ -698,17 +698,16 @@
 		                				</table><!-- End .table table-summary -->
 
 		                				<div class="accordion-summary" id="accordion-payment">
-										    <div class="card">
-										        <div class="card-header" id="heading-1">
+                                            <div class="card">
+										        <div class="card-header" id="heading-3">
 										            <h2 class="card-title">
-										                <a role="button" data-toggle="collapse" href="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+										                <a class="collapsed" role="button" data-payment="Cash on Delivery" onclick="selectPaymentMethod('Wallet')" data-toggle="collapse" href="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
 										                    Wallet
 										                </a>
 										            </h2>
 										        </div><!-- End .card-header -->
-										        <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion-payment">
-										            <div class="card-body">
-										              you can  directly purchase the product using wallet 
+										        <div id="collapse-1" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
+										            <div class="card-body">you can use a wallet to purchase a product
 										            </div><!-- End .card-body -->
 										        </div><!-- End .collapse -->
 										    </div><!-- End .card -->
@@ -1219,7 +1218,11 @@
       console.log('response', response);
       if (response.codSucess) {
         location.href = '/orderSucess';
-      } else {
+      }else if(response.walletSucess){
+        location.href = '/orderSucess';
+      }
+      
+      else {
         razorpayPayment(response);
       }
     },

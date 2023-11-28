@@ -1,5 +1,4 @@
 
-
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -41,6 +40,8 @@ var orderRouter = require('./routes/orderPage')
 var orderSucessRouter = require('./routes/orderSucess'); 
 var orderDetailsRouter = require('./routes/orderDetails')
 var adminOrderRouter = require('./routes/adminOrder')
+var brandingRouter = require('./routes/branding')
+var bannerRouter = require('./routes/banner')
 const { product } = require('./controller/productDetailsController');
 var app = express();
  
@@ -56,7 +57,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('uploads'));
-
+app.use('/bannerImages', express.static('bannerImages'))
 
 //app.use(upload.single('productImage'));
 //app.use(express.static('public'));
@@ -117,7 +118,9 @@ app.use('/cart',cartRouter)
 app.use('/order', orderRouter)
 app.use('/orderSucess', orderSucessRouter);
 app.use('/orderDetails', orderDetailsRouter)
-app.use('/adminOrder',adminOrderRouter)
+app.use('/adminOrder',checkSession,adminOrderRouter)
+app.use('/branding',checkSession, brandingRouter)
+app.use('/banner', checkSession, bannerRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

@@ -1,5 +1,5 @@
 const orderData = require('../models/orderModel')
-
+const userData = require('../models/userModel')
 const orderDetails = {
     orderPage: async(req,res)=>{
         try{
@@ -15,16 +15,36 @@ const orderDetails = {
     },
     deleteOrder: async(req,res)=>{
         try{
+            const orderId = req.params.orderId
+            const orderStatus = req.query.orderStatus
             const userId = req.session.user._id
-        await orderData.findOneAndUpdate(
-                { userId: userId},
+            // if(orderStatus === 'Delivered'){
+            //     const userOrder = await orderData.findById(orderId)
+            //     const shippingPrice = userOrder.shippingPrice
+            //     const TotalPrice = userOrder.Total
+            //     const updatedPrice = TotalPrice-shippingPrice
+            //     console.log('shipping price',shippingPrice);
+            //     console.log('total price',TotalPrice);
+            //     console.log('updated price',updatedPrice);
+            //     const user = await userData.findByIdAndUpdate(userId,{Wallet:updatedPrice},{new:true})
+            //     res.json({sucess:true})
+            // }
+      const updatedOrder =  await orderData.findOneAndUpdate(
+                { _id:orderId },
                 { $set: { orderStatus: 'canceled' } },
                 { new: true }
             );
-    
+      if(updatedOrder.paymentMethod === 'Online Payment' &&  updatedOrder.orderStatus === 'canceled'){
+          const user = await userData.findById(userId)
+            const wallet = user.Wallet
+            const updatedWallet = wallet+updatedOrder.Total
+            await userData.findByIdAndUpdate(userId,{Wallet:updatedWallet},{new:true})
+            await orderData.findByIdAndUpdate(orderId,{Total:0,paymentStatus:'Returned'},{new:true})
+        
+      }
+            console.log('orderstatus',updatedOrder.orderStatus);
 
-
-        res.redirect('/orderDetails')
+        res.json({sucess:true})
         }catch(error){
             console.log(error)
             res.status(500).send('internal server error')

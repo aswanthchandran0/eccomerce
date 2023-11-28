@@ -1,11 +1,12 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto')
 const orderModel = require('../models/orderModel');
-const order = require('../models/orderModel');
 const cartModel = require('../models/cartModel')
 const productModel = require('../models/productModel')
+let id
 const paymentGateway = { 
   generateRazorPay: async (orderId, totalPrice) => {
+    id=orderId
     console.log('orderId:', orderId);
     console.log('totalPrice:', totalPrice);
     const  totalPriceInPaise =Math.round(totalPrice * 100)
@@ -60,14 +61,14 @@ const paymentGateway = {
  await cartModel.updateOne({ userId }, { $unset: { products: 1 } });
 
  const order = await orderModel.findOneAndUpdate(
-  { userId: userId },
+  { _id: id },
   { $set: {paymentStatus: 'Approved' } },
 
 );
     console.log(order.paymentStatus);
     res.json({status:true})
      }else{
-     order.paymentStatus = 'Rejected'
+    
        res.json({status:false,errMsg:''})
      }
   }

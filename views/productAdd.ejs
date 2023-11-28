@@ -1,145 +1,383 @@
 <%- include('./adminHeader.ejs')-%>
 
-
-<div class="col-12 grid-margin stretch-card">
-    
- <%- include('./adminSidebar.ejs')-%>
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Product add</h4>
-        <p class="card-description">  </p>
-        <p class="card-description">  </p>
-        <form class="forms-sample" action="/productAdd/addProduct" method="post" enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="exampleInputName1"> Product Name</label>
-            <input type="text" class="form-control" id="exampleInputName1" name="ProductName"  value="<%= product ? product.ProductName : '' %>" placeholder="Product Name">
+    <div class="container-scroller">
+      <!-- partial:partials/_sidebar.html -->
+    <%- include('./adminSidebar.ejs') -%>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo.png" alt="logo" /></a>
           </div>
-          <div class="form-group">
-            <label for="exampleInputEmail3">Product Price</label>
-            <input type="number" class="form-control" id="exampleInputEmail3"  value="<%= product ? product.ProductPrice : '' %>" name="ProductPrice" placeholder="$:0.00" min="1">
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword4">Product Expense</label>
-            <input type="number" class="form-control" id="exampleInputPassword4"  value="<%= product ? product.ProductExpense :'' %>" name="ProductExpense" placeholder="$:0.00" >
-          </div>
-          <div class="form-group">
-            <label for="exampleSelectGender">Catagory</label>
-            <select class="form-control" id="exampleSelectGender" name="Catagory">
-              <% Catagories.forEach(category => { %>
-                <option value="<%= category.name %>"><%= category.name %></option>
-            <% }); %>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword4">Product Count</label>
-            <input style="width: 10%;" type="number" class="form-control" id="exampleInputPassword4"  value="<%= product ? product.ProductCount :'1' %>" name="ProductCount"  min="1">
-          </div>
-          <div class="form-group" >
-            <label>Image upload</label>
-           <!-- <ul id="imgView"></ul> -->
-            <div class="existing-images row">
-              <% if (product && product.images && product.images.length > 0) { %>
-                  <% product.images.forEach((image, index) => { %>
-                      <div class="col-md-2 mb-3">
-                          <div class="existing-image " >
-                              <img  style="height: 200px;" src="<%= image ? image : '' %>" alt="Product Image" class="img-fluid" ><br>
-                              <input type="checkbox" name="removedImages" value="<%=image%>"> Remove
-                          </div>
-                      </div>
-                  <% }); %>
-              <% } %>
-          </div>
-          
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav w-100">
+              <li class="nav-item w-100">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                  <input type="text" class="form-control" placeholder="Search products">
+                </form>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+              <li class="nav-item dropdown d-none d-lg-block">
            
-                
-               
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  <h6 class="p-3 mb-0">Projects</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-web text-info"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">UI Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-layers text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Testing</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all projects</p>
+                </div>
+              </li>
+              <li class="nav-item nav-settings d-none d-lg-block">
+                <a class="nav-link" href="#">
+                  <i class="mdi mdi-view-grid"></i>
+                </a>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                  <i class="mdi mdi-email"></i>
+                  <span class="count bg-success"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                  <h6 class="p-3 mb-0">Messages</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <img src="assets/images/faces/face4.jpg" alt="image" class="rounded-circle profile-pic">
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
+                      <p class="text-muted mb-0"> 1 Minutes ago </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <img src="assets/images/faces/face2.jpg" alt="image" class="rounded-circle profile-pic">
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
+                      <p class="text-muted mb-0"> 15 Minutes ago </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <img src="images/IMG_20220322_182702_732.jpg" alt="image" class="rounded-circle profile-pic">
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
+                      <p class="text-muted mb-0"> 18 Minutes ago </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">4 new messages</p>
+                </div>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <i class="mdi mdi-bell"></i>
+                  <span class="count bg-danger"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-calendar text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Event today</p>
+                      <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event today </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                      <p class="text-muted ellipsis mb-0"> Update dashboard </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-link-variant text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Launch Admin</p>
+                      <p class="text-muted ellipsis mb-0"> New admin wow! </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all notifications</p>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                  <div class="navbar-profile">
+                    <img class="img-xs rounded-circle" src="images/IMG_20220322_182702_732.jpg" alt="">
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">aswanth</p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                        
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <a href="/AdminPanel/logout"><p style="text-decoration: none; color: aliceblue; margin-top: -38%; margin-left: 45%;" class="preview-subject mb-1" >Log out</p></a>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                </div>
+              </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+              <span class="mdi mdi-format-line-spacing"></span>
+            </button>
+          </div>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+           
+            <div class="row">
+             
+              <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex flex-row justify-content-between">
+                      <h4 class="card-title mb-1">Product add</h4>
+                      <p class="text-muted mb-1"></p>
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="preview-list">
+                          <!---->
+                          
+                              
+                              <p class="card-description">  </p>
+                              <p class="card-description">  </p>
+                              <form class="forms-sample" action="/productAdd/addProduct" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                  <label for="exampleInputName1"> Product Name</label>
+                                  <input type="text" class="form-control" id="exampleInputName1" name="ProductName"  value="<%= product ? product.ProductName : '' %>" placeholder="Product Name">
+                                </div>
+                                <div class="form-group">
+                                  <label for="exampleInputEmail3">Product Price</label>
+                                  <input type="number" class="form-control" id="exampleInputEmail3"  value="<%= product ? product.ProductPrice : '' %>" name="ProductPrice" placeholder="$:0.00" min="1">
+                                </div>
+                                <div class="form-group">
+                                  <label for="exampleInputPassword4">Product Expense</label>
+                                  <input type="number" class="form-control" id="exampleInputPassword4"  value="<%= product ? product.ProductExpense :'' %>" name="ProductExpense" placeholder="$:0.00" >
+                                </div>
+                                <div class="form-group">
+                                  <label for="exampleSelectGender">Catagory</label>
+                                  <select class="form-control" id="exampleSelectGender" name="Catagory">
+                                    <% Catagories.forEach(category => { %>
+                                      <option value="<%= category.name %>"><%= category.name %></option>
+                                  <% }); %>
+                                  </select>
+                                </div>
+                                <div class="form-group">
+                                  <label for="exampleInputPassword4">Product Count</label>
+                                  <input style="width: 10%;" type="number" class="form-control" id="exampleInputPassword4"  value="<%= product ? product.ProductCount :'1' %>" name="ProductCount"  min="1">
+                                </div>
+                                <div class="form-group" >
+                                  <label>Image upload</label>
+                                 <!-- <ul id="imgView"></ul> -->
+                                  <div class="existing-images row">
+                                    <% if (product && product.images && product.images.length > 0) { %>
+                                        <% product.images.forEach((image, index) => { %>
+                                            <div class="col-md-2 mb-3">
+                                                <div class="existing-image " >
+                                                    <img  style="height: 200px;" src="<%= image ? image : '' %>" alt="Product Image" class="img-fluid" ><br>
+                                                    <input type="checkbox" name="removedImages" value="<%=image%>"> Remove
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    <% } %>
+                                </div>
+                                
+                                 
+                                      
+                                     
+                      
+                                  <div class="input-group col-xs-12" style="width: 50%;" >
+                                    <input  style="background: none;" type="file" id="imageInput" name="images[]" class="file-upload-default" multiple onchange="viewImage(event)">
+                              
+                                   <input  type="file" class="form-control"  id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple  onchange="viewImage(event)">
+                                    <span class="input-group-append">
+                                      
+                                    </span>
+                                  </div> 
+                                </div>
+                              
+                                <div class="form-group">
+                                  <label for="exampleTextarea1">Product Discription</label>
+                                  <textarea class="form-control" id="exampleTextarea1" name="ProductDiscription"  value="<%= product ? product.ProductDiscription : '' %>" rows="4"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                <button type="button" class="btn btn-dark  " id="cancelBtn">Cancel</button>
+                              </form>
+                               
+                              
+                              
+                        
+                          
+                          
+                            
+            
+                         <!---->
 
-            <div class="input-group col-xs-12" style="width: 50%;" >
-              <input  style="background: none;" type="file" id="imageInput" name="images[]" class="file-upload-default" multiple onchange="viewImage(event)">
-        
-             <input  type="file" class="form-control"  id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple  onchange="viewImage(event)">
-              <span class="input-group-append">
-                
-              </span>
-            </div> 
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+           
+
+
           </div>
-        
-          <div class="form-group">
-            <label for="exampleTextarea1">Product Discription</label>
-            <textarea class="form-control" id="exampleTextarea1" name="ProductDiscription"  value="<%= product ? product.ProductDiscription : '' %>" rows="4"></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary mr-2">Submit</button>
-          <button type="button" class="btn btn-dark  " id="cancelBtn">Cancel</button>
-        </form>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
          
-        
-        
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
       </div>
+      <!-- page-body-wrapper ends -->
     </div>
 
-<script>
-  function viewImage(event){
-    document.getElementById('imgView').src=URL.createObjectURL(event.target.files)
-  }
-</script>
 
-
-  <script>
- document.addEventListener('DOMContentLoaded', function(){
-  const cancelBtn = document.getElementById('cancelBtn')
-  cancelBtn.addEventListener('click', function(){
-    window.location.href = "productDetails"
-  })
- })
-  </script>
-
-<script>
-  function updateImageList(input){
-    const maxImages = 4;
-    const fileList = input.files;
-    const imageList = document.getElementById('image-list')
-  
-    if (fileList.length > maxImages) {
-alert(`You can only upload ${maxImages} images.`);
-input.value = ''; 
-document.querySelector('.form-control.file-upload-default').value = '';
-return;
-}
-
-  for(i=0;i<fileList.length;i++){
-    const listItem = document.createElement('li')
-    listItem.textContent = fileList[i].name;
-    imageList.appendChild(listItem)
-  }
-  }
- 
-// ... append other form fields to formData ...
-function handleFileSelect(event) {
-const files = event.target.files;
-for (let i = 0; i < files.length; i++) {
-formData.append('images', files[i]);
-}
-}
-const fileInput = document.querySelector('input[name="images"]');
-fileInput.addEventListener('change', handleFileSelect);
-form.addEventListener('submit', async (event) => {
-event.preventDefault();
-// Perform form submission with fetch or other AJAX methods
-try {
-const response = await fetch('/productAdd/addProduct', {
-  method: 'POST',
-  body: formData,
-});
-// Handle response as needed
-} catch (error) {
-console.error(error);
-}
-});
-
-
-</script>
-
+    <script>
+      function viewImage(event){
+        document.getElementById('imgView').src=URL.createObjectURL(event.target.files)
+      }
+    </script>
     
- 
-
-<%- include('./adminFooter.ejs')-%>
+    
+      <script>
+     document.addEventListener('DOMContentLoaded', function(){
+      const cancelBtn = document.getElementById('cancelBtn')
+      cancelBtn.addEventListener('click', function(){
+        window.location.href = "productDetails"
+      })
+     })
+      </script>
+    
+    <script>
+      function updateImageList(input){
+        const maxImages = 4;
+        const fileList = input.files;
+        const imageList = document.getElementById('image-list')
+      
+        if (fileList.length > maxImages) {
+    alert(`You can only upload ${maxImages} images.`);
+    input.value = ''; 
+    document.querySelector('.form-control.file-upload-default').value = '';
+    return;
+    }
+    
+      for(i=0;i<fileList.length;i++){
+        const listItem = document.createElement('li')
+        listItem.textContent = fileList[i].name;
+        imageList.appendChild(listItem)
+      }
+      }
+     
+    // ... append other form fields to formData ...
+    function handleFileSelect(event) {
+    const files = event.target.files;
+    for (let i = 0; i < files.length; i++) {
+    formData.append('images', files[i]);
+    }
+    }
+    const fileInput = document.querySelector('input[name="images"]');
+    fileInput.addEventListener('change', handleFileSelect);
+    form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    // Perform form submission with fetch or other AJAX methods
+    try {
+    const response = await fetch('/productAdd/addProduct', {
+      method: 'POST',
+      body: formData,
+    });
+    // Handle response as needed
+    } catch (error) {
+    console.error(error);
+    }
+    });
+    
+    
+    </script>
+    
+        
+     
+    
+    <%- include('./adminFooter.ejs')-%>

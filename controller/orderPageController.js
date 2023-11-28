@@ -5,6 +5,7 @@ const orderModel = require('../models/orderModel')
 const  {isValidpaymentMethod,isValidselectedAddressId} = require('../validators/orderVaidation')
 const RazorPay = require('../paymentGateway/RazorPay')
 const productModel = require('../models/productModel')
+const userData = require('../models/userModel')
 const { response } = require('express')
 
 const order = {
@@ -143,8 +144,27 @@ const order = {
             success: true,
             message: 'Razorpay order created successfully',
             data: response,
-          }); 
-          } 
+          });  
+          }else if(paymentMethod ==='Wallet'){
+              const user = await userData.findById(userId)
+            
+              const  userWallet = user.Wallet
+              console.log('user wallet', userWallet);
+             console.log('total price of the product ', totalPrice);
+             if(userWallet >= totalPrice){
+               const updatedWallet = userWallet-totalPrice
+              await userData.findByIdAndUpdate(userId,{Wallet:updatedWallet},{new:true}) 
+              await cartModel.updateOne({ userId }, { $unset: { products: 1 } });
+              await orderModel.findOneAndUpdate(
+                { _id: orderId },
+                { $set: {paymentStatus: 'Approved' } },
+              
+              );
+              res.json({walletSucess:true})
+             }else{
+              res.json({walletSucess:false, message:'Insufficent balance in  the wallet'})
+             }
+          }
         
       
   

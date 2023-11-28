@@ -205,11 +205,11 @@
            
             <div class="row">
              
-              <div class="col-md-12 grid-margin stretch-card">
+              <div class="col-md-5 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
-                      <h4 class="card-title mb-1">Order Status</h4>
+                      <h4 class="card-title mb-1">Brand</h4>
                       <p class="text-muted mb-1"></p>
                     </div>
                     <div class="row">
@@ -217,69 +217,9 @@
                         <div class="preview-list">
                           <!---->
                          
-                          <div class="table-responsive ">
-
-            
-                            <table class="table">
-                              <thead>
-                                <tr>
-                                  
-                                  <th>Order No</th>
-                                  <th>Client Name</th>
-                                  <th> Product Cost </th>
-                                  <th> Start Date </th>
-                                  <th> Payment Mode </th>
-                                  <th> Product </th>
-                                  <th> Status </th>
-                                  <th> Payment Status </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <% if(orderData !==null && orderData!== undefined){%>
-                                  <% orderData.forEach((order,index)=>{%>
-                                <tr>
-                 
-                                  <td>
-                 
-                                    <span class="pl-2"><%= index+1 %></span>
-                                  </td>
-                                  <td><%= order.address.Fname %></td>
-                                  <td> $<%= order.Total %></td>
-                                  <td><%= order.orderDate.toLocaleDateString(); %></td>
-                                  <td> <%=  order.paymentMethod %></td>
-                                  <td>
-                                    <a href="#">&nbsp&nbspview</a>
-                                  </td>
-                                  
-
-                                    <td>
-                                      <select  class="form-control selectedOrderStatus" data-order-id="<%= order._id %>" name="orderStatus">
-                                      <%if(order.orderStatus !== 'canceled' && order.orderStatus !== 'Deliverd'){%>
-                                        <option value="<%= order.ordersStatus %>"><%= order.orderStatus %></option>
-                                        <option value="Packed">Packed</option>
-                                        <option value="Shipping">Shipping</option>
-                                        <option value="Deliverd">Deliverd</option>
-                                        <%}else{%>
-                                          <option  value="<%= order.ordersStatus %>"><%= order.orderStatus %></option>
-                                          <%}  
-                                        %>
-                                    </select>
-                                    
-                                    </td>
-                                  <td>
-                                    <div class="<%= order.paymentStatus ==='Approved' ? 'badge badge-outline-success' : 'badge badge-outline-warning' %> "><%= order.paymentStatus %></div>
-                                  </td>
-                                </tr>
-                
-                                <%})%>
+                          
                             
-                                <%}%>
-                              </tbody>
-                            </table>
-                          </div>
-                            
-                               
-                               
+                                 
                        
             
                          <!---->
@@ -305,28 +245,5 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-      jQuery.noConflict();
-      (function ($) {
-        document.querySelectorAll('.selectedOrderStatus').forEach(function (element) {
-          element.addEventListener('change', function () {
-            var selectedValue = this.value;
-            var orderId =this.getAttribute('data-order-id')
-            $.ajax({
-              type: 'GET',
-              url: `/adminOrder/selectedValue/${selectedValue}/orderId/${orderId}`,
-              success: function (data) {
-                window.location.reload();
-    console.log('AJAX request successful', data);
-  },
-            });
-          });
-        });
-      })(jQuery);
-    </script>
-    
-    
-
 
     <%- include('./adminFooter.ejs')-%>
