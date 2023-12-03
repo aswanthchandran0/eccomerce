@@ -16,7 +16,7 @@ const catagoryData = {
         console.log(catagoryId);
         try{
             await model.findByIdAndRemove(catagoryId)
-            res.redirect('/catagory')
+            res.redirect('/admin/catagory')
 
         }catch(errors){
           console.log(errors);

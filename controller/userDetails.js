@@ -15,7 +15,7 @@ const userData = {
         const userId=req.params.id
         try{
             await User.findByIdAndUpdate(userId,{userStatus:'blocked'})
-            res.redirect('/userDetails')
+            res.redirect('/admin/userDetails')
         } catch {
             console.log(error);
             res.status(500).send('Internal server Error')
@@ -25,7 +25,7 @@ const userData = {
         const userId=req.params.id
         try{
             await User.findByIdAndUpdate(userId,{userStatus:'active'})
-            res.redirect('/userDetails')
+            res.redirect('/admin/userDetails')
         } catch {
             console.log(error);
             res.status(500).send('Internal server Error')
@@ -35,7 +35,7 @@ const userData = {
         const userId = req.params.id
         try{
             await User.findByIdAndRemove(userId)
-            res.redirect('/userDetails')
+            res.redirect('/admin/userDetails')
         }catch{
             console.log(error);
             res.status(500).send('Internal server error')
@@ -59,7 +59,7 @@ const userData = {
 
         try {
             const user = await User.findByIdAndUpdate(userId, { Fname, Email, PhoneNumber }, { new: true });
-            res.redirect('/userDetails');
+            res.redirect('/admin/userDetails');
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');

@@ -1,5 +1,7 @@
 <%- include('./adminHeader.ejs')-%>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-Cnqt0n8e6F5v2mKRA1VT3O42XjzqstTxwabylgh+IbpgrvuJh0tN17ABX4nvmTvjG1yWmlG6h7Qq5ROJdgy0mA==" crossorigin="anonymous" />
+
     <div class="container-scroller">
       <!-- partial:partials/_sidebar.html -->
     <%- include('./adminSidebar.ejs') -%>
@@ -220,18 +222,27 @@
                               
                               <p class="card-description">  </p>
                               <p class="card-description">  </p>
-                              <form class="forms-sample" action="/productAdd/addProduct" method="post" enctype="multipart/form-data">
+                              <form class="forms-sample" action="/admin/addProduct" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
                                   <label for="exampleInputName1"> Product Name</label>
-                                  <input type="text" class="form-control" id="exampleInputName1" name="ProductName"  value="<%= product ? product.ProductName : '' %>" placeholder="Product Name">
+                                  <input type="text" class="form-control" id="exampleInputName1" name="ProductName"   placeholder=" Product Name">
+                                <% if(errors && errors.ProductName){%>
+                                  <p style="color: tomato;"><%=errors.ProductName %></p>
+                                  <%} %>
                                 </div>
                                 <div class="form-group">
                                   <label for="exampleInputEmail3">Product Price</label>
-                                  <input type="number" class="form-control" id="exampleInputEmail3"  value="<%= product ? product.ProductPrice : '' %>" name="ProductPrice" placeholder="$:0.00" min="1">
+                                  <input type="number" class="form-control" id="exampleInputEmail3"  value="" name="ProductPrice" placeholder="₹:0.00" min="1">
+                                  <% if(errors && errors.ProductPrice){%>
+                                    <p style="color: tomato;"><%=errors.ProductPrice %></p>
+                                    <%} %>
                                 </div>
                                 <div class="form-group">
                                   <label for="exampleInputPassword4">Product Expense</label>
-                                  <input type="number" class="form-control" id="exampleInputPassword4"  value="<%= product ? product.ProductExpense :'' %>" name="ProductExpense" placeholder="$:0.00" >
+                                  <input type="number" class="form-control" id="exampleInputPassword4"  value="" name="ProductExpense" placeholder="₹:0.00" >
+                                  <% if(errors && errors.ProductExpense){%>
+                                    <p style="color: tomato;"><%=errors.ProductExpense %></p>
+                                    <%} %>
                                 </div>
                                 <div class="form-group">
                                   <label for="exampleSelectGender">Catagory</label>
@@ -239,45 +250,63 @@
                                     <% Catagories.forEach(category => { %>
                                       <option value="<%= category.name %>"><%= category.name %></option>
                                   <% }); %>
+                                
                                   </select>
+                                  <% if(errors && errors.category){%>
+                                    <p style="color: tomato;"><%=errors.category %></p>
+                                    <%} %>
+                                  <br>
+
+                                  <label for="selectsize">Size</label>
+                                  <select  class="form-control" name="ProductSize">
+                                    <option value="XS">XS</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
+                                  </select>
+                                    <br>
+                                  <label for="brands">Brands</label>
+                                  <select class="form-control" name="SelectedBrand" >
+                                    <% brands.forEach(brands => { %>
+                                      <option value="<%= brands.Brand %>"><%=  brands.Brand  %></option>
+                                  <% }); %>  
+                                  </select>
+                                
+
                                 </div>
                                 <div class="form-group">
                                   <label for="exampleInputPassword4">Product Count</label>
-                                  <input style="width: 10%;" type="number" class="form-control" id="exampleInputPassword4"  value="<%= product ? product.ProductCount :'1' %>" name="ProductCount"  min="1">
+                                  <input style="width: 10%;" type="number" class="form-control" id="exampleInputPassword4"  value="" name="ProductCount"  min="1">
+                                  <% if(errors && errors.ProductCount){%>
+                                    <p style="color: tomato;"><%=errors.ProductCount %></p>
+                                    <%} %>
                                 </div>
-                                <div class="form-group" >
+                                <div class="form-group">
                                   <label>Image upload</label>
-                                 <!-- <ul id="imgView"></ul> -->
-                                  <div class="existing-images row">
-                                    <% if (product && product.images && product.images.length > 0) { %>
-                                        <% product.images.forEach((image, index) => { %>
-                                            <div class="col-md-2 mb-3">
-                                                <div class="existing-image " >
-                                                    <img  style="height: 200px;" src="<%= image ? image : '' %>" alt="Product Image" class="img-fluid" ><br>
-                                                    <input type="checkbox" name="removedImages" value="<%=image%>"> Remove
-                                                </div>
-                                            </div>
-                                        <% }); %>
-                                    <% } %>
+                                  <div class="input-group col-xs-12" style="width: 50%;">
+                                    <input type="file" class="form-control" id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple onchange="viewImage(event)" accept="image/*">
+                                    <span class="input-group-append"></span>
+                                  </div>
+                                  <% if(errors && errors.Image){ %>
+                                    <p style="color: tomato;"><%=errors.Image %></p>
+                                  <% } %>
                                 </div>
                                 
-                                 
-                                      
-                                     
-                      
-                                  <div class="input-group col-xs-12" style="width: 50%;" >
-                                    <input  style="background: none;" type="file" id="imageInput" name="images[]" class="file-upload-default" multiple onchange="viewImage(event)">
-                              
-                                   <input  type="file" class="form-control"  id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple  onchange="viewImage(event)">
-                                    <span class="input-group-append">
-                                      
-                                    </span>
-                                  </div> 
+                                <!-- Display images in a separate container below the input field -->
+                                <div class="form-group">
+                                  <label>Image Preview</label>
+                                  <div class="row" id="imgView" class="existing-images list-unstyled d-flex flex-wrap"></div>
                                 </div>
+                                
                               
                                 <div class="form-group">
                                   <label for="exampleTextarea1">Product Discription</label>
-                                  <textarea class="form-control" id="exampleTextarea1" name="ProductDiscription"  value="<%= product ? product.ProductDiscription : '' %>" rows="4"></textarea>
+                                  <textarea class="form-control" id="exampleTextarea1" name="ProductDiscription"  value="" rows="4"></textarea>
+                                  <% if(errors && errors.ProductDiscription){%>
+                                    <p style="color: tomato;"><%=errors.ProductDiscription %></p>
+                                    <%} %>
                                 </div>
                                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                 <button type="button" class="btn btn-dark  " id="cancelBtn">Cancel</button>
@@ -314,68 +343,88 @@
       <!-- page-body-wrapper ends -->
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <script>
-      function viewImage(event){
-        document.getElementById('imgView').src=URL.createObjectURL(event.target.files)
-      }
-    </script>
-    
-    
-      <script>
-     document.addEventListener('DOMContentLoaded', function(){
-      const cancelBtn = document.getElementById('cancelBtn')
-      cancelBtn.addEventListener('click', function(){
-        window.location.href = "productDetails"
-      })
-     })
-      </script>
-    
-    <script>
-      function updateImageList(input){
-        const maxImages = 4;
-        const fileList = input.files;
-        const imageList = document.getElementById('image-list')
-      
-        if (fileList.length > maxImages) {
-    alert(`You can only upload ${maxImages} images.`);
-    input.value = ''; 
-    document.querySelector('.form-control.file-upload-default').value = '';
-    return;
-    }
-    
-      for(i=0;i<fileList.length;i++){
-        const listItem = document.createElement('li')
-        listItem.textContent = fileList[i].name;
-        imageList.appendChild(listItem)
-      }
-      }
-     
-    // ... append other form fields to formData ...
-    function handleFileSelect(event) {
+<!-- ... Previous HTML code ... -->
+
+<script>
+  function viewImage(event) {
+    const imageList = document.getElementById('imgView');
     const files = event.target.files;
+    const fileNames = [];
+
     for (let i = 0; i < files.length; i++) {
-    formData.append('images', files[i]);
+      fileNames.push(files[i].name);
+
+      // Create a new container for each image
+      const colDiv = document.createElement('div');
+      colDiv.className = 'col-md-2 mb-2';
+
+      const listItem = document.createElement('div');
+
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(files[i]);
+      img.alt = 'Product Image';
+      img.style.height = '200px';
+
+      // Attach a click event listener to each image
+      img.addEventListener('click', function() {
+        deleteImage(fileNames.indexOf(files[i].name));
+      });
+
+      listItem.appendChild(img);
+      colDiv.appendChild(listItem);
+
+      imageList.appendChild(colDiv);
     }
-    }
-    const fileInput = document.querySelector('input[name="images"]');
-    fileInput.addEventListener('change', handleFileSelect);
-    form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    // Perform form submission with fetch or other AJAX methods
-    try {
-    const response = await fetch('/productAdd/addProduct', {
-      method: 'POST',
-      body: formData,
-    });
-    // Handle response as needed
-    } catch (error) {
-    console.error(error);
-    }
-    });
-    
-    
-    </script>
+    imageList.setAttribute('data-file-names', JSON.stringify(fileNames));
+  }
+
+  function deleteImage(index) {
+  const imageList = document.getElementById('imgView');
+  const images = imageList.getElementsByClassName('col-md-2');
+  const inputElement = document.getElementById('imageInput');
+
+  if (index >= 0 && index < images.length) {
+    // Retrieve file names from the data attribute
+    const fileNames = JSON.parse(imageList.getAttribute('data-file-names'));
+
+    // Remove the deleted image from the fileNames array
+    fileNames.splice(index, 1);
+
+    // Update the data-file-names attribute
+    imageList.setAttribute('data-file-names', JSON.stringify(fileNames));
+
+    // Remove the corresponding image container
+    images[index].parentNode.removeChild(images[index]);
+
+    // Update the input files to remove the deselected image
+    const newFiles = Array.from(inputElement.files);
+    newFiles.splice(index, 1);
+
+    // Create a new FileList and assign it to the input files
+    const newFileList = new DataTransfer();
+    newFiles.forEach(file => newFileList.items.add(file));
+
+    inputElement.files = newFileList.files;
+  }
+}
+
+</script>
+
+
+
+<!-- ... Remaining HTML code ... -->
+
+
+
+
+
+
+
+
+
+
     
         
      

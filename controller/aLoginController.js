@@ -14,7 +14,7 @@ const validation = async (req,res)=>{
       
       if(PaswordMatch){
         req.session.admin = admin
-    res.redirect('/AdminPanel')
+    res.redirect('/admin/adminPanel')
     }
  }
     }

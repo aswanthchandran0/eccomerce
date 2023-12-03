@@ -229,7 +229,7 @@
                                                 <th> Catagory </th>
                                                 <th></th>
                                              
-                                                <th><a href="/addCatagory"
+                                                <th><a href="/admin/addCatagory"
                                                     style="color:rgba(107, 235, 164, 1); background: none; border: none; margin-left: 10px;">Add</a></th>
                                             </tr>
                                         </thead>
@@ -241,7 +241,7 @@
                                                 <td>
                                             
                                                 <td>
-                                                    <form action="/catagory/delete/<%= category._id %>" method="POST" style="display: inline;">
+                                                    <form action="/admin/catagory/delete/<%= category._id %>" method="POST" style="display: inline;">
                                                         <button type="submit"
                                                             style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick=" return confirmDelete('<%= category._id %>','<%= category.name %>')">Delete</button>
                                                     </form>

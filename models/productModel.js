@@ -29,9 +29,17 @@ const productSchema = new mongoose.Schema({
     ProductCount:{
         type:Number,
         required:true
+    },
+    ProductSize:{
+        type:String,
+        required:true
+    },
+    Brand:{
+        type:String,
+        required:true
     }
 })
-
+ 
 
 const ProductDetails = mongoose.model('ProductDetails', productSchema)
 

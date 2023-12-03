@@ -13,8 +13,8 @@ const paymentGateway = {
     try {
       console.log('total price in generated razor'+totalPrice);
       var instance = new Razorpay({
-        key_id: 'rzp_test_SoEmBjOco04Lhe',
-        key_secret: '0sk7KMqW8V3HthmebsRFLx5A',
+        key_id: process.env.PAYMENT_GATEWAY_key_id,
+        key_secret: process.env.PAYMENT_GATEWAY_key_secret,
       });
 
       const order = await instance.orders.create({

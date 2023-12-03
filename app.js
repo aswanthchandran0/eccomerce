@@ -4,45 +4,24 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const helmet = require('helmet'); 
 const cors = require('cors');
 var session = require('express-session')
-const {checkSession,checkUserStatus} = require('./controller/middleware')
-const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy
+require('dotenv').config();
+
+
 
 const mongoose =require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/dress_eccomerse',{ useNewUrlParser: true,
+mongoose.connect(process.env.DB_HOST,{ useNewUrlParser: true,
 useUnifiedTopology: true
-}).then(() => {
+}).then(() => { 
 console.log('dbs connected bro');
 }).catch((err) => {
 console.error('Error connecting to MongoDB', err);
 })
-
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var loginRouter = require('./routes/login'); 
-var AdminPanelRouter = require('./routes/AdminPanel')
-var otpRouter = require('./routes/otp')
-var userDetailsRouter = require('./routes/userDetails');
-var productAddRouter = require('./routes/productAdd')
+;
 var adminLoginRouter = require('./routes/adminLogin')
-var categoryRouter = require('./routes/catagory')
-var addCatagoryRouter = require('./routes/addCatagory')
-var productDetailsRouter = require('./routes/productDetails')
-var productListRouter = require('./routes/productList')
-var productViewRouter = require('./routes/productView')
-var userProfileRouter = require('./routes/userProfile')
-var cartRouter = require('./routes/cart')
-var orderRouter = require('./routes/orderPage')
-var orderSucessRouter = require('./routes/orderSucess'); 
-var orderDetailsRouter = require('./routes/orderDetails')
-var adminOrderRouter = require('./routes/adminOrder')
-var brandingRouter = require('./routes/branding')
-var bannerRouter = require('./routes/banner')
-const { product } = require('./controller/productDetailsController');
+var userRouter = require('./routes/userRouter')
+const adminRouter = require('./routes/adminRouter');
 var app = express();
  
 // view engine setup
@@ -59,11 +38,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('uploads'));
 app.use('/bannerImages', express.static('bannerImages'))
 
-//app.use(upload.single('productImage'));
-//app.use(express.static('public'));
-///////
-//app.use(express.static(path.join(__dirname, 'javascripts')));
-///////
 
 app.use((req, res, next) => {
   if (req.secure) {
@@ -81,16 +55,6 @@ app.use(cors({
 
 
 
-/*app.use(helmet.contentSecurityPolicy({
-  directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "ajax.example.com", "localhost:3000", "code.jquery.com"],
-      styleSrc: ["'self'", "'unsafe-inline'", "localhost:3000", "stackpath.bootstrapcdn.com"],
-      // ... other directives
-  } 
-}));
-
-*/
 
 app.use(session({
   secret: 'Key',
@@ -100,28 +64,12 @@ app.use(session({
 }))
 
  
-app.use('/',checkUserStatus, indexRouter);
-app.use('/users', usersRouter);
-app.use('/login', loginRouter);
-app.use('/AdminPanel',checkSession, AdminPanelRouter);
-app.use('/otp',otpRouter)
-app.use('/userDetails',checkSession,userDetailsRouter)
-app.use('/productAdd',checkSession,productAddRouter)
 app.use('/adminLogin',   adminLoginRouter)
-app.use('/catagory',checkSession, categoryRouter)
-app.use('/addCatagory',checkSession, addCatagoryRouter)
-app.use('/productDetails',checkSession, productDetailsRouter)
-app.use('/productList', productListRouter)
-app.use('/productView',productViewRouter)
-app.use('/userProfile',userProfileRouter)
-app.use('/cart',cartRouter)
-app.use('/order', orderRouter)
-app.use('/orderSucess', orderSucessRouter);
-app.use('/orderDetails', orderDetailsRouter)
-app.use('/adminOrder',checkSession,adminOrderRouter)
-app.use('/branding',checkSession, brandingRouter)
-app.use('/banner', checkSession, bannerRouter)
-// catch 404 and forward to error handler
+app.use('/', userRouter) 
+app.use('/admin', adminRouter);
+
+
+
 app.use(function(req, res, next) {
   next(createError(404));
 }); 
@@ -140,7 +88,7 @@ app.use(function(err, req, res, next) {
   else{
 
     res.status(err.status || 500);
-    res.render('error');
+    res.render('500error');
 
   }
  

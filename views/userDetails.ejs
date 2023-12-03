@@ -246,20 +246,20 @@
                       <td> <%= user.PhoneNumber %> </td>
                       <td>
                         <% if (user.userStatus === 'active') { %>
-                            <form action="/userDetails/user/block/<%= user._id %>" method="POST">
+                            <form action="/admin/userDetails/user/block/<%= user._id %>" method="POST">
                                 <button type="submit" style="color: rgba(245, 37, 37, 1); background: none; border: none;">Block</button>
                             </form>
                         <% } else { %>
-                            <form action="/userDetails/user/unblock/<%= user._id %>" method="POST">
+                            <form action="/admin/userDetails/user/unblock/<%= user._id %>" method="POST">
                                 <button type="submit" class="edit-btn" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Active</button>
                             </form>
                         <% } %>
  
-                <td><a href="/userDetails/edit/<%= user._id %>" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Edit</a>      
+                <td><a href="/admin/userDetails/edit/<%= user._id %>" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Edit</a>      
                     </td>                  
                     <td>
-                        <form action="/userDetails/delete/<%= user._id %>" method="POST" style="display: inline;">
-                           <button type="submit"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick="return confirmDelete('<%= user._id %>', '<%= user.Fname %>')">Delete</button>
+                        <form id="deleteForm_<%= user._id %>"  action="/admin/userDetails/delete/<%= user._id %>" method="POST" style="display: inline;">
+                           <button type="button"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick="return confirmDelete('<%= user._id %>', '<%= user.Fname %>')">Delete</button>
                         </form>
                     </td>
                     </tr>
@@ -301,15 +301,46 @@
     </div>
 
 
-    <script>
-      function confirmDelete(userId, userName) {
-       
-          var result = confirm(`Are you sure you want to delete ${userName}?`);
-          return result;
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<style>
+  .custom-swal-popup {
+    background-color: #38455e !important; /* Add !important to override default styles */
+    color: #fff; /* Change text color */
+  }
+</style>
+
+<script>
+  function confirmDelete(userId, userName) {
+    Swal.fire({
+      title: 'Delete Confirmation',
+      text: `Are you sure you want to delete ${userName}?`,
+      showCancelButton: true,
+      confirmButtonColor: '#f44336',
+      cancelButtonColor: '#2196f3',
+      confirmButtonText: 'Yes, delete it!',
+      customContainerClass: 'custom-swal',
+      customClass: {
+            popup: 'custom-swal-popup',
+            content: 'custom-swal-content',
+            confirmButton: 'custom-swal-confirm-button'
+          }
+      
+      // Apply the custom class to the container
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Perform the form submission using JavaScript
+        const deleteForm = document.getElementById(`deleteForm_${userId}`);
+        if (deleteForm) {
+          deleteForm.submit();
+        } else {
+          console.error(`Form with ID deleteForm_${userId} not found.`);
+        }
       }
-  </script>
-  
-  
+    });
+  }
+</script>
+
   
   
     <script>

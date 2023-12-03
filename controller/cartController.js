@@ -1,6 +1,5 @@
 const product = require('../models/productModel')
 const cartModel = require('../models/cartModel');
-const productModel = require('../models/productModel');
 const { urlencoded } = require('express');
 const cart = {
   cartPage: async (req, res) => {
@@ -43,7 +42,7 @@ const cart = {
       }
     } catch (error) {
       console.log(error);
-      res.status(500).send("Internal Server Error");
+      res.status(500)
     }
   },
 
@@ -180,15 +179,20 @@ const cart = {
      }
   },
 shippingPrice: async (req,res)=>{
+     try{
+      const shippingValue = req.body.shippingValue;
+      console.log('shipping price',shippingValue);
+       const updatedCart = await cartModel.findOneAndUpdate({userId:req.session.user._id},
+         { shippingPrice: shippingValue}
+         )
      
-  const shippingValue = req.body.shippingValue;
-
-  const updatedCart = await cartModel.findOneAndUpdate({userId:req.session.user._id},
-    { shippingPrice: shippingValue}
-    )
-
-    
-  res.json({ status: 'success', message: 'Shipping price received on the server.' });
+         
+       res.json({ status: 'success', message: 'Shipping price received on the server.' });
+     }catch(error){
+      console.log(error);
+      res.status(500)
+     }
+  
 },
 processToCheckout: async(req,res)=>{
   try{
@@ -204,8 +208,11 @@ processToCheckout: async(req,res)=>{
   }
      cartProductInfo = await Promise.all(
      userCart.products.map(async (info)=>{
-      const productInfo = await productModel.findOne({_id:info.productId})
-      return { productId:info.productId,productCount:productInfo.ProductCount,quantity:info.quantity}
+      const productInfo = await product.findOne({_id:info.productId})
+     
+        return { productId:info.productId,productCount:productInfo.ProductCount,quantity:info.quantity}
+
+    
      })
  )
   
@@ -216,7 +223,7 @@ console.log('cart info length',cartProductInfo.length);
 for(let i=0;i<cartProductInfo.length;i++){
   console.log('request reached inside the loop');
   if(cartProductInfo[i].quantity > cartProductInfo[i].productCount){
-    const product = await productModel.findOne({_id:cartProductInfo[i].productId})
+    const product = await product.findOne({_id:cartProductInfo[i].productId})
    errors.push({productId:cartProductInfo[i].productId,error:'not enough stock',productName:product.ProductName})
    
   }

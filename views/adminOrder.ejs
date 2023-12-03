@@ -315,7 +315,7 @@
             var orderId =this.getAttribute('data-order-id')
             $.ajax({
               type: 'GET',
-              url: `/adminOrder/selectedValue/${selectedValue}/orderId/${orderId}`,
+              url: `/admin/adminOrder/selectedValue/${selectedValue}/orderId/${orderId}`,
               success: function (data) {
                 window.location.reload();
     console.log('AJAX request successful', data);

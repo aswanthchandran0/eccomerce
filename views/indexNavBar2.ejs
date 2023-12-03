@@ -1,0 +1,84 @@
+<header class="header">
+    
+
+    <div class="header-middle sticky-header">
+        <div class="container">
+            <div class="header-left">
+                <button class="mobile-menu-toggler">
+                    <span class="sr-only">Toggle mobile menu</span>
+                    <i class="icon-bars"></i>
+                </button>
+
+                <a href="index.html" class="logo">
+                    <img src="images/Lexxive.png" alt="Lexxive Logo" width="130" height="30">
+                </a>
+
+                <nav class="main-nav">
+                    <ul class="menu sf-arrows">
+                        <li class="megamenu-container active">
+                            <a href="./" >Home</a>
+                        </li>
+                        <li>
+                            <a href="./productList" class="">Products</a>
+                        </li>
+                        <li>
+                            <a href="blog.html" class="">Contact</a>    
+                        </li>
+                        <li>
+                            <a href="elements-list.html" class="">ABOUT</a>   
+                        </li>
+                    </ul><!-- End .menu -->
+                </nav><!-- End .main-nav -->
+            </div><!-- End .header-left -->
+
+            <div class="header-right">
+                <div class="header-search">
+                    <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                    <form action="#" method="get">
+                        <div class="header-search-wrapper">
+                            <label for="q" class="sr-only">Search</label>
+                            <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
+                        </div><!-- End .header-search-wrapper -->
+                    </form>
+                </div><!-- End .header-search -->
+                
+
+                <div class="dropdown cart-dropdown">
+                    <a href="/cart" class="dropdown-toggle" role="button"  aria-haspopup="true" aria-expanded="false" data-display="static">
+                        <i class="icon-shopping-cart"></i>
+                        <span class="cart-count">2</span>
+                    </a>
+
+                </div><!-- End .cart-dropdown -->
+            </div><!-- End .header-right -->
+        </div><!-- End .container -->
+    </div><!-- End .header-middle -->
+</header><!-- End .header -->
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function(){
+        let timeout;
+
+        $('#q').on('input', function(){
+            clearTimeout(timeout);
+
+            // Set a delay of 500 milliseconds (adjust as needed)
+            timeout = setTimeout(function() {
+                var searchQuery = $('#q').val();
+                $.ajax({
+                    url:'/productSearch',
+                    method:'POST',
+                    data:{q:searchQuery},
+                    success: function(response){
+                        window.location.href = '/searchedProduct?searchResults=' + encodeURIComponent(JSON.stringify(response.searchResults));
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }, 800);
+        });
+    });
+</script>
+

@@ -1,15 +1,27 @@
-const model = require('../models/productModel')
+const productData= require('../models/productModel')
 
 const productViewAll = {
      productView : async (req,res)=>{
+      try{
+
         const productId = req.query.id
-      const product = await model.findOne({_id:productId})
-      if (product) {
-        res.render('productView', { product: product });
-    } else {
-        // Handle the case where the product data is null or undefined
-        res.send('Product not found');
-    }
+        const product = await productData.findOne({_id:productId})
+        const productCategory = product.Catagory
+         console.log('category',productCategory);
+        const categorisedProducts = await productData.find({Catagory:productCategory, _id:{$ne:productId}})
+        console.log('categorised product',categorisedProducts);
+        if (product) {
+          res.render('productView', { product: product,categorisedProducts:categorisedProducts });
+
+      } else {
+          
+          res.send('Product not found');
+      }
+      }catch(error){
+        console.log(error);
+        res.status(500)
+      }
+      
      } 
 } 
  

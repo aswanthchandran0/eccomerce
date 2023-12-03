@@ -11,7 +11,7 @@ const product = {
         const catagoryId = req.params.id
         try{
            await  model.findByIdAndRemove(catagoryId)
-           res.redirect('/ProductDetails')
+           res.redirect('/admin/ProductDetails')
         } catch(error) {
             console.log(errors); 
             res.status(500).send('internal server error')

@@ -21,7 +21,7 @@ const catagoryData= {
             name:Name,
          })
        await   newCatagory.save()
-       res.redirect('/catagory')
+       res.redirect('/admin/catagory')
         }
            
        
