@@ -57,7 +57,7 @@
 	                		<aside class="col-md-4 col-lg-3">
 	                			<ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
 								    <li class="nav-item">
-								        <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
+								        <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Offers</a>
 								    </li>
 								    <li class="nav-item">
 								        <a class="nav-link" id="tab-orders-link"  href="./orderDetails" role="tab" aria-controls="tab-orders" >Orders</a>
@@ -82,13 +82,41 @@
 	                		<div class="col-md-8 col-lg-9">
                               
 	                			<div class="tab-content">
-								    <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
-								    	<p>Hello <span class="font-weight-normal text-dark">User</span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
-								    	<br>
-								    	From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
-								    </div><!-- .End .tab-pane -->
+								    
 
-								    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+								   
+                                    <div class="col-md-6 grid-margin stretch-card">
+                                        <% if(activeCoupons !==null && activeCoupons !== undefined){%>
+                                            <% activeCoupons.forEach((coupon)=>{%>
+                                        <div class="card">
+                                          <div class="card-body" style=" background-color: rgba(147, 145, 145, 1); border-radius: 10px;">
+                                            <div class="d-flex flex-row justify-content-between">
+                                              <h4 style="color: rgba(241, 241, 241, 1); margin-top: 4%; margin-left: 3%; " class="card-title mb-1"><%= coupon.couponName %></h4> 
+                                          
+                                            </div>
+                                            <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspcouponCode: <%= coupon.couponCode %></p>
+                                            <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp validity:<%= coupon.ExpireDate.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'medium' }) %></p>
+                                            <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp purchase more than:₹ <%= coupon.Creteria%></p>
+                                            <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Discount Amount:₹ <%= coupon.discountAmount%></p>
+                                          
+                                            <div class="row">
+                                              <div class="col-12">
+                                                <div class="preview-list">
+                                                <!---->
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <%})%>
+                                        <%}%>
+                                      </div>
+
+                                      
+                                   
+                                   
+                                   
+                                    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
 								    	
                           
 

@@ -18,6 +18,7 @@ const productController = require('../controller/productController');
 const productModel = require('../models/productModel')
 const catagoryModel = require('../models/catagoryModel')
 const brandData = require('../models/BrandModel')
+const adminCouponController = require('../controller/adminCouponController');
 
 //middleware
 router.use(checkSession);
@@ -100,5 +101,9 @@ router.delete('/deleteImage', productController.deleteImage);
 
 router.delete('/deleteImage', productController.deleteImage)
 
+//coupon router
+ 
+router.get('/coupon',adminCouponController.couponController.couponPage);
+router.post('/addCoupon',adminCouponController.couponController.couponAdd);
 
 module.exports = router;

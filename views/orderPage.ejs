@@ -53,9 +53,13 @@
             	<div class="checkout">
 	                <div class="container">
             			<div class="checkout-discount">
-            				<form action="#">
-        						<input type="text" class="form-control" required id="checkout-discount-input">
+            				<form action="/coupon" method="POST">
+        						<input type="text" class="form-control" name="EnteredCoupon" required id="checkout-discount-input">
+                                <% if(discountError !== null && discountError !== undefined){%>
+                                    <label for="checkout-discount-input" class="text-truncate"><span><%= discountError %></span></label>
+                                    <%}else{%>
             					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
+                                <%} %>
             				</form>
             			</div><!-- End .checkout-discount -->
             			
@@ -233,6 +237,7 @@
                             <input type="hidden" id="selectedAddressId" name="selectedAddressId" value="">
                             <input type="hidden" id="selectedAddressName" name="selectedAddressName" value="">
                             <input type="hidden" id="selectedPaymentMethod" name="selectedPaymentMethod" value="">
+                            <input type="hidden" name="discountAmount" value="<%= discountAmount %>">
                     </form>
 
 
@@ -642,7 +647,7 @@
   
   const selectedAddressId = document.getElementById('selectedAddressId').value;
   const paymentMethod = document.getElementById('selectedPaymentMethod').value;
-
+  const discountAmount = document.getElementsByName('discountAmount')[0].value;
   if(!selectedAddressId){
     Swal.fire({
   title: "Please Select Any Address",
@@ -689,6 +694,7 @@
     data: {
       selectedAddressId: selectedAddressId,
       paymentMethod: paymentMethod,
+      discountAmount: discountAmount,
     },
     success: function (response) {
       console.log('response', response);

@@ -34,6 +34,7 @@ router.get("/cart/processToCheckout",cartController.cart.processToCheckout)
 router.get('/order',userValidationMiddleware.userMiddleware.verifiy, orderPageController.order.orderPage)
 router.post('/order/order', orderPageController.order.order)
 router.post('/order/verifyPayment', paymentGateway.paymentGateway.verifyPayment)
+router.post('/coupon',orderPageController.order.verifyingCoupon)
 
 //userProfile
 router.get('/userProfile', userProfileController.userProfile.profile,)

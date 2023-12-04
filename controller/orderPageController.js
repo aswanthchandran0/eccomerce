@@ -6,12 +6,14 @@ const  {isValidpaymentMethod,isValidselectedAddressId} = require('../validators/
 const RazorPay = require('../paymentGateway/RazorPay')
 const productModel = require('../models/productModel')
 const userData = require('../models/userModel')
+const moment = require('moment');
+const Coupon = require('../models/couponModel')
 const { response } = require('express')
 
 const order = {
     orderPage: async (req,res)=>{
         try{ 
-          
+          const discountError = req.query.error || null;
             const userId = req.session.user._id
             const address = await addressModel.findOne({user:userId})
             const userCart = await cartModel.findOne({userId:userId})
@@ -38,9 +40,12 @@ const order = {
         individualTotalArray.push(individualTotal);
         totalPriceArray.push(totalPrice);
           }
+
+          const discountAmount = req.query.discountAmount || 0;
+          totalPrice -= discountAmount;
         const allTotal = totalPrice+shippingPrice
           
-              res.render('orderPage',{address,products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal, })
+              res.render('orderPage',{address,products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount })
         }catch(error){
             console.log(error); 
             res.status(500).send('internal server error')
@@ -50,6 +55,7 @@ const order = {
       const userId= req.session.user._id 
       const selectedAddressId = req.body.selectedAddressId;
       const paymentMethod = req.body.paymentMethod
+      const discountAmount = req.body.discountAmount
       try{
  
         
@@ -83,7 +89,10 @@ const order = {
         individualTotalArray.push(individualTotal);
         totalPriceArray.push(subTotalPrice);
           } 
-        const totalPrice = subTotalPrice+shippingPrice
+
+        let  totalPrice = subTotalPrice+shippingPrice
+            totalPrice -= discountAmount 
+         
           console.log('sub total price in order'+subTotalPrice); 
           console.log('total price in the order'+totalPrice);
               
@@ -186,6 +195,53 @@ const order = {
 
      
   } ,
+  verifyingCoupon: async (req,res)=>{
+    const userId= req.session.user._id 
+    const EnteredCode = req.body.EnteredCoupon
+    const userCart =await cartModel.findOne({userId})
+    const productDetails = userCart.products.map(product => ({
+      productId: product.productId,
+      purchasedCount: product.quantity
+  }));
+
+  const products = await product.find({ _id: { $in: productDetails.map(product => product.productId) } })
+  const productPrice = products.map(product => product.ProductPrice)
+  const purchasedCount = productDetails.map(product => product.purchasedCount);
+  const shippingPrice = userCart ? userCart.shippingPrice : 0;
+ const currentDate = new Date();
+  const totalPriceArray = [];
+  const individualTotalArray = [];
+
+  let subTotalPrice = 0 
+  for(let i =0;i<products.length;i++){
+    const individualTotal = productPrice[i] *  purchasedCount[i];
+subTotalPrice += individualTotal;
+
+individualTotalArray.push(individualTotal);
+totalPriceArray.push(subTotalPrice);
+  } 
+let totalPrice = subTotalPrice+shippingPrice
+  console.log('sub total price in order'+subTotalPrice); 
+  console.log('total price in the order'+totalPrice);
+
+
+  console.log('total price ',totalPrice);
+  console.log("subtotal price", subTotalPrice);
+
+    console.log('enteredCode',EnteredCode); 
+    const coupon = await Coupon.findOne({ couponCode: EnteredCode });
+    if(coupon){
+      const currentDate = moment();
+      if (currentDate.isBefore(coupon.ExpireDate) && subTotalPrice>coupon.Creteria ) {
+        let discount = coupon.discountAmount;
+        res.redirect(`./order?discountAmount=${discount}`);
+    } else {
+      res.redirect('./order?error=Coupon is expired');
+    }
+    }else {
+      res.redirect('./order?error=invalid coupon');
+    }
+  }
  
 }
 

@@ -4,7 +4,8 @@ const orderData = require('../models/orderModel')
 const productModel = require('../models/productModel')
 const {isValidFname,isValidEmail,isValidPhoneNumber, isValidPincode,isValidAddress,isValidPlace,isValidstate,isValidLandMark,isValidAphoneNumber} = require('../validators/userAddressValidator');
 const { session } = require('passport');
-
+const moment = require('moment');
+const Coupon = require('../models/couponModel');
 
 const userProfile = {
     profile: async (req,res)=>{
@@ -13,6 +14,11 @@ const userProfile = {
             if(req.session.user){
               const userId = req.session.user._id;
               const user = await model.findOne({ _id: userId });
+              const currentDate = moment();
+              const activeCoupons = await Coupon.find({
+                couponStatus: 'Active',
+                ExpireDate: { $gt: currentDate }, 
+            });
               const wallet = user.Wallet
               const walletTransactions = user.walletStatus;
               console.log('wallet',wallet);
@@ -21,7 +27,7 @@ const userProfile = {
               const productDetails = await productModel.find({ _id: { $in: productIds } });
               console.log('product details'+productDetails);
               const userAddress = await AddressModel.findOne({ user: userId });
-               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet,walletTransactions})
+               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet,walletTransactions,activeCoupons})
                req.session.AddressValidationErrors = null;
                
             }
