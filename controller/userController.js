@@ -11,13 +11,14 @@ const { log } = require('console');
   const createUser =  async(Fname, Email, PhoneNumber, Password) => {
        
     try {
-     
       const hashedPassword = await bcrypt.hash(Password, 10)
+      const referalCode = generateRandomReferalCode();
       const newUser = new User({
         Fname,
         Email,
         PhoneNumber,
         Password:hashedPassword, 
+        referalCode,
       });
       console.log(newUser);
       await newUser.save();
@@ -61,8 +62,13 @@ const { log } = require('console');
     }
    }
 
+   const generateRandomReferalCode = () => {
+    return Math.floor(100000 + Math.random() * 900000);
+};
+
    async function signUp(req, res) {
-    const { Fname, Email, PhoneNumber, Password, Cpassword } = req.body;
+    const { Fname, Email, PhoneNumber, Password, Cpassword,enteredReferalCode } = req.body;
+   
      generatedOtp = crypto.randomInt(100000, 999999);
      otpTimestamb = Date.now();
     const existingUser = await User.findOne({ Email });
@@ -99,6 +105,34 @@ const { log } = require('console');
         const newUser = await createUser( Fname, Email, PhoneNumber, Password);
         req.session.loggedIn = true
         req.session.user = newUser;
+
+        if (enteredReferalCode) {
+          // Check if enteredReferalCode is a valid number
+          if (!isNaN(enteredReferalCode)) {
+              const referredUser = await User.findOne({ referalCode: enteredReferalCode });
+              if (referredUser) {
+                  newUser.Wallet += 100;
+                  referredUser.Wallet += 50;
+                  await newUser.save();
+                  await referredUser.save();
+              } else {
+                  const errors = {
+                      enteredReferalCode: 'Invalid referral code'
+                  };
+                  return res.render('login', { errors });
+              }
+          } else {
+              const errors = {
+                  enteredReferalCode: 'Invalid referral code'
+              };
+              return res.render('login', { errors });
+          }
+      }
+
+
+
+
+
         res.redirect('/otp');
         return Email;
     } catch (error) {

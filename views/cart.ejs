@@ -608,20 +608,20 @@
     
 <script> 
      function changeQuantity(quantityChange,productId,productPrice,shippingValue){
-  const url = `/cart/updatePrice/${quantityChange}/${productId}/${productPrice}/${shippingValue}`
+  const url = `/cart/updatePrice/${quantityChange}/${productId}/${productPrice}`
   const priceElementId = `productPrice_${productId}`
   const productPriceElement = document.getElementById(priceElementId)
-console.log('shipping value djld',shippingValue);
 
+let productPriceValue, productPriceValueFloat;
 
+if (productPriceElement) {
+        productPriceValue = productPriceElement.innerText;
+        productPriceValueFloat = parseFloat(productPriceValue.replace('₹', ''));
+    }
 
-  if(productPriceElement){
-    const productPriceValue = productPriceElement.innerText
-    const productPrice = parseFloat(productPriceValue.replace('$',''))
-  }
-  console.log(productPrice);
-  console.log(quantityChange);
-  console.log(productId);
+    console.log(productPriceValueFloat);
+    console.log(quantityChange);
+    console.log(productId);
  
   
   $.ajax({
@@ -653,14 +653,18 @@ console.log('Updated Shipping value in changeQuantity:', updatedShippingValue);
      function shipping(value) {
    // console.log(value);
     const subtotalElement = document.getElementById('subTotal');
-    const subtotalValueText = subtotalElement.innerText.trim().replace('$', '');
+    const subtotalValueText = subtotalElement ? subtotalElement.innerText.trim().replace('₹', '') : '0';
 
     const subtotalValue = parseFloat(subtotalValueText) || 0;
-
     const totalValue = subtotalValue + value;
 
-    const totalElement = document.getElementById('totalAmount');
-    totalElement.innerText = '$' + totalValue.toFixed(2);
+       
+console.log('subtotal value',subtotalValue);
+console.log('total value',totalValue);
+const totalElement = document.getElementById('totalAmount');
+    if (totalElement) {
+        totalElement.innerText = '₹' + totalValue.toFixed(2);
+    }
     
  //  sendPricesToServer(totalValue, subtotalValue, value);
  const xhr = new XMLHttpRequest();

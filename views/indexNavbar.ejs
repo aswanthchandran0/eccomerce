@@ -58,8 +58,9 @@
                         <div class="dropdown cart-dropdown">
                             <a href="./cart" class="dropdown-toggle" role="button"  aria-haspopup="true" aria-expanded="false" data-display="static">
                                 <i style="margin-left: -8px;" class="icon-shopping-cart"></i>
-                              <!--  <span class="cart-count">2</span>  -->
-                                
+                                <% if(numberOfProduct !==null && numberOfProduct>0){%>
+                                <span class="cart-count"><%= numberOfProduct %></span>
+                                <%}%>
                             </a>
                             <a href="./userProfile">
                                 <i class="fa-regular fa-user fa-lg" style="color: #ffffff; margin-top: -2%; margin-left: 10px;"></i>

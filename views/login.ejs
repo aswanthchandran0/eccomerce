@@ -136,7 +136,6 @@
 
 							    		<div class="form-group position-relative">
 							    			<label for="register-password-2">Password *</label>
-                                            <span id="register-eyeIcon" class="fa-solid fa-eye-slash password-icon"  onclick="toggleIcon2()" style="position: absolute; top: 55%; transform: translateY(-50%); right: 10px; cursor: pointer; color: rgba(0, 0, 0, 0.466);"></span>
 							    			<input type="password" class="form-control p-r-40" id="register-password-2" name="Password">
                                             <% if (errors.Password) { %>
                                                 <p style="color: tomato;"><%= errors.Password %></p>
@@ -149,6 +148,15 @@
                                             <% if (errors.Cpassword) { %>
                                             <p style="color: tomato;"><%= errors.Cpassword %></p>
                                              <% } %>
+                                        </div><!-- End .form-group -->
+
+                                        <div class="form-group">
+							    			<label for="register-password-2">REFERAL CODE</label>
+							    			<input type="text" class="form-control" id="register-referal" name="enteredReferalCode">
+							    		
+                                            <% if (errors && errors.enteredReferalCode) { %>
+                                                <p style="color: tomato;"><%= errors.enteredReferalCode %></p>
+                                            <% } %>
                                         </div><!-- End .form-group -->
                                       
 

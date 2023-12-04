@@ -247,7 +247,7 @@
                       <td>
                         <% if (user.userStatus === 'active') { %>
                             <form action="/admin/userDetails/user/block/<%= user._id %>" method="POST">
-                                <button type="submit" style="color: rgba(245, 37, 37, 1); background: none; border: none;">Block</button>
+                              <div class="badge badge-outline-danger"><button type="submit" style="color: rgba(245, 37, 37, 1); background: none; border: none;">Block</button></div>
                             </form>
                         <% } else { %>
                             <form action="/admin/userDetails/user/unblock/<%= user._id %>" method="POST">
@@ -255,11 +255,15 @@
                             </form>
                         <% } %>
  
-                <td><a href="/admin/userDetails/edit/<%= user._id %>" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Edit</a>      
+                <td> <div class="badge badge-outline-success"><a href="/admin/userDetails/edit/<%= user._id %>" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Edit</a>      </div>
+
+
+
+                    
                     </td>                  
                     <td>
                         <form id="deleteForm_<%= user._id %>"  action="/admin/userDetails/delete/<%= user._id %>" method="POST" style="display: inline;">
-                           <button type="button"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick="return confirmDelete('<%= user._id %>', '<%= user.Fname %>')">Delete</button>
+                          <div class="badge badge-outline-danger"><button type="button"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick="return confirmDelete('<%= user._id %>', '<%= user.Fname %>')">Delete</button></div>
                         </form>
                     </td>
                     </tr>

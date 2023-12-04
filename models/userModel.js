@@ -47,6 +47,10 @@ const userSchema = new mongoose.Schema({
     },
     walletStatus:{
         type:[walletTransactionSchema],
+    },
+    referalCode:{
+        type:Number,
+        required:true
     }
 })
 

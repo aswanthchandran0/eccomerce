@@ -229,7 +229,10 @@
                                   
                                   <th>Stock</th>
                                  
-                                  <th><a href="/admin/productAdd" style="color:rgba(107, 235, 164, 1); background: none; border: none;" >Add</a></th>
+                                  <th>
+                                    <div class="badge badge-outline-success"><a href="/admin/productAdd" style="color:rgba(107, 235, 164, 1); " >Add</a></div>
+
+                                    </th>
                                   <th>  </th>
                                   <th>  </th>
                                   <th>  </th>
@@ -260,11 +263,15 @@
                                          
                                        
                    
-                                  <td><a href="./productAdd?id=<%= product._id %>" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Edit</a>      
+                                  <td>
+                                    <div class="badge badge-outline-success"> <a href="./productAdd?id=<%= product._id %>" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Edit</a>      </div>
+                                   
                                       </td>                  
                                       <td>
                                           <form   action="/admin//productDetails/delete/<%= product._id %>" method="POST" style="display: inline;">
-                                             <button type="submit"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick=" return confirmDelete('<%= product._id %>', '<%= product.productName %>')">Delete</button>
+                                            <div class="badge badge-outline-danger"><button type="submit"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick=" return confirmDelete('<%= product._id %>', '<%= product.productName %>')">Delete</button></div>
+
+                                             
                                              
                                             </form>
                                        

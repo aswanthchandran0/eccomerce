@@ -7,11 +7,13 @@ const cart = {
       if(!req.session.user._id ){
         res.redirect('/')
       }
+     
       const empty = req.query.empty
-      let error = req.query.error ? JSON.parse(decodeURIComponent(req.query.error)) : null;
+        let error = req.query.error ? JSON.parse(decodeURIComponent(req.query.error)) : null;
       console.log(`errors in cart page: ${JSON.stringify(error)}`);
 
       const userCart = await cartModel.findOne({ userId: req.session.user._id });
+      console.log('usercart',userCart);
       let products = null;
       let totalPrice = 0;
       let quantity
@@ -19,6 +21,8 @@ const cart = {
         for (let i = 0; i < userCart.products.length; i++) {
           const cartProduct = userCart.products[i];
           const productData = await product.findOne({ _id: cartProduct.productId });
+           console.log('cart product',cartProduct);
+           console.log('prodouct data',productData);
           if (productData) {
             totalPrice += productData.ProductPrice * cartProduct.quantity;
           }
@@ -54,7 +58,16 @@ const cart = {
     if (req.session.user) {
       const productId = req.params.id
       const userId = req.session.user._id
+     const existingProduct = await cartModel.findOne({
+      userId:userId,
+      'products.productId': productId,
+     })
 
+    
+     if (existingProduct) {
+      console.log('Product already exists in the cart.');
+      return res.redirect('/');
+  }
 
       try { 
 
@@ -83,8 +96,11 @@ const cart = {
 
     const { productId, quantity, productPrice } = req.body;
     const totalPrice = quantity * productPrice;
-
+        
     try {
+      console.log('productId in updateTotalPrice ',productId);
+      console.log('quantity in updateTotalPrice ',quantity);
+      console.log('productPrice in updateTotalPrice ',productPrice);
 
       const updatedCart = await cartModel.findOneAndUpdate(
         { userId: req.session.user._id, 'products.productId': productId },
@@ -145,7 +161,9 @@ const cart = {
 
     const totalPrice = productPrice* cart.products[productIndex].quantity
     const updatedQuantity = cart.products[productIndex].quantity;
-   
+      
+    console.log('totalPrice in updatePrice',totalPrice);
+    console.log('updatedQuantity in updatePrice',updatedQuantity);
       res.json({quantity: updatedQuantity,totalPrice });
     }  
    
@@ -210,21 +228,33 @@ processToCheckout: async(req,res)=>{
      userCart.products.map(async (info)=>{
       const productInfo = await product.findOne({_id:info.productId})
      
-        return { productId:info.productId,productCount:productInfo.ProductCount,quantity:info.quantity}
+
+      if (!productInfo) {
+        // Handle the case where productInfo is null (product not found)
+        console.log(`Product not found for productId: ${info.productId}`);
+        return null; // or handle it according to your application logic
+      }
+
+
+      return {
+        productId: info.productId,
+        productCount: productInfo.ProductCount || 0, 
+        quantity: info.quantity || 0, 
+      };
 
     
      })
  )
   
  console.log('cartProductInfo', cartProductInfo);
- 
+ let item
 let errors = []
 console.log('cart info length',cartProductInfo.length);
 for(let i=0;i<cartProductInfo.length;i++){
   console.log('request reached inside the loop');
   if(cartProductInfo[i].quantity > cartProductInfo[i].productCount){
-    const product = await product.findOne({_id:cartProductInfo[i].productId})
-   errors.push({productId:cartProductInfo[i].productId,error:'not enough stock',productName:product.ProductName})
+     item = await product.findOne({_id:cartProductInfo[i].productId})
+   errors.push({productId:cartProductInfo[i].productId,error:'not enough stock',productName:item.ProductName})
    
   }
 }

@@ -42,6 +42,8 @@ function isValidFname(Fname){
       return otp === generatedOtp
   }
 
+
+
   
   module.exports = {
     isValidFname,isValidEmail,isValidPhoneNumber,isValidPassword,isPasswordMatch,isValidOtp

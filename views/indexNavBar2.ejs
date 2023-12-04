@@ -46,10 +46,18 @@
                 <div class="dropdown cart-dropdown">
                     <a href="/cart" class="dropdown-toggle" role="button"  aria-haspopup="true" aria-expanded="false" data-display="static">
                         <i class="icon-shopping-cart"></i>
-                        <span class="cart-count">2</span>
+               <!--  <span class="cart-count" id="cartCount">2</span> -->
                     </a>
-
+                   
                 </div><!-- End .cart-dropdown -->
+                
+                <div class="dropdown cart-dropdown" style="margin-top: 2px;">
+                    <a href="./userProfile">
+                        <i class="fa-regular fa-user fa-lg" style="color: #000000; "></i>
+                        
+                    </a>
+                   
+                </div>
             </div><!-- End .header-right -->
         </div><!-- End .container -->
     </div><!-- End .header-middle -->
@@ -71,6 +79,7 @@
                     method:'POST',
                     data:{q:searchQuery},
                     success: function(response){
+                       
                         window.location.href = '/searchedProduct?searchResults=' + encodeURIComponent(JSON.stringify(response.searchResults));
                     },
                     error: function(error) {
