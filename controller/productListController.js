@@ -2,15 +2,26 @@ const model = require('../models/productModel')
 const categoryData = require('../models/catagoryModel')
 const brandData =require('../models/BrandModel')
 const productfilter = require('../validators/productFilter')
+
+const ITEMS_PER_PAGE = 8;
+
+
 const allProducts = {
         showProducts : async (req,res)=>{
 
             try{
-        
+                const page = parseInt(req.query.page) || 1;
+                const totalProducts = await model.countDocuments({});
+                const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
+                const products = await model
+                .find({})
+                .skip((page - 1) * ITEMS_PER_PAGE)
+                .limit(ITEMS_PER_PAGE)
+                .exec();
+
              const category = await categoryData.find({})
              const brands =  await brandData.find({})
-            const products =  await model.find({})
-            res.render('productList', { products: products ,category,brands});
+            res.render('productList', { products: products ,category,brands,totalPages, currentPage: page});
 
         }catch (error){
             console.error(error);
@@ -46,7 +57,8 @@ const allProducts = {
             
             const category = await categoryData.find({})
             const brands =  await brandData.find({})
-            res.render('productList', { products: searchResults,category,brands })
+      
+            res.render('productList', { products: searchResults,category,brands,totalPages:'',currentPage:'' })
         }catch(error){
             console.log(error);
             res.status(500)

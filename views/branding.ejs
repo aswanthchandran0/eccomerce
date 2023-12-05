@@ -242,8 +242,9 @@
                                         <th> Brands </th>
                                         <th></th>
                                      
-                                        <th><a href="#" onclick="toggleAddBrandPopup()"
-                                            style="color:rgba(107, 235, 164, 1); background: none; border: none; margin-left: 10px;">Add</a></th>
+                                        <th> <div class="badge badge-outline-success"><a href="#" onclick="toggleAddBrandPopup()"
+                                          style="color:rgba(107, 235, 164, 1); background: none; border: none;">Add</a></div>
+                                          </th>
                                     </tr>
                                 </thead>
                                 <tbody id="#list">
@@ -256,8 +257,10 @@
                                         <td>
                                             <form action="/admin/deleteBrand/" method="POST" style="display: inline;">
                                               <input type="hidden" name="brandId" value="<%= brand._id %>">
-                                                <button type="submit"
-                                                    style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick=" return confirmDelete('<%= brand._id %>','<%=brand.Brand %>')">Delete</button>
+                                              <div class="badge badge-outline-danger">  <button type="submit"
+                                                style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick=" return confirmDelete('<%= brand._id %>','<%=brand.Brand %>')">Delete</button></div>
+
+                                              
                                             </form>
                                         </td>
                                     </tr>

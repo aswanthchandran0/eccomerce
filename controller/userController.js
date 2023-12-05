@@ -113,8 +113,17 @@ const { log } = require('console');
               if (referredUser) {
                   newUser.Wallet += 100;
                   referredUser.Wallet += 50;
-                  await newUser.save();
-                  await referredUser.save();
+                 
+
+                  const creditTransactionNewUser = { status: 'credited', amount: 100, timestamp: new Date() };
+                const creditTransactionReferredUser = { status: 'credited', amount: 50, timestamp: new Date() };
+
+                newUser.walletStatus.push(creditTransactionNewUser);
+                referredUser.walletStatus.push(creditTransactionReferredUser);
+
+                await newUser.save();
+                await referredUser.save();
+
               } else {
                   const errors = {
                       enteredReferalCode: 'Invalid referral code'

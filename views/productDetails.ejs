@@ -268,8 +268,8 @@
                                    
                                       </td>                  
                                       <td>
-                                          <form   action="/admin//productDetails/delete/<%= product._id %>" method="POST" style="display: inline;">
-                                            <div class="badge badge-outline-danger"><button type="submit"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick=" return confirmDelete('<%= product._id %>', '<%= product.productName %>')">Delete</button></div>
+                                          <form data-product-id="<%= product._id %>"  action="/admin//productDetails/delete/<%= product._id %>" method="POST" style="display: inline;">
+                                            <div class="badge badge-outline-danger"><button type="button"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick=" return confirmDelete('<%= product._id %>', '<%= product.productName %>')">Delete</button></div>
 
                                              
                                              
@@ -317,13 +317,49 @@
 
   
 
-  <script>
-    function confirmDelete(productId,productName){
-     var result = `are you sure you want to delete ${productName}`
-     return result
-    }
-  </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Include your custom styles and script -->
+    <style>
+        .custom-swal-popup {
+            background-color: #38455e !important;
+            color: #fff;
+        }
+    </style>
 
+
+
+<script>
+function confirmDelete(productId, productName) {
+  console.log('Delete function called with productId:', productId);
+
+  Swal.fire({
+    title: 'Delete Confirmation',
+    text: `Are you sure you want to delete ${productName}?`,
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#2196f3',
+    confirmButtonText: 'Yes, delete it!',
+    customContainerClass: 'custom-swal',
+    customClass: {
+      popup: 'custom-swal-popup',
+      content: 'custom-swal-content',
+      confirmButton: 'custom-swal-confirm-button'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Use the data-product-id attribute to select the form
+      const deleteForm = document.querySelector(`form[data-product-id="${productId}"]`);
+      
+      if (deleteForm) {
+        deleteForm.submit();
+      } else {
+        console.error('Form not found.');
+      }
+    }
+  });
+}
+
+</script>
 
 
   <script>

@@ -85,99 +85,44 @@
 								    
 
 								   
-                                    <div class="col-md-6 grid-margin stretch-card">
-                                        <% if(activeCoupons !==null && activeCoupons !== undefined){%>
-                                            <% activeCoupons.forEach((coupon)=>{%>
-                                        <div class="card">
-                                          <div class="card-body" style=" background-color: rgba(147, 145, 145, 1); border-radius: 10px;">
-                                            <div class="d-flex flex-row justify-content-between">
-                                              <h4 style="color: rgba(241, 241, 241, 1); margin-top: 4%; margin-left: 3%; " class="card-title mb-1"><%= coupon.couponName %></h4> 
-                                          
-                                            </div>
-                                            <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspcouponCode: <%= coupon.couponCode %></p>
-                                            <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp validity:<%= coupon.ExpireDate.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'medium' }) %></p>
-                                            <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp purchase more than:₹ <%= coupon.Creteria%></p>
-                                            <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Discount Amount:₹ <%= coupon.discountAmount%></p>
-                                          
-                                            <div class="row">
-                                              <div class="col-12">
-                                                <div class="preview-list">
-                                                <!---->
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <%})%>
-                                        <%}%>
-                                      </div>
 
                                       
                                    
                                    
                                    
-                                    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                    <div class="tab-pane fade" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
 								    	
                           
 
+                                        <div class="col-md-6 grid-margin stretch-card">
+                                            <% if(activeCoupons !==null && activeCoupons !== undefined){%>
+                                                <% activeCoupons.forEach((coupon)=>{%>
+                                            <div class="card">
+                                              <div class="card-body" style=" background-color: rgba(147, 145, 145, 1); border-radius: 10px;">
+                                                <div class="d-flex flex-row justify-content-between">
+                                                  <h4 style="color: rgba(241, 241, 241, 1); margin-top: 4%; margin-left: 3%; " class="card-title mb-1"><%= coupon.couponName %></h4> 
+                                              
+                                                </div>
+                                                <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspcouponCode: <%= coupon.couponCode %></p>
+                                                <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp validity:<%= coupon.ExpireDate.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'medium' }) %></p>
+                                                <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp purchase more than:₹ <%= coupon.Creteria%></p>
+                                                <p style="color: rgba(241, 241, 241, 1); margin-top: 1%;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Discount Amount:₹ <%= coupon.discountAmount%></p>
+                                              
+                                                <div class="row">
+                                                  <div class="col-12">
+                                                    <div class="preview-list">
+                                                    <!---->
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <%})%>
+                                            <%}%>
+                                          </div>
                        
 
 
-                                        <article class="entry entry-list">
-                                            <div class="row align-items-center">
-                                                <div class="col-md-4">
-                                                    <figure class="entry-media">
-                                                        <a href="single.html">
-                                                            <img src="assets/images/blog/listing/post-1.jpg" alt="image desc">
-                                                            <img src="assets/images/blog/listing/post-1.jpg" alt="image desc">
-                                                            <img src="assets/images/blog/listing/post-1.jpg" alt="image desc">
-                                                        </a>
-                                                    </figure><!-- End .entry-media -->
-                                                </div><!-- End .col-md-4 -->
-                    
-                                                <div class="col-md-8">
-                                                    <div class="entry-body">
-                                                        <div class="entry-meta">
-                                                            <span class="entry-author">
-                                                                by <a href="#">John Doe</a>
-                                                            </span>
-                                                            <span class="meta-separator">|</span>
-                                                            <a href="#">Nov 22, 2018</a>
-                                                            <span class="meta-separator">|</span>
-                                                            <a href="#">2 Comments</a>
-                                                        </div><!-- End .entry-meta -->
-                    
-                                                        <h2 class="entry-title">
-                                                            <a href="single.html">Cras ornare tristique elit.</a>
-                                                        </h2><!-- End .entry-title -->
-                    
-                                                        <div class="entry-cats">
-                                                            in <a href="#">Lifestyle</a>,
-                                                            <a href="#">Shopping</a>
-                                                        </div><!-- End .entry-cats -->
-                    
-                                                        <div class="entry-content">
-                                                            <p>Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh. Suspendisse potenti. Sed egestas ... </p>
-                                                            <a href="single.html" class="read-more">Continue Reading</a>
-                                                        </div><!-- End .entry-content -->
-                                                    </div><!-- End .entry-body -->
-                                                </div><!-- End .col-md-8 -->
-                                            </div><!-- End .row -->
-                                        </article><!-- End .entry -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-								    	<a href="./" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
