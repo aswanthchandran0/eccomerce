@@ -42,11 +42,6 @@ router.post('/adminLogin', aLoginController.validation); // Add the admin login 
 router.get('/adminOrder', adminOrderController.orderStatus.orderStatusPage);
 router.get('/adminOrder/selectedValue/:selectedValue/orderId/:orderId', adminOrderController.orderStatus.updateOrderStatus);
 
-// Banner Routes
-router.get('/banner', bannerController.banner.bannerPage);
-router.post('/banner/upload-image', bannerController.banner.handleUpload);
-router.get('/banner/delete', bannerController.banner.bannerDeletion);
-
 // Branding Routes
 router.get('/branding', brandingController.branding.brandingPage);
 router.post('/addBrand', brandingController.branding.addBrand)
@@ -106,4 +101,21 @@ router.delete('/deleteImage', productController.deleteImage)
 router.get('/coupon',adminCouponController.couponController.couponPage);
 router.post('/addCoupon',adminCouponController.couponController.couponAdd);
 
+// banner
+
+const bannerStorage = multer.diskStorage({
+    destination: function(req,res,cb){
+        cb(null,'bannerImages/');
+    },
+    filename:function(req,file,cb){
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null,file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+})
+
+const bannerUploads = multer({storage:bannerStorage})
+
+router.get('/banner', bannerController.banner.bannerPage)
+router.post('/addBanner',bannerUploads.single('image'), bannerController.banner.addBanner)
+router.get('/deleteBanner',bannerController.banner.deleteBanner)
 module.exports = router;

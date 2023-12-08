@@ -205,34 +205,35 @@
            
             <div class="row">
              
-              <div class="col-md-5 grid-margin stretch-card">
+              <div class="col-md-5 grid-margin stretch-card" id="banners">
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
                       <h4 class="card-title mb-1">Banner</h4>
-                      <a href="javascript:void(0)" style="color:rgba(107, 235, 164, 1)" id="addButton">Add</a>
+                      <a href="#" style="color:rgba(107, 235, 164, 1)" class="toggleButton">Add</a>
                       
                     </div>
                     <div class="row">
+                      <% if(latestBanner !== null && latestBanner !== undefined){%>
+                        <% latestBanner.forEach((banner)=>{%>
                       <div class="col-12">
                         <div class="preview-list">
                           <!---->
-                          <% if(banners !== null && banners !== undefined){%>
-                            <% banners.forEach((banner,index)=>{%>
+                    
                           <div class="preview-item border-bottom">
                             <div class="preview-thumbnail">
                               <div class="preview-icon bg-info">
-                                <img src="/bannerImages/<%=banner.homePage[index]?.Images %>" alt="Banner Image">
+                                <img src="/bannerImages/<%= banner.image %>" alt="Banner Image">
                               </div>
                             </div>
                             <div class="preview-item-content d-sm-flex flex-grow">
                               <div class="flex-grow">
-                                <h6 class="preview-subject"><%= banner.homePage[index]?.bannerMainText %></h6>
+                                <h6 class="preview-subject"><%= banner.mainText %></h6>
                                 <p class="text-muted mb-0"></p>
                               </div>
                               <div class="mr-auto text-sm-right pt-2 pt-sm-0">
                                 <p class="text-muted"></p>
-                                <a href="./banner/delete?bannerId =<%=banner._id %>&index=<%=index %>"><i class="text-muted mb-0  fa-solid fa-xmark"></i></a>
+                                <a href="/admin/deleteBanner/?bannerId=<%= banner._id %>"><i class="text-muted mb-0  fa-solid fa-xmark"></i></a>
                                 
                                 <p class="text-muted mb-0"></p>
                               </div>
@@ -240,13 +241,16 @@
                           </div>
                           
                             
-                                 
-                          <%})%>
-                          <%}%>
+
+
+
+                         
                          <!---->
 
                         </div>
                       </div>
+                      <%})%>
+                      <%}%>
                     </div>
                   </div>
                 </div>
@@ -254,6 +258,67 @@
             </div>
            
           
+
+            <div class="col-md-6 grid-margin stretch-card" id="bannerAdd" style="display: none;">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Banner</h4>
+                  <form class="forms-sample bannerForm"  method="post" action="/admin/addBanner" enctype="multipart/form-data">
+                    <div class="form-group row">
+                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label" >Text</label>
+                     
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control validate" name="subText1"  placeholder="sub Text">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Text</label>
+                     
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control validate" name="MainText"   placeholder="Main Text">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="exampleInputMobile" class="col-sm-3 col-form-label">Text</label>
+                      
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control validate" name="subText2"  placeholder="sub Text">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Button Text</label>
+                     
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control validate" name="ButtonText"  placeholder="Button Text">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Image</label>
+                     
+                      <div class="col-sm-9">
+                        <input type="file" class="form-control" name="image"  >
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Page url</label>
+                    
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control validate"  name="url"  placeholder="url">
+                      </div>
+                    </div>
+                   
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button class="btn btn-dark toggleButton">Cancel</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+       
+
+
+
+
+
 
 
           </div>
@@ -267,80 +332,119 @@
       <!-- page-body-wrapper ends -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+    
     <script>
-      var btn = document.getElementById('addButton');
-    
-      btn.onclick = async function () {
-        const { value: file, dismiss } = await Swal.fire({
-          title: "Banner",
-          html:
-            '<input type="text" id="input1" class="swal2-input" placeholder="sub Text">' +
-            '<input type="text" id="input2" class="swal2-input" placeholder="Main Text">' +
-            '<input type="text" id="input3" class="swal2-input" placeholder="sub Text">' +
-            '<input type="text" id="input4" class="swal2-input" placeholder="button Text">' +
-            '<input style="width:65%" type="file" id="fileInput" accept="image/*" aria-label="Upload your profile picture" class="swal2-input">',
-          focusConfirm: false,
-          preConfirm: () => {
-            return [
-              document.getElementById('fileInput').files[0],
-              document.getElementById('input1').value,
-              document.getElementById('input2').value,
-              document.getElementById('input3').value,
-              document.getElementById('input4').value,
-            ];
-          },
-          customClass: {
-            popup: 'custom-swal-popup',
-            content: 'custom-swal-content',
-            confirmButton: 'custom-swal-confirm-button'
-          }
-        });
-    
-        if (file) {
-          const [imageFile, subtext1, mainText, subText2, buttonText] = file;
-          const formData = new FormData()
-          formData.append('image', imageFile)
-          formData.append('subText1', subtext1);
-          formData.append('mainText', mainText);
-          formData.append('subText2', subText2);
-          formData.append('buttonText', buttonText);
+    if('<%= bannerAdded %>'){
 
-          fetch('/banner/upload-image', {
-            method: 'POST',
-            body: formData
-          }).then(response => response.json())
-            .then(data => {
-              console.log('Server Response:', data);
-            })
-            .catch(error => {
-              console.error('Error:', error);
-            });
-    
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            Swal.fire({
-              title: "Your uploaded picture",
-              imageUrl: e.target.result,
-              imageAlt: "The uploaded picture",
-              customClass: {
-                container: 'custom-swal-container'
-              }
-            });
-          };
-          reader.readAsDataURL(imageFile);
-        } else if (dismiss === Swal.DismissReason.cancel) {
-          console.log('cancelled');
-        }
+      const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
       }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "banner added"
+    });
+    }
+    if('<%= bannerDeleted %>'){
+
+      const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "banner deleted"
+    });
+    }
     </script>
     
+    
+    
+    
+    
+    
     <style>
-      .custom-swal-popup {
-        background-color: #38455e !important; /* Add !important to override default styles */
-        color: #fff; /* Change text color */
+      .validate {
+        transition: border-color 0.3s;
+      }
+    
+      .validate-error {
+        border-color: red;
       }
     </style>
+
+    <script>
+      $(document).ready(() => {
+        $('form.bannerForm').submit((event) => {
+          event.preventDefault();
+    
+          async function validationForm() {
+            var isValid = true;
+    
+            $('form.bannerForm input[type="text"]').each(function () {
+              const fieldName = $(this).attr("name");
+              const inputValue = $(this).val().trim();
+    
+              if (inputValue === "") {
+                isValid = false;
+                $(this).attr("placeholder", `${fieldName} is required.`)
+          
+              } else {
+                $(`#${fieldName}-error`).text("");
+              }
+            });
+    
+            const imageInput = $('form.bannerForm input[type="file"]');
+            const imageFile = imageInput[0].files[0];
+    
+            if (!imageFile) {
+              isValid = false;
+              $("#image-error").text("Image is required.");
+            } else {
+              $("#image-error").text("");
+            }
+    
+            return isValid;
+          }
+    
+          const isFormValid = validationForm();
+    
+          if (!isFormValid) {
+            // Display a general error message or perform other actions
+            alert("Please fill in all required fields.");
+          } else {
+            $('form.bannerForm').unbind('submit').submit();
+          }
+        });
+      });
+    </script>
+
+    <script>
+
+      $(document).ready(function() {
+        $('.toggleButton').click((e)=>{
+          $('#banners').toggle(200)
+          $('#bannerAdd').toggle(200)
+        })
+      });
+      </script>
+  
     
     <%- include('./adminFooter.ejs')-%>
     
