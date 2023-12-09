@@ -18,8 +18,8 @@ body {
 }
 
 .container {
-    width: 500px;
-    height: 610px;
+    width: 400px;
+    height: 400px;
     background: #333;
     box-shadow: 10px 20px 20px 0 rgba(0, 0, 0, 0.4), -10px 20px 20px 0 rgba(0, 0, 0, 0.4), 0 -2px 20px 0 rgba(0, 0, 0, 0.5);
     display: flex;
@@ -28,13 +28,14 @@ body {
 }
 
 .signin-signup {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 form {
     grid-column: 1 / 2;
-    grid-row: 1/2;
+    grid-row: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -131,7 +132,9 @@ a {
     color: red;     
 
 }
-
-.input-field input.normal {
-    /* Add styles for the normal state here */
+.resend-otp{
+   background: none;
+   border: none;
+   margin-top: 9%;
+   color: #999;
 }

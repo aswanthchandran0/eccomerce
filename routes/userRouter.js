@@ -17,7 +17,7 @@ const navBar2Controller = require('../controller/navBar2Controller')
 
 router.get('/productView', productViewController.productViewAll.productView);
 
-//homePage
+//homePage 
 router.get('/', checkUserStatus, indexController.homePage.showProducts);
 
 
@@ -48,18 +48,18 @@ router.delete('/orderDetails/detetOrder/:orderId/',orderDetailsController.orderD
 
 //orderSucess
 router.get('/orderSucess', function(req, res, next) {
-    res.render('orderSucess', { title: 'Express' });
+    res.render('orderSucess', { title: 'Express' }); 
   });
 
 //login
 router.get('/login', function(req, res, next) {
     res.render('login', { title: 'Express',errors:{} });
   });    
-router.post('/login/login',userController.loginController)
-router.post('/login/signin', userController.signUp);
+router.post('/login',userController.loginController)
+router.post('/signin', userController.signUp);
 
 //otp
-const limiter = rateLimit({
+const limiter = rateLimit({ 
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 5, // limit each IP to 5 requests per windowMs
     message: 'Too many requests from this IP, please try again later'
@@ -69,8 +69,8 @@ const limiter = rateLimit({
     res.render('otp', { title: 'otp', otpError: null });
   });
   
-  router.post('/otp/otpValidation', limiter, otpController.validateOtp);
-  router.post('/otp/resend-otp', otpController.resendOtp)  
+  router.post('/otpValidation', limiter, otpController.validateOtp);
+  router.post('/resend-otp', otpController.resendOtp)  
 
   // product list controller
   router.get('/productList', checkUserStatus, productListController.allProducts.showProducts);
