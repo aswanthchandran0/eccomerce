@@ -92,6 +92,9 @@ const AdminPanel = {
           
           console.log('Most Sold Product details:', mostSoldProductDetails);
           console.log('most sold product',mostSoldProducts);
+          if(!mostSoldProducts || mostSoldProducts.length ===0){
+         return    res.render('AdminPanel', {productExpense,cashOnDelivery,onlinePayment,latestcashOnDeliveryDate,latesOnlinePaymentDate,todayIncome,monthlyIncome,yearlyIncome,mostSoldProducts:''})
+          }
         res.render('AdminPanel', {productExpense,cashOnDelivery,onlinePayment,latestcashOnDeliveryDate,latesOnlinePaymentDate,todayIncome,monthlyIncome,yearlyIncome,mostSoldProducts})
     }catch(error){
         console.log(error);

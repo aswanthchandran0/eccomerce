@@ -16,6 +16,7 @@ const order = {
           const discountError = req.query.error || null;
             const userId = req.session.user._id
             const address = await addressModel.findOne({user:userId})
+         console.log('address',address);
             const userCart = await cartModel.findOne({userId:userId})
             const productDetails = userCart.products.map(product => ({
               productId: product.productId,
@@ -44,7 +45,9 @@ const order = {
           const discountAmount = req.query.discountAmount || 0;
           totalPrice -= discountAmount;
         const allTotal = totalPrice+shippingPrice
-          
+           if(address == null || address == undefined){
+           return res.render('orderPage',{address:'',products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount })
+           }
               res.render('orderPage',{address,products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount })
         }catch(error){
             console.log(error); 

@@ -9,17 +9,21 @@ const otpTimestamb = userController.otpGeneratedTime();
 async function validateOtp(req, res) {
   const { otp } = req.body;
   const currentTimestamb = Date.now();
-
+         const userId = req.session.user._id
   if (currentTimestamb - otpTimestamb > otp_Expire_Duration) {
     res.render('otp', { title: 'otp', otpError: 'OTP has expired. Please request a new OTP.' });
     return;
   }
-  const generatedOtp = userController.getGeneratedOtp();
+       const user = await userModel.findById(req.session.user._id)
+       console.log('user',user);
+
+  const generatedOtp =user.otp
   try {
     const isValid = await isValidOtp(parseInt(otp), parseInt(generatedOtp));
     if (!isValid) {
       res.render('otp', { title: 'otp', otpError: 'Invalid OTP' });
     } else {
+      const verified = await userModel.findByIdAndUpdate(userId, {Authentication:'verified'})
       res.redirect('/');
     }
   } catch (error) {
@@ -36,8 +40,11 @@ const resendOtp = async (req,res)=>{
   console.log('user email'+email);
 
   const resendOtpGenerated = crypto.randomInt(100000,999999)
+   console.log('resend otp',resendOtpGenerated);
+  const  userUpdated = await userModel.findByIdAndUpdate(userId,{otp:resendOtpGenerated})
+   userUpdated.save()
   resendOtpTimestamb = Date.now()
-
+ 
   try{
     await otpGenerator.sendOtpEmail(email,resendOtpGenerated)
   }catch(error){

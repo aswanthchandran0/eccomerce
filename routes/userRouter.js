@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {checkUserStatus} = require('../controller/middleware')
+const {checkUserStatus,checkUserSession} = require('../controller/middleware')
 const indexController = require('../controller/indexControler')
 const productListController = require('../controller/productListController')
 const productViewController = require('../controller/productViewController')
@@ -14,7 +14,7 @@ const userController = require('../controller/userController')
 const otpController = require('../controller/otpController');
 const rateLimit = require('express-rate-limit');
 const navBar2Controller = require('../controller/navBar2Controller')
-
+const wishlistController = require('../controller/wishlistController')
 router.get('/productView', productViewController.productViewAll.productView);
 
 //homePage 
@@ -56,21 +56,26 @@ router.get('/login', function(req, res, next) {
     res.render('login', { title: 'Express',errors:{} });
   });    
 router.post('/login',userController.loginController)
+
+//sign up
+router.get('/signup', function(req, res, next) {
+  res.render('signup', { title: 'Express',errors:{} });
+}); 
 router.post('/signin', userController.signUp);
 
-//otp
+//otp 
 const limiter = rateLimit({ 
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 5, // limit each IP to 5 requests per windowMs
     message: 'Too many requests from this IP, please try again later'
   });
   
-  router.get('/otp', function (req, res) {
+  router.get('/otp', checkUserSession, function (req, res) {
     res.render('otp', { title: 'otp', otpError: null });
   });
   
-  router.post('/otpValidation', limiter, otpController.validateOtp);
-  router.post('/resend-otp', otpController.resendOtp)  
+  router.post('/otpValidation', checkUserSession, limiter, otpController.validateOtp);
+  router.post('/resend-otp', checkUserSession, otpController.resendOtp)  
 
   // product list controller
   router.get('/productList', checkUserStatus, productListController.allProducts.showProducts);
@@ -79,4 +84,9 @@ const limiter = rateLimit({
   //search navBar2 controller
 router.post('/productSearch', navBar2Controller.navBar.search)
 router.get('/searchedProduct',productListController.allProducts.showSearchedProducts)
+
+//wishlist 
+router.get('/wishlist',wishlistController.wishList.wishlistPage)
+router.post('/addToWishlist',wishlistController.wishList.addToWishlist)
+router.get('/deleteWishist/:productId',wishlistController.wishList.delete)
 module.exports = router;

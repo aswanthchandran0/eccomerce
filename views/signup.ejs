@@ -14,25 +14,7 @@
 <body>
     <div class="container">
         <div class="signin-signup">
-            <form action="/login" method="post" class="sign-in-form">
-                <h2 class="title">Sign in</h2>
-                <div class="input-field">
-                    <i class="fas fa-user"></i>
-                    <input type="text" name="Email" placeholder="Email">
-                </div>
-                <div class="input-field">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" name="Password" placeholder="Password">
-                </div>
-                <% if (errors && errors.login) { %>
-                    <p style="color: red;"><%= errors.login %></p>
-                <% } %> 
-                <a href="#" class="forgot-password">Forgot password?</a>
-                <input type="submit" value="Login" class="btn">
-                <p>Don't have an account? <a href="#" class="account-text" id="sign-up-link">Sign up</a></p>
-                   <h2><a href="/">Home</a></h2>
-            </form>
-            <form action="/signin" method="post" class="sign-up-form">
+            <form action="/signin" method="post">
                 <h2 class="title">Sign up</h2>
                 <div class="input-field">
                     <i class="fas fa-user"></i>
@@ -87,24 +69,12 @@
                     <%} %>
                 </div>
                 <input type="submit" value="Sign up" class="btn">
-                <p>Already have an account? <a href="#" class="account-text" id="sign-in-link">Sign in</a></p>
+                <p>Already have an account? <a href="/login" class="account-text" id="sign-in-link">Sign in</a></p>
                 <h2><a href="/">Home</a></h2>
             </form>
         </div>
     </div>
-    <script>
-        const sign_in_link = document.querySelector("#sign-in-link");
-const sign_up_link = document.querySelector("#sign-up-link");
-const container = document.querySelector(".container");
 
-sign_up_link.addEventListener("click", () => {
-    container.classList.add("sign-up-mode");
-})
-
-sign_in_link.addEventListener("click", () => {
-    container.classList.remove("sign-up-mode");
-})
-    </script>
     <style>
        .input-field input.error::placeholder {
     color: red; /* Set the placeholder text color to red */

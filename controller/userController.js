@@ -8,8 +8,8 @@ const { log } = require('console');
 
     let generatedOtp 
     let otpTimestamb
-  const createUser =  async(Fname, Email, PhoneNumber, Password) => {
-       
+  const createUser =  async(Fname, Email, PhoneNumber, Password,otp) => {
+       console.log('otp',otp);
     try {
       const hashedPassword = await bcrypt.hash(Password, 10)
       const referalCode = generateRandomReferalCode();
@@ -19,6 +19,7 @@ const { log } = require('console');
         PhoneNumber,
         Password:hashedPassword, 
         referalCode,
+        otp
       });
       console.log(newUser);
       await newUser.save();
@@ -32,8 +33,8 @@ const { log } = require('console');
     try {
       const { Email, Password } = req.body;
       const user = await User.findOne({Email:Email})
-     
-      if (user) {
+          
+      if (user && user.Authentication === 'verified') {
 
       const passwordMatch = await bcrypt.compare(Password, user.Password)
 
@@ -42,7 +43,7 @@ const { log } = require('console');
           req.session.loggedIn = true
           req.session.user = user; 
         
-            return res.redirect('/');
+            return res.redirect('/?login=sucess');
         } else {
             const errors = { login: 'Account is banned. Please contact support.' };
             return res.render('login', { errors });
@@ -53,7 +54,7 @@ const { log } = require('console');
       }
         
     } else {
-        const errors = { login: 'Invalid email or password.' };
+        const errors = { login: 'user not exist' };
         return res.render('login', { errors });
     } 
     } catch(error){
@@ -68,16 +69,18 @@ const { log } = require('console');
 
    async function signUp(req, res) {
     const { Fname, Email, PhoneNumber, Password, Cpassword,enteredReferalCode } = req.body;
-   
      generatedOtp = crypto.randomInt(100000, 999999);
      otpTimestamb = Date.now();
     const existingUser = await User.findOne({ Email });
-
-    if (existingUser) {
+    if(existingUser){
+      if(existingUser.Authentication !== 'verified'){
+        await User.findOneAndRemove({Email:existingUser.Email})
+      }else{
         const errors = {
-            Email: 'User with this email is already existed'
-        };
-        return res.render('login', { errors });
+          Email: 'User with this email is already existed'
+      };
+      return res.render('signup', { errors });
+      }
     }
 
     // Example validation
@@ -93,7 +96,7 @@ const { log } = require('console');
 
     if (hasErrors) {
         // Validation failed, render the login template with error messages
-        return res.render('login', { errors });
+        return res.render('signup', { errors });
     }
 
     // If validation passes, create a new user and send OTP
@@ -102,7 +105,7 @@ const { log } = require('console');
     try {
         await otpGenerator.sendOtpEmail(Email,generatedOtp)
      
-        const newUser = await createUser( Fname, Email, PhoneNumber, Password);
+        const newUser = await createUser( Fname, Email, PhoneNumber, Password,generatedOtp);
         req.session.loggedIn = true
         req.session.user = newUser;
 
@@ -134,7 +137,7 @@ const { log } = require('console');
               const errors = {
                   enteredReferalCode: 'Invalid referral code'
               };
-              return res.render('login', { errors });
+              return res.render('signup', { errors });
           }
       }
 

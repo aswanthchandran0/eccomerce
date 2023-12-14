@@ -4,16 +4,15 @@ const { urlencoded } = require('express');
 const cart = {
   cartPage: async (req, res) => {
     try {
-      if(!req.session.user._id ){
+      if(!req.session.user){
         res.redirect('/')
       }
-     
       const empty = req.query.empty
         let error = req.query.error ? JSON.parse(decodeURIComponent(req.query.error)) : null;
       console.log(`errors in cart page: ${JSON.stringify(error)}`);
 
       const userCart = await cartModel.findOne({ userId: req.session.user._id });
-      console.log('usercart',userCart);
+      console.log('usercart',userCart)
       let products = null;
       let totalPrice = 0;
       let quantity
@@ -31,6 +30,8 @@ const cart = {
           
         const productIds = userCart.products.map(product => product.productId);
         products = await product.find({ _id: { $in: productIds } });
+      }else{
+        res.render('cart',{products:'',totalPrice:'',error:'',empty:''})
       }
 
       if (products) {

@@ -26,15 +26,10 @@
                                  
                                 </li>
                                 <li>
-                                    <a href="blog.html" class="">Contact</a>
-
-                                  
-                                </li>
-                                <li>
-                                    <a href="elements-list.html" class="">ABOUT</a>
-
                                     
+                                  <button onclick="redirectToLoginPage()" style="background:none; border-radius: 15px; color: #fff; border-color: white;">sign/login</button>                            
                                 </li>
+                               
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
                     </div><!-- End .header-left -->
@@ -51,7 +46,7 @@
                             </form>
                         </div><!-- End .header-search -->
                         
-                        <a href="wishlist.html" class="wishlist-link">
+                        <a href="/wishlist" class="wishlist-link">
                             <i class="icon-heart-o"></i>
                         </a>
 
@@ -103,4 +98,12 @@
             }, 800);
         });
     });
+</script>
+
+
+<script>
+    function redirectToLoginPage() {
+
+        window.location.href = '/login';
+    }
 </script>

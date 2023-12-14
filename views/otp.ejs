@@ -28,8 +28,9 @@
                 <input  type="submit" value="Submit" class="btn">
                  
             </form>
-            <form  action="/resend-otp" method="post" >
-                <button  type="submit" class="forgot-password resend-otp"  >resend OTP?</button>
+            <form  id="resendForm">
+                <div id="resendTimer" style="display: none;"></div>
+                <button  type="submit" class="resend-otp" id="resendButton" >resend OTP?</button>
              </form>
              <h2><a href="/">Home</a></h2>
         </div>
@@ -42,6 +43,61 @@
 }
 
     </style>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const resendButton = document.getElementById('resendButton');
+    const resendTimer = document.getElementById('resendTimer');
+    const resendForm = document.getElementById('resendForm');
+    let timer = localStorage.getItem('resendTimer') || 0;
+
+    if (timer > 0) {
+        resendButton.disabled = true;
+        resendButton.style.display = 'none';
+        startTimer(timer, resendButton, resendTimer);
+        resendTimer.style.display = 'block';
+    }
+
+
+    resendForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        handleResendSubmit();
+    });
+});
+
+function handleResendSubmit() {
+    resendButton.disabled = true;
+    resendButton.style.display = 'none';
+    startTimer(60, resendButton, resendTimer);
+    resendTimer.style.display = 'block';
+    localStorage.setItem('resendTimer', 60)
+    fetch('/resend-otp', { method: 'POST' })
+        .then(response => {
+
+        })
+        .catch(error => {
+          console.log('error',error);
+        });
+}
+
+function startTimer(duration, resendButton, resendTimer) {
+    let timer = duration;
+    const timerInterval = setInterval(function () {
+        resendTimer.innerHTML = `<span class="resend-otp">Resend OTP in ${timer} seconds</span>`;
+        if (--timer < 0) {
+            clearInterval(timerInterval);
+            resendButton.disabled = false;
+            resendButton.style.display = 'block';
+            resendTimer.style.display = 'none';
+            localStorage.removeItem('resendTimer');
+        }else{
+            localStorage.setItem('resendTimer', timer);
+        }
+    }, 1000);
+}
+
+</script>
+
+
 </body>
 
 </html>

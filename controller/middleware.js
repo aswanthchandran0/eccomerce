@@ -17,4 +17,13 @@ const checkUserStatus =(req,res, next)=>{
   }
 }
 
-  module.exports = {checkSession,checkUserStatus}
+
+const  checkUserSession = (req,res,next)=>{
+  if(req.session && req.session.user){
+    next();
+  } else {
+    res.redirect('/')
+  }
+}
+
+  module.exports = {checkSession,checkUserStatus,checkUserSession}

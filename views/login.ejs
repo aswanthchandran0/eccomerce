@@ -29,82 +29,12 @@
                 <% } %> 
                 <a href="#" class="forgot-password">Forgot password?</a>
                 <input type="submit" value="Login" class="btn">
-                <p>Don't have an account? <a href="#" class="account-text" id="sign-up-link">Sign up</a></p>
+                <p>Don't have an account? <a href="/signup" class="account-text" id="sign-up-link">Sign up</a></p>
                    <h2><a href="/">Home</a></h2>
-            </form>
-            <form action="/signin" method="post" class="sign-up-form">
-                <h2 class="title">Sign up</h2>
-                <div class="input-field">
-                    <i class="fas fa-user"></i>
-                    <% if (errors.Fname) { %>
-                        <input type="text" placeholder="<%= errors.Fname %>" name="Fname" class="error">
-                      <% }else{%>
-                    <input type="text" placeholder="Username" name="Fname">
-                    <%} %>
-                </div>
-                <div class="input-field">
-                    <i class="fas fa-envelope"></i>
-                    <% if (errors.Email) { %>
-                        <input type="text" placeholder="<%= errors.Email %>" name="Email" class="error">
-                      <% }else{%>
-                        <input type="text" placeholder="Email" name="Email">
-                    <%} %>
-                    
-                </div>
-                <div class="input-field">
-                    <i class="fa-solid fa-phone"></i>
-                    <% if (errors.PhoneNumber) { %>
-                        <input type="text" placeholder="<%= errors.PhoneNumber %>"  name="PhoneNumber" class="error">
-                      <% }else{%>
-                        <input type="text" placeholder="Phone Number"  name="PhoneNumber">
-                    <%} %>
-                    
-                </div>
-                <div class="input-field">
-                    <i class="fas fa-lock"></i>
-                    <% if (errors.Password) { %>
-                        <input type="password" placeholder="<%= errors.Password %>" name="Password" class="error">
-                      <% }else{%>
-                        <input type="password" placeholder="Password" name="Password">
-                    <%} %>
-                    
-                </div>
-                <div class="input-field">
-                    <i class="fas fa-lock"></i>
-                    <% if (errors.Cpassword) { %>
-                        <input type="password" placeholder="<%= errors.Cpassword %>"   name="Cpassword" class="error">
-                      <% }else{%>
-                        <input type="password" placeholder=" Conform Password"   name="Cpassword">
-                    <%} %>
-                   
-                </div>
-                <div class="input-field">
-                    <i class="fas fa-lock"></i>
-                    <% if (errors && errors.enteredReferalCode) { %>
-                        <input type="text" placeholder="<%= errors.enteredReferalCode %>" name="enteredReferalCode" class="error">
-                      <% }else{%>
-                        <input type="text" placeholder="REFERAL CODE" name="enteredReferalCode">
-                    <%} %>
-                </div>
-                <input type="submit" value="Sign up" class="btn">
-                <p>Already have an account? <a href="#" class="account-text" id="sign-in-link">Sign in</a></p>
-                <h2><a href="/">Home</a></h2>
             </form>
         </div>
     </div>
-    <script>
-        const sign_in_link = document.querySelector("#sign-in-link");
-const sign_up_link = document.querySelector("#sign-up-link");
-const container = document.querySelector(".container");
-
-sign_up_link.addEventListener("click", () => {
-    container.classList.add("sign-up-mode");
-})
-
-sign_in_link.addEventListener("click", () => {
-    container.classList.remove("sign-up-mode");
-})
-    </script>
+    
     <style>
        .input-field input.error::placeholder {
     color: red; /* Set the placeholder text color to red */

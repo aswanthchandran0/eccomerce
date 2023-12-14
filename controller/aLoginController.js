@@ -15,6 +15,9 @@ const validation = async (req,res)=>{
       if(PaswordMatch){
         req.session.admin = admin
     res.redirect('/admin/adminPanel')
+    }else{
+      const errors = {login: 'Access Denied'}
+   return res.render('adminLogin',{errors})
     }
  }
     }

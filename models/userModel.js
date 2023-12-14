@@ -51,6 +51,15 @@ const userSchema = new mongoose.Schema({
     referalCode:{
         type:Number,
         required:true
+    },
+    otp:{
+        type:Number,
+        required:true
+    },
+    Authentication:{
+        type:String,
+        required:true,
+        default:'not verified'
     }
 })
 

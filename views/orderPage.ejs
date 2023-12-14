@@ -42,7 +42,7 @@
                     ---------------------------------------------------------------------
                 ------------------------------------------------------------------------------------->
                 <form action="/order/order" method="post" id="orderForm" onsubmit="makePayment(event)">
-                <% if(address !==null && address !==undefined){%>
+                <% if(address !== null && address !==undefined && address.length !==0){%>
                     <% address.address.forEach((address,index)=>{%>
                              
                                     <div class="summary summary-cart">
@@ -91,12 +91,7 @@
 
                                    
 
-                              
-                                       <!-------------------------------------
-                          --------------------------------------------------------
-                        ------------------------------------------------------------
-                    ---------------------------------------------------------------------
-                ------------------------------------------------------------------------------------->
+    
                                             
 
 	        							<div class="custom-control custom-checkbox">
@@ -198,7 +193,7 @@
 		                					<span class="btn-hover-text">Proceed to Checkout</span>
 		                				</button>
                                 
-                                        <%} %>
+                                        <%}else{%> <p>no address found</p><%} %>
 		                			</div><!-- End .summary -->
 		                		</aside><!-- End .col-lg-3 -->
 		                	</div><!-- End .row -->

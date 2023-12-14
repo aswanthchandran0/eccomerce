@@ -94,7 +94,11 @@ router.delete('/deleteImage', productController.deleteImage);
 
 // deteting images from product add
 
-router.delete('/deleteImage', productController.deleteImage)
+
+
+//product edit
+router.get('/editProduct',productController.editProductPage)
+router.post('/updateProduct',productController.updateProduct)
 
 //coupon router
  
@@ -118,4 +122,5 @@ const bannerUploads = multer({storage:bannerStorage})
 router.get('/banner', bannerController.banner.bannerPage)
 router.post('/addBanner',bannerUploads.single('image'), bannerController.banner.addBanner)
 router.get('/deleteBanner',bannerController.banner.deleteBanner)
+
 module.exports = router;
