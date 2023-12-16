@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 
 const userAdress = mongoose.Schema({
+   Address:[
+      {
     user:{
         type:String,
         required:true,
@@ -49,8 +51,15 @@ const userAdress = mongoose.Schema({
       required:true
    }
  }
+<<<<<<< HEAD
 ]
  
+=======
+
+}
+   ]
+
+>>>>>>> master
 })
  
 const Address = mongoose.model('Address',userAdress)
