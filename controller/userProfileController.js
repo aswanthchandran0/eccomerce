@@ -9,6 +9,7 @@ const Coupon = require('../models/couponModel');
 
 const userProfile = {
     profile: async (req, res) => {
+
         try {
             errors = null;
             if (req.session.user) {
@@ -27,6 +28,7 @@ const userProfile = {
                 const productDetails = await productModel.find({ _id: { $in: productIds } });
                 console.log('product details' + productDetails);
                 const userAddress = await AddressModel.findOne({ user: userId });
+
                 res.render('userProfile', { user: req.session.user, AddressValidationErrors: req.session.loginErr, userdata: [userAddress] })
                 req.session.AddressValidationErrors = null;
             } else {

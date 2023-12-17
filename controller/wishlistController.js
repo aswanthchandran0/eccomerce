@@ -4,7 +4,6 @@ const wishList = {
   wishlistPage: async(req,res)=>{
     try{
      if(req.session.user){
-      console.log('request reached');
       const userId = req.session.user._id
       const userWishlist = await wishListData.findOne({userId:userId})
       let products
