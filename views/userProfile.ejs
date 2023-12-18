@@ -471,32 +471,32 @@ color: aliceblue;
     </div><!-- End .modal -->
 
     <!-- Plugins JS File -->
-    <script src="https://localhost:3000/assets/js/jquery.min.js"></script>
-    <script src="https://localhost:3000/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="https://localhost:3000/assets/js/jquery.hoverIntent.min.js"></script>
-    <script src="https://localhost:3000/assets/js/jquery.waypoints.min.js"></script>
-    <script src="https://localhost:3000/assets/js/superfish.min.js"></script>
-    <script src="https://localhost:3000/assets/js/owl.carousel.min.js"></script>
+    <script src="//code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="http://localhost:3000/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="http://localhost:3000/assets/js/jquery.hoverIntent.min.js"></script>
+    <script src="http://localhost:3000/assets/js/jquery.waypoints.min.js"></script>
+    <script src="http://localhost:3000/assets/js/superfish.min.js"></script>
+    <script src="http://localhost:3000/assets/js/owl.carousel.min.js"></script>
     <!-- Main JS File -->
-    <script src="https://localhost:3000/assets/js/main.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $("#showAddressForm").click(function(){
-               
-
-                $("#userData").toggle();
-                $("#addressForm").toggle();
-
-                
-            });
-        })
-        $('#cancelButton').click(function(){
-         
-            $("#addressForm").hide()
-            $("#userData").toggle();
-        })
-    </script>
+    <script src="http://localhost:3000/assets/js/main.js"></script>
+   <!-- Make sure jQuery is included before this script -->
+   <script>
+    $(document).ready(function() {
+      $('#userData').submit(function(event) {
+        // Prevent the default form submission
+        event.preventDefault();
+        
+        // Toggle the forms
+        $('#userData, #addressForm').toggle();
+      });
+  
+      $('#cancelButton').click(function() {
+        $('#addressForm').hide();
+        $('#userData').toggle();
+      });
+    });
+  </script>
+  
 
 </body>
 
