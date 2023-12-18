@@ -77,29 +77,29 @@ const userProfile = {
 
 
     try{
-      console.log('User ID:', req.session.user._id);
 
-      const userAddress = await AddressModel.updateOne(
-        { 'user': req.session.user._id },
-        {
-          $addToSet: {
-            'address': {
-              Fname: Fname,
-              Email: Email,
-              PhoneNumber: PhoneNumber,
-              Pincode: Pincode,
-              Address: Address,
-              Place: Place,
-              state: state,
-              LandMark: LandMark,
-              AphoneNumber: AphoneNumber,
-              AddressType: AddressType,
-            },
-          },
-        },
-        { upsert: true }
-      );
-      
+
+     
+const userAddress = await AddressModel.updateOne(
+  {user:req.session.user._id},
+  {
+    $addToSet:{address:{
+      Fname:Fname,
+      Email:Email,
+      PhoneNumber:PhoneNumber,
+      Pincode:Pincode,
+      Address:Address,
+      Place:Place,
+      state:state,
+      LandMark:LandMark,
+      AphoneNumber:AphoneNumber, 
+      AddressType:AddressType
+
+   }}
+  },
+  {upsert: true}
+)
+
       
 
 console.log('userAddress',userAddress);
