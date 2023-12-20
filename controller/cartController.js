@@ -57,8 +57,10 @@ const cart = {
   addToCart: async (req, res) => {
 
     if (req.session.user) {
-      const productId = req.params.id
+      const productId = req.body.productId
       const userId = req.session.user._id
+      console.log('user id',userId);
+      console.log('productId',productId);
      const existingProduct = await cartModel.findOne({
       userId:userId,
       'products.productId': productId,
@@ -66,8 +68,7 @@ const cart = {
 
     
      if (existingProduct) {
-      console.log('Product already exists in the cart.');
-      return res.redirect('/');
+      return res.json({productExist:true})
   }
 
       try { 
@@ -81,14 +82,14 @@ const cart = {
         )
 
 
-        res.redirect('/')
+        res.json({success:true})
       } catch (error) {
         console.log(error);
-        res.status(500).send('Internal Server Error')
+        res.json({success:false})
       }
     }
     else {
-      res.redirect('/login')
+      return res.json({notLoggedIn:true})
     }
 
 

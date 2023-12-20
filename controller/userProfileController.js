@@ -27,8 +27,9 @@ const userProfile = {
               const productDetails = await productModel.find({ _id: { $in: productIds } });
               console.log('product details'+productDetails);
               const userAddress = await AddressModel.findOne({ user: userId });
-               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet,walletTransactions,activeCoupons})
-               req.session.AddressValidationErrors = null;
+               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet,walletTransactions,activeCoupons,updatedAddressValidationErr: req.session.updatedAddressValidationErr})
+               req.session.AddressValidationErr = null;
+               req.session.updatedAddressValidationErr = null
                
             }
             else{
@@ -121,6 +122,92 @@ console.log('userAddress',userAddress);
     console.log('req reached');
     res.redirect('/userProfile')
    },
+   addressHandler:async (req,res)=>{
+    try{
+         const user = req.session.user
+         const index = req.query.index
+
+         if(user !== null && user !== undefined){
+        const userId = req.session.user._id
+         if(index !== null && index !== undefined){
+          const userAddress = await AddressModel.find({user:userId})
+          if (userAddress.length > 0 && userAddress[0].address.length > index) {
+            const addressData = userAddress[0].address[index];
+            res.json({ success: true, address: addressData,index:index });
+        }else{
+            res.status(404).json({ success: false, error: 'Address not found' });
+          }
+         }
+      }
+    }catch(error){
+      console.log(error);
+      res.status(500)
+    }
+    const index = req.query.index
+    const user = req.session.user
+   
+  
+  },
+  updateAddress:async(req,res)=>{
+    const {name,email,phoneNumber,pincode,address,place,state,landmark,secondNumber,editAddressType,addressIndex} = req.body
+    const user = req.session.user
+    try{
+      if(user){
+        const userId = req.session.user._id
+        const userAddress = await AddressModel.findOne({user:userId})
+  
+  
+        const errors = {
+          Fname:isValidFname(name),
+          Email:isValidEmail(email),
+          PhoneNumber:isValidPhoneNumber(phoneNumber),
+          Pincode:isValidPincode(pincode),
+          Address:isValidAddress(address),
+          Place:isValidPlace(place),
+          state:isValidstate(state), 
+          LandMark:isValidLandMark(landmark),
+          AphoneNumber:isValidAphoneNumber(secondNumber)
+      }
+      
+     
+    
+      const hasErrors =Object.values(errors).some(errors => errors !==null)
+    
+      if(hasErrors){
+  
+    req.session.updatedAddressValidationErr    =errors
+        return res.redirect('/userProfile')
+      }
+    
+  
+  
+        if (userAddress && userAddress.length !== 0) {
+      
+                  const addressToUpdate = userAddress.address[addressIndex]
+  
+                  addressToUpdate.Fname = name
+                  addressToUpdate.Email = email
+                  addressToUpdate.PhoneNumber = phoneNumber
+                  addressToUpdate.Pincode = pincode
+                  addressToUpdate.Address = address
+                  addressToUpdate.Place = place
+                  addressToUpdate.state = state
+                  addressToUpdate.LandMark = landmark
+                  addressToUpdate.AphoneNumber = secondNumber
+                  addressToUpdate.AddressType = editAddressType
+  
+                  await userAddress.save();
+                  res.redirect('/userProfile')
+        }
+    
+      }
+    }catch(error){
+               console.log(error);
+               res.status(500)
+    }
+
+      
+  }
   
   }
 

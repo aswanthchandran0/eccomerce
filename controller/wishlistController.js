@@ -28,10 +28,12 @@ const wishList = {
   },
   addToWishlist:async(req,res)=>{
     try{
-          const userId = req.session.user._id
-          const productId = req.body.productId 
-           if(userId){
+          const user = req.session.user
 
+        
+          const productId = req.body.productId 
+           if(user !== null && user !== undefined){
+            const userId = req.session.user._id
             const existingProduct = await wishListData.findOne({
               userId:userId,
               'products.productId': productId,
@@ -52,10 +54,10 @@ const wishList = {
               { upsert: true }
             )
                   
-            console.log('wishlist',newWishlist);
             res.json({success:true})
            }else{
-            res.json({success:false})
+            
+            return res.json({notLoggedIn:true})
            }
           
           

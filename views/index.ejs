@@ -49,7 +49,7 @@
                 fringilla odio mi. Consequat pharetra at magna imperdiet cursus ac faucibus sit libero. Ultricies quam
                 nunc, lorem sit lorem urna, pretium aliquam ut. In vel, quis donec dolor id in. Pulvinar commodo mollis
                 diam sed facilisis at cursus imperdiet cursus ac faucibus sit faucibus sit libero.</p>
-              <a href="/productList" class="btn btn-dark text-uppercase mt-3">Shop Collection</a>
+              <a href="/productList" class="btn btn-dark text-uppercase mt-3">Shop</a>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
                                     </div><!-- End .product-action -->
 
                                     <div class="product-action product-action-transparent">
-                                        <a href="/cart/addToCart/<%= product._id %>" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <a href="#" class="btn-product btn-cart cart"  data-product-id="<%= product._id %>"><span>add to cart</span></a>
                                     </div><!-- End .product-action -->
                                 </figure><!-- End .product-media -->
 
@@ -361,6 +361,69 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/js/main.js"></script>
+<script>
+    $(document).ready(function (){
+        $('.cart').click(function(e){
+            e.preventDefault();
+            const productId = $(this).data('product-id')
+            addToCart(productId)
+        })
+    })
+
+    function addToCart(productId){
+        $.ajax({
+            type:'POST',
+            url:'/addToCart',
+            data:{productId:productId},
+            success:function(data){
+                console.log('data',data);
+                if (data.notLoggedIn){
+                    console.log('request reached inside not logged in');
+                    window.location.href = '/login'
+                  }
+
+               else if(data.success){
+                        const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "product Added"
+    });
+
+                    }
+
+                    
+                    else if(data.productExist){
+                        const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Already added"
+    });
+                    }
+
+            }
+        })
+    }
+</script>
 
     <script>
           $(document).ready(function () {
@@ -377,8 +440,11 @@
                 url: '/addToWishlist',
                 data: { productId: productId },
                 success: function (data) {
-                    console.log("request reached",data);
-                    if(data.success){
+                  if (data.notLoggedIn){
+                    console.log('request reached inside not logged in');
+                    window.location.href = '/login'
+                  }
+                    else if (data.success){
                         const Toast = Swal.mixin({
       toast: true,
       position: "top-end",

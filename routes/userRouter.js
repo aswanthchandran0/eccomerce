@@ -23,7 +23,7 @@ router.get('/', checkUserStatus, indexController.homePage.showProducts);
 
 //cart
 router.get( '/cart',userValidationMiddleware.userMiddleware.verifiy , cartController.cart.cartPage)
-router.get('/cart/addToCart/:id',cartController.cart.addToCart)
+router.post('/addToCart',cartController.cart.addToCart)
 router.get('/cart/deleteCart/:id', cartController.cart.deleteCart);
 router.get('/cart/updatePrice/:quantityChange/:productId/:productPrice',cartController.cart.updatePrice)
 router.get('/cart/orderData/:totalPrice/:subtotalPrice/:shippingPrice/:quantity', cartController.cart.orderData);
@@ -41,7 +41,8 @@ router.get('/userProfile', userProfileController.userProfile.profile,)
 router.post('/userProfile/address',userProfileController.userProfile.userAddress)
 router.get('/userProfile/signout', userProfileController.userProfile.signout)
 router.get('/userProfile/orderCancel', userProfileController.userProfile.cancelOrder)
-
+router.get('/addressHandler',userProfileController.userProfile.addressHandler)
+router.post ('/updateAddress',userProfileController.userProfile.updateAddress)
 //orderDetails
 router.get('/orderDetails' ,userValidationMiddleware.userMiddleware.verifiy, orderDetailsController.orderDetails.orderPage)
 router.delete('/orderDetails/detetOrder/:orderId/',orderDetailsController.orderDetails.deleteOrder)

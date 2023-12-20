@@ -10,17 +10,7 @@
                         <li class="breadcrumb-item active" aria-current="page">Default</li>
                     </ol>
 
-                    <nav class="product-pager ml-auto" aria-label="Product">
-                        <a class="product-pager-link product-pager-prev" href="#" aria-label="Previous" tabindex="-1">
-                            <i class="icon-angle-left"></i>
-                            <span>Prev</span>
-                        </a>
-
-                        <a class="product-pager-link product-pager-next" href="#" aria-label="Next" tabindex="-1">
-                            <span>Next</span>
-                            <i class="icon-angle-right"></i>
-                        </a>
-                    </nav><!-- End .pager-nav -->
+                 
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
 
@@ -69,33 +59,14 @@
 
 
                                   
-                                    <div class="details-filter-row details-row-size">
-                                        <label for="size">Size:</label>
-                                        <div class="select-custom">
-                                            <select name="size" id="size" class="form-control">
-                                                <option value="#" selected="selected">Select a size</option>
-                                                <option value="s">Small</option>
-                                                <option value="m">Medium</option>
-                                                <option value="l">Large</option>
-                                                <option value="xl">Extra Large</option>
-                                            </select>
-                                        </div><!-- End .select-custom -->
-
-                                        
-                                    </div><!-- End .details-filter-row -->
-
-                                    <div class="details-filter-row details-row-size">
-                                        <label for="qty">Qty:</label>
-                                        <div class="product-details-quantity">
-                                            <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                        </div><!-- End .product-details-quantity -->
-                                    </div><!-- End .details-filter-row -->
+                                  
+                                  
 
                                     <div class="product-details-action">
-                                        <a href="/cart/addToCart/<%= product._id %>" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <a href="#" class="btn-product btn-cart cart"  data-product-id="<%= product._id %>"><span>add to cart</span></a>
 
                                         <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                            <a href="#" class="btn-product btn-wishlist wishlist" title="Wishlist" data-product-id="<%= product._id %>"><span>Add to Wishlist</span></a>
                                            
                                         </div><!-- End .details-action-wrapper -->
                                     </div><!-- End .product-details-action -->
@@ -265,13 +236,11 @@
                     <div class="product-price">
                         $<%= product.ProductPrice %>
                     </div><!-- End .product-price -->
-                    <div class="product-details-quantity">
-                        <input type="number" id="sticky-cart-qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                    </div><!-- End .product-details-quantity -->
+                    
 
                     <div class="product-details-action">
-                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                        <a href="#" class="btn-product btn-cart cart" data-product-id="<%= product._id %>"><span>add to cart</span></a>
+                        <a href="#" class="btn-product btn-wishlist wishlist" title="Wishlist"  data-product-id="<%= product._id %>"><span>Add to Wishlist</span></a>
                     </div><!-- End .product-details-action -->
                 </div><!-- End .col-6 -->
             </div><!-- End .row -->
@@ -292,7 +261,132 @@
     <script src="assets/js/jquery.elevateZoom.min.js"></script>
     <script src="assets/js/bootstrap-input-spinner.js"></script>
     <script src="assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
 
-   
+    <script>
+        $(document).ready(function (){
+            $('.cart').click(function(e){
+                e.preventDefault();
+                const productId = $(this).data('product-id')
+                addToCart(productId)
+            })
+        })
+    
+        function addToCart(productId){
+            $.ajax({
+                type:'POST',
+                url:'/addToCart',
+                data:{productId:productId},
+                success:function(data){
+                    console.log('data',data);
+                    if (data.notLoggedIn){
+                        console.log('request reached inside not logged in');
+                        window.location.href = '/login'
+                      }
+    
+                   else if(data.success){
+                            const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "product Added"
+        });
+    
+                        }
+    
+                        
+                        else if(data.productExist){
+                            const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Already added"
+        });
+                        }
+    
+                }
+            })
+        }
+    </script>
+    
+        <script>
+              $(document).ready(function () {
+            $('.wishlist').click(function (e) {
+                e.preventDefault(); 
+    
+                const productId = $(this).data('product-id');
+                addToWishlist(productId);
+            });
+    
+            function addToWishlist(productId) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/addToWishlist',
+                    data: { productId: productId },
+                    success: function (data) {
+                      if (data.notLoggedIn){
+                        console.log('request reached inside not logged in');
+                        window.location.href = '/login'
+                      }
+                        else if (data.success){
+                            const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "product Added"
+        });
+                        }else if(data.productExist){
+                            const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Already added"
+        });
+                        }
+                    },
+                    error: function (error) {
+                        // Handle the error
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
+        </script>

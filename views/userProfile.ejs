@@ -209,9 +209,9 @@ color: aliceblue;
 								    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
 								    	<p>The following addresses will be used on the checkout page by default.</p>
                                       
-								    	<div class="row">
+								    	<div class="row" id="addressContainer">
                                             <% if (userdata) { %>
-                                                <% userdata.address.forEach(address => { %>
+                                                <% userdata.address.forEach((address,index) => { %>
 								    		<div class="col-lg-6">
 								    			<div class="card card-dashboard">
                                                     
@@ -229,9 +229,9 @@ color: aliceblue;
                                                                 <p>LandMark:<%= address.LandMark %></p>
                                                                 <p>SecondNumber:<%= address.AphoneNumber %></p>
                                                                 <p>AddressType:<%= address.AddressType %></p>
-                                                    
+                                                      
 
-														<a href="#">Edit <i class="icon-edit"></i></a></p>
+														<a href="#" class="toggleButton" data-address-index = "<%= index %>" data-address-id="<%= address._id %>">Edit <i class="icon-edit "></i></a>
 								    				</div><!-- End .card-body -->
 								    			</div><!-- End .card-dashboard -->
 								    		</div><!-- End .col-lg-6 -->
@@ -240,6 +240,76 @@ color: aliceblue;
                                                 <p>Address not found</p>
                                             <% } %>
 								    	</div><!-- End .row -->
+
+                                        <!---->
+                                             
+								    	<div class="row edit-address" style="display: none;">
+								    		<div class="col-lg-8">
+								    			<div class="card card-dashboard">
+                                                    
+                                                  
+								    				<div class="card-body">
+								    					<h3 class="card-title">Edit</h3><!-- End .card-title -->
+                                                        <form action="/updateAddress" method="post">
+
+                                                            <label>Name </label>
+                                                        <input type="text" class="form-control" name="name" value="">
+                                                        <input type="hidden" name="addressIndex" value="">
+
+                                                        <small class="form-text"></small>
+                                          
+                                                        <label>Email address </label>
+                                                        <input type="email" class="form-control" name="email" value="">
+            
+                                                        <label>Phone Number</label>
+                                                        <input type="text" class="form-control" name="phoneNumber" value="">
+                                                    
+                                                         <label>Pincode</label>
+                                                         <input type="text" class="form-control" name="pincode" value="">
+
+                                                         <label>Address</label>
+                                                         <input type="text" class="form-control" name="address" value="">
+                                                         
+                                                         <label>Place</label>
+                                                         <input type="text" class="form-control" name="place" value="">
+                                                         
+                                                         <label>State</label>
+                                                         <input type="text" class="form-control" name="state" value="">
+                                                         
+                                                         <label>LandMark</label>
+                                                         <input type="text" class="form-control" name="landmark" value="">
+                                                         
+                                                         <label>SecondNumber</label>
+                                                         <input type="text" class="form-control" name="secondNumber" value="">
+            
+                                            <label>Address type</label><br>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio"  name="editAddressType"  id="inlineRadio1" value="Home" style="background-color: #c96 !important; border-color: #c96 !important;" required>
+                                                <label class="form-check-label" for="inlineRadio1">Home</label>
+                                              </div>
+                                              <div class="form-check form-check-inline">
+                                                <input   class="form-check-input" type="radio"name="editAddressType"  id="inlineRadio2" value="Work" style="background-color: #c96 !important; border-color: #c96 !important;" required>
+                                                <label class="form-check-label" for="inlineRadio2">Work(Delevery between 10 AM -5 PM)</label>
+                                              </div>
+                                              <br>
+
+                                                            <button type="submit" class="btn btn-outline-primary-2">
+                                                            <span>SAVE</span>
+                                                            <i class="icon-long-arrow-right"></i>
+                                                        </button>
+
+                                                        <button type="button" class="btn btn-outline-primary-2  toggleButton">
+                                                            <span>CANCEL</span>
+                                                            <i class="icon-long-arrow-right"></i>
+                                                        </button>
+                                                    </form>
+														
+								    				</div><!-- End .card-body -->
+								    			</div><!-- End .card-dashboard -->
+								    		</div><!-- End .col-lg-6 -->
+                                         
+								    	</div><!-- End .row -->
+                                        <!---->
                                                    
                                       
 								    </div><!-- .End .tab-pane -->
@@ -480,23 +550,76 @@ color: aliceblue;
     <!-- Main JS File -->
     <script src="http://localhost:3000/assets/js/main.js"></script>
    <!-- Make sure jQuery is included before this script -->
+ 
    <script>
-    $(document).ready(function() {
-      $('#userData').submit(function(event) {
-        // Prevent the default form submission
-        event.preventDefault();
-        
-        // Toggle the forms
-        $('#userData, #addressForm').toggle();
-      });
-  
-      $('#cancelButton').click(function() {
-        $('#addressForm').hide();
-        $('#userData').toggle();
-      });
+    $(document).ready(function(){
+        $("#showAddressForm").click(function(){
+           
+
+            $("#userData").toggle();
+            $("#addressForm").toggle();
+
+            
+        });
+    })
+    $('#cancelButton').click(function(){
+     
+        $("#addressForm").hide()
+        $("#userData").toggle();
+    })
+</script>
+   
+
+
+  <script>
+   $(document).ready(function(){
+    // Use event delegation to handle click on dynamically added elements
+    $(document).on('click', '.toggleButton', function(e){
+        var index = $(this).data('address-index');
+        var addressId = $(this).data('address-id');
+        $('#addressContainer').toggle();
+        $('.edit-address').toggle(200);
+
+        $.ajax({
+            url: '/addressHandler',
+            method: 'GET',
+            data: { index: index },
+            success: function(data){
+                if (data.success) {
+                    // Populate the edit form with the received data
+                    $('.edit-address input[name="name"]').val(data.address.Fname);
+                    $('.edit-address input[name="email"]').val(data.address.Email);
+                    $('.edit-address input[name="phoneNumber"]').val(data.address.PhoneNumber);
+                    $('.edit-address input[name="pincode"]').val(data.address.Pincode);
+                    $('.edit-address input[name="address"]').val(data.address.Address);
+                    $('.edit-address input[name="place"]').val(data.address.Place);
+                    $('.edit-address input[name="state"]').val(data.address.state);
+                    $('.edit-address input[name="landmark"]').val(data.address.LandMark);
+                    $('.edit-address input[name="secondNumber"]').val(data.address.AphoneNumber);
+                    $('.edit-address input[name="addressIndex"]').val(data.index);
+                    $('input[name="editAddressType"][value="' + data.address.AddressType + '"]').prop('checked', true);
+                } else {
+                    console.error('Error fetching address data from the server');
+                }
+            },
+            error: function() {
+                console.error('Error connecting to the server');
+            }
+        });
     });
-  </script>
-  
+
+    $(document).on('click', '.edit-address .toggleButton', (e)=>{
+        $('.edit-address #addressContainer').toggle();
+        $('.edit-address').toggle();
+    });
+});
+
+
+</script>
+
+
+
+
 
 </body>
 
