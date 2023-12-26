@@ -2,9 +2,15 @@ const BrandModel = require('../models/BrandModel')
 
 const branding = {
     brandingPage: async(req,res)=>{
+      const BRAND_PER_PAGE = 10
       try{
+        const page = parseInt(req.query.page) || 1
+        const totalBrands = await BrandModel.countDocuments({})
+        const totalPages = Math.ceil(totalBrands/BRAND_PER_PAGE)
         const Brands = await BrandModel.find({})
-         res.render('branding',{Brands})
+        .skip((page-1)*BRAND_PER_PAGE)
+        .limit(BRAND_PER_PAGE)
+         res.render('branding',{Brands,totalPages,currentPage:page})
       }catch(error){
      console.log(error);
      res.status(500).send('internal server error')

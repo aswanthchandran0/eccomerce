@@ -54,7 +54,7 @@ const { log } = require('console');
       }
         
     } else {
-        const errors = { login: 'user not exist' };
+        const errors = { login: 'please enter the email' };
         return res.render('login', { errors });
     } 
     } catch(error){

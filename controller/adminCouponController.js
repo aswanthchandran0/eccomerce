@@ -12,9 +12,14 @@ const Coupon = require('../models/couponModel');
 
 const couponController = {
     couponPage: async (req, res) => {
+        const COUPON_PER_PAGE = 10
         try {
-    
-            const coupons = await Coupon.find({});
+            const page = parseInt(req.query.page) || 1
+            const totalCoupon = await Coupon.countDocuments({})
+            const totalPages = Math.ceil(totalCoupon/COUPON_PER_PAGE)    
+            const coupons = await Coupon.find({})
+            .skip((page -1)*COUPON_PER_PAGE)
+            .limit(COUPON_PER_PAGE)
             const currentDate = moment();
 
             for (const coupon of coupons) {
@@ -24,7 +29,7 @@ const couponController = {
             }
 
             console.log('coupons',);
-            res.render('adminCoupon', { coupons , errors:'' });
+            res.render('adminCoupon', { coupons , errors:'' ,totalPages,currentPage:page});
         } catch (error) {
             console.log(error);
             res.status(500).send('Internal Server Error');

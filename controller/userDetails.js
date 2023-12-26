@@ -4,8 +4,15 @@ const User = require('../models/userModel')
 const userData = {
     getAllUser: async (req,res)=>{
         try{
+            const USER_PER_PAGE =10
+             const page = parseInt(req.query.page) ||1
+             const TotalUsers = await User.countDocuments({})
+             const totalPages = Math.ceil(TotalUsers/USER_PER_PAGE)
+
             const Users = await User.find()
-            res.render('userDetails',{Users})
+            .skip((page-1)*USER_PER_PAGE)
+            .limit(USER_PER_PAGE)
+            res.render('userDetails',{Users,totalPages,currentPage:page})
         }catch {
             console.error(error);
             res.status(500).send('Internal Server Error');

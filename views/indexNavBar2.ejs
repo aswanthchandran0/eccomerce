@@ -15,17 +15,17 @@
 
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
-                        <li class="megamenu-container active">
+                        <li class="megamenu-container <%= currentPage === 'home'?'active': '' %>">
                             <a href="./" >Home</a>
                         </li>
-                        <li>
+                        <li class="<%= currentPage === 'products'?'active':''%>">
                             <a href="./productList" class="">Products</a>
                         </li>
                         <li>
-                            <a href="blog.html" class="">Contact</a>    
+                           
                         </li>
                         <li>
-                            <a href="elements-list.html" class="">ABOUT</a>   
+                           
                         </li>
                     </ul><!-- End .menu -->
                 </nav><!-- End .main-nav -->
@@ -42,25 +42,24 @@
                     </form>
                 </div><!-- End .header-search -->
                 
-                <a href="/wishlist" class="wishlist-link">
+                <a href="/wishlist" class="wishlist-link active-link <%= currentPage==='wishlist'?'active':''%>">
                     <i class="icon-heart-o"></i>
                 </a>
 
                 <div class="dropdown cart-dropdown">
-                    <a href="/cart" class="dropdown-toggle" role="button"  aria-haspopup="true" aria-expanded="false" data-display="static">
+                    <a href="/cart" class="dropdown-toggle active-link <%= currentPage ==='cart'?'active':''%>" role="button"  aria-haspopup="true" aria-expanded="false" data-display="static">
                         <i class="icon-shopping-cart"></i>
                <!--  <span class="cart-count" id="cartCount">2</span> -->
                     </a>
-                   
                 </div><!-- End .cart-dropdown -->
                 
-                <div class="dropdown cart-dropdown" style="margin-top: 2px;">
-                    <a href="./userProfile">
-                        <i class="fa-regular fa-user fa-lg" style="color: #000000; "></i>
-                        
-                    </a>
-                   
-                </div>
+                <a href="/userProfile" style="margin-bottom: -4px;" class="wishlist-link active-link <%= currentPage ==='profile'?'active':''%>"> 
+                    <i class="fa-regular fa-user fa-xs"></i>
+                    
+                </a> 
+               
+                  
+               
             </div><!-- End .header-right -->
         </div><!-- End .container -->
     </div><!-- End .header-middle -->
@@ -94,3 +93,8 @@
     });
 </script>
 
+<style>
+    .active-link.active {
+    color: tomato  /* Your desired active color */
+}
+</style>

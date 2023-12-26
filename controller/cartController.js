@@ -31,19 +31,19 @@ const cart = {
         const productIds = userCart.products.map(product => product.productId);
         products = await product.find({ _id: { $in: productIds } });
       }else{
-        res.render('cart',{products:'',totalPrice:'',error:'',empty:''})
+        res.render('cart',{products:'',totalPrice:'',error:'',empty:'',currentPage:'cart'})
       }
 
       if (products) {
         if(error){
           console.log('errors reached'+error);
-          res.render('cart', { products, totalPrice: totalPrice ,error,empty});
+          res.render('cart', { products, totalPrice: totalPrice ,error,empty,currentPage:'cart'});
         
         }else{
-        res.render('cart', { products, totalPrice: totalPrice ,error:null});
+        res.render('cart', { products, totalPrice: totalPrice ,error:null,currentPage:'cart'});
         }
       } else {
-        res.render('cart', { products: null });
+        res.render('cart', { products: null,currentPage:'cart' });
       }
     } catch (error) {
       console.log(error);

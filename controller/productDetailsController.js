@@ -4,9 +4,16 @@ const fs = require('fs')
 
 const product = {
      getAllProduct: async (req,res)=>{ 
-        const productData=  await model.find()
-        console.log(productData);   
-        res.render('productDetails',{productData}) 
+      const PRODUCT_PER_PAGE = 10
+        const page = parseInt(req.query.page) || 1
+        const totaProduct = await model.countDocuments({})
+        const totalPages = Math.ceil(totaProduct/PRODUCT_PER_PAGE)
+            console.log('total pages',totalPages);
+            console.log('total products',totaProduct);
+        const productData=  await model.find({})
+        .skip((page -1)*PRODUCT_PER_PAGE)
+        .limit(PRODUCT_PER_PAGE)
+        res.render('productDetails',{productData,totalPages,currentPage:page}) 
      },
      deleteProduct : async (req,res)=>{
         const productId = req.params.id

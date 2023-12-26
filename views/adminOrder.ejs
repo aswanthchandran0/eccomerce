@@ -1,5 +1,5 @@
 <%- include('./adminHeader.ejs')-%>
-
+<link rel="stylesheet" href="http://localhost:3000/assets/css/adminSidePagination.css">
     <div class="container-scroller">
       <!-- partial:partials/_sidebar.html -->
     <%- include('./adminSidebar.ejs') -%>
@@ -273,16 +273,44 @@
                                 <%}%>
                               </tbody>
                             </table>
+                            
                           </div>
                             
                                
-                               
+                         
+                          
                        
             
                          <!---->
 
                         </div>
                       </div>
+                      <div class="pagination mx-auto">
+                        <% if (currentPage > 1) { %>
+                          <a href="?page=<%= currentPage - 1 %>" class="pagination__arrow pagination__arrow--left ">
+                            <span class="pagination__arrow-half "><i class="fa-solid fa-chevron-left"></i></span>
+                            <span class="pagination__arrow-half "></span>
+                          </a>
+                        <% } %>
+                        
+                        <span class="pagination__number-indicator"></span>
+                        
+                        <% for (let i = 1; i <= totalPages; i++) { %> 
+                          <a href="?page=<%= i %>" class="pagination__number <%= i === currentPage ? 'pagination__number--active' : '' %>">
+                            <%= i %>
+                          </a>
+                        <% } %>
+                        
+                        <% if (currentPage < totalPages) { %>
+                          <a href="?page=<%= currentPage + 1 %>" class="pagination__arrow pagination__arrow--right">
+                            <span class="pagination__arrow-half"></span>
+                            <span class="pagination__arrow-half"><i class="fa-solid fa-chevron-left"></i></span>
+                          </a>
+                        <% } %>
+                      </div>
+                      
+                      
+                      
                     </div>
                   </div>
                 </div>
@@ -290,7 +318,7 @@
             </div>
            
            
-
+     
 
           </div>
           <!-- content-wrapper ends -->
@@ -322,8 +350,7 @@
         });
       })(jQuery);
     </script>
-    
-    
+    <script src="http://localhost:3000/assets/js/pagination.js"></script>
 
 
     <%- include('./adminFooter.ejs')-%>

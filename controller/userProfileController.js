@@ -27,7 +27,7 @@ const userProfile = {
               const productDetails = await productModel.find({ _id: { $in: productIds } });
               console.log('product details'+productDetails);
               const userAddress = await AddressModel.findOne({ user: userId });
-               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet,walletTransactions,activeCoupons,updatedAddressValidationErr: req.session.updatedAddressValidationErr})
+               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet,walletTransactions,activeCoupons,updatedAddressValidationErr: req.session.updatedAddressValidationErr,currentPage:'profile'})
                req.session.AddressValidationErr = null;
                req.session.updatedAddressValidationErr = null
                

@@ -46,7 +46,7 @@ router.post ('/updateAddress',userProfileController.userProfile.updateAddress)
 //orderDetails
 router.get('/orderDetails' ,userValidationMiddleware.userMiddleware.verifiy, orderDetailsController.orderDetails.orderPage)
 router.delete('/orderDetails/detetOrder/:orderId/',orderDetailsController.orderDetails.deleteOrder)
-
+router.get('/orderedProduct',orderDetailsController.orderDetails.orderedProductView)
 //orderSucess
 router.get('/orderSucess', function(req, res, next) {
     res.render('orderSucess', { title: 'Express' }); 

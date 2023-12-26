@@ -1,5 +1,5 @@
 <%- include('./indexHeader.ejs')-%>
-
+<link rel="stylesheet" href="assets/css/pagination.css">
     <body>
         <div class="page-wrapper">
             <%- include('./indexNavBar2.ejs')-%>
@@ -13,13 +13,15 @@
                 <div class="page-content" id="entireDiv">
                     <div class="cart">
                         <div class="container">
-                            <div class="row">
-                                <div class="col-lg-9">
+                            <div class="row" style="margin-top: 15px;">
+                                <div class="col-lg-12 pagination mx-auto">
+                                 
                                     <table class="table table-cart table-mobile">
                                         <thead>
                                             <tr>
-                                                <th>product Details</th>
+                                                <th>product Name</th>
                                                 <th>Delivery address</th>
+                                                <th>Product Details</th>
                                                 <th>OrderDate</th>
                                                 <th>Status</th>
                                                 <th></th>
@@ -36,7 +38,7 @@
                                                         <td>
                                                             <p>product</p>
                                                             <% order.productDetails.forEach((product, index) => { %>
-                                                                <%= product.productId.ProductName %>
+                                                                <%= product.productId ? product.productId.ProductName : '' %>
                                                                 <% if (index !== order.productDetails.length - 1) { %>, <% } %>
                                                             <% }) %>
                                                         </td>
@@ -46,6 +48,10 @@
                                                             <p><%= order.address.Address %> , <%= order.address.Place %> </p>
                                                             <p><%= order.address.state %>, <%= order.address.Pincode %></p>
                                                             <p><%= order.address.PhoneNumber %></p>
+                                                        </td>
+                                                        <td>
+                                                            <a href="/orderedProduct/?orderId=<%= order._id %>">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspview</a>
+ 
                                                         </td>
                                                         <td class="price-col">
                                                             <p><%= order.orderDate.toLocaleDateString(); %></p>
@@ -65,22 +71,49 @@
                                                                 <a href="#" onclick="conformDelete('<%= order._id %>','<%= order.productId %>','<%= order.orderStatus %>')" class="sf-with-ul" style="color: rgb(226, 43, 43); ">Return</a>
                                                             </td>
                                                         <% } else { %>
+                                                            <% if(order.orderStatus !== 'canceled'){%>
                                                             <td class="remove-col">
                                                                 <a href="#" onclick="conformDelete('<%= order._id %>','<%= order.productId %>','<%= order.orderStatus %>')" class="sf-with-ul" style="color: rgb(226, 43, 43); ">Cancel</a>
                                                             </td>
+                                                            <%}%>
                                                         <% } %>
                                                     </tr>
                                                 <% }) %>
                                             <% } %>
-                                        </tbody>
-                                        
-                                    </table><!-- End .table table-wishlist -->
 
+                                        
+                                        </tbody>
+                                       
+                                    </table><!-- End .table table-wishlist -->
+                            
                                   
                                 </div><!-- End .col-lg-9 -->
 
+                                <div id="productDetailsDiv" style="display: none;">
+                                  
+                                  </div>
 
 
+
+                                <div class="pagination mx-auto">
+                                    <span class="pagination__number-indicator"></span>
+                                    <button class="pagination__arrow">
+                                      <span class="pagination__arrow-half"></span>
+                                      <span class="pagination__arrow-half"></span>
+                                    </button>
+                                  
+                                    <% for (let i = 1; i <= totalPages; i++) { %>
+                                      <a href="?page=<%= i %>" class="pagination__number <%= i === currentPage ? 'pagination__number--active' : '' %>">
+                                        <%= i %>
+                                      </a>
+                                    <% } %>
+                                  
+                                    <button class="pagination__arrow pagination__arrow--right">
+                                      <span class="pagination__arrow-half"></span>
+                                      <span class="pagination__arrow-half"></span>
+                                    </button>
+                                  </div>
+                                  
 
 
                             </div><!-- End .row -->
@@ -88,8 +121,12 @@
                     </div><!-- End .cart -->
 
                 </div><!-- End .page-content -->
-            </main><!-- End .main -->
 
+               
+
+
+            </main><!-- End .main -->
+     
 
             <%- include('indexFooter.ejs')  %>
         </div><!-- End .page-wrapper -->
@@ -110,6 +147,8 @@
                 </div><!-- End .modal-content -->
             </div><!-- End .modal-dialog -->
         </div><!-- End .modal -->
+
+       
 
 
 <%- include('navBarMobile.ejs') %>
@@ -195,4 +234,4 @@
         }
     }
    </script>
-
+  <script src="assets/js/pagination.js"></script>

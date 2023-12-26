@@ -13,14 +13,14 @@
 
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
-                                <li class="megamenu-container active">
+                                <li class="megamenu-container <%= currentPage === 'home'?'active': '' %>">
                                     <a href="./" >Home</a>
 
                                  
                                 </li>
                     
                              
-                                <li>
+                                <li class="<%= currentPage === 'products'?'active':''%>">
                                     <a href="./productList" class="">Products</a>
 
                                  

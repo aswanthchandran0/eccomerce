@@ -1,7 +1,7 @@
 <%- include('./indexHeader.ejs')-%>
     <div class="page-wrapper">
        <%- include('./indexNavBar2.ejs')-%>
-        <main class="main">
+        <main class="main" class="">
             <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
                 <div class="container d-flex align-items-center">
                     <ol class="breadcrumb">
@@ -63,10 +63,10 @@
                                   
 
                                     <div class="product-details-action">
-                                        <a href="#" class="btn-product btn-cart cart"  data-product-id="<%= product._id %>"><span>add to cart</span></a>
+                                        <a href="#" class="btn-product btn-cart cart  <%= isProductinCart ? 'badge  border-success text-success hover-color' : '' %>"  data-product-id="<%= product._id %>"><span><%= isProductinCart ? 'Added to Cart' : 'Add to Cart' %></span></a>
 
                                         <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist wishlist" title="Wishlist" data-product-id="<%= product._id %>"><span>Add to Wishlist</span></a>
+                                            <a href="#" class="btn-product btn-wishlist wishlist <%= isProductinWishlist ? 'badge  border-success text-success' : '' %>" title="Wishlist" data-product-id="<%= product._id %>"><span><%= isProductinWishlist ? 'Added to Wishlist' : 'Add to Wishlist' %></span></a>
                                            
                                         </div><!-- End .details-action-wrapper -->
                                     </div><!-- End .product-details-action -->
@@ -185,13 +185,13 @@
                                 </a>
 
                                 <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable "><span>add to wishlist</span></a>
                                     <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
                                     <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                                 </div><!-- End .product-action-vertical -->
 
                                 <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                    <a href="#" class="btn-product btn-cart "><span>add to cart</span></a>
                                 </div><!-- End .product-action -->
                             </figure><!-- End .product-media -->
 
@@ -239,8 +239,8 @@
                     
 
                     <div class="product-details-action">
-                        <a href="#" class="btn-product btn-cart cart" data-product-id="<%= product._id %>"><span>add to cart</span></a>
-                        <a href="#" class="btn-product btn-wishlist wishlist" title="Wishlist"  data-product-id="<%= product._id %>"><span>Add to Wishlist</span></a>
+                        <a href="#" class="btn-product btn-cart cart <%= isProductinCart ? 'badge  border-success text-success hover-color' : '' %>" data-product-id="<%= product._id %>"><span><%= isProductinCart ? 'Added to Cart' : 'Add to Cart' %></span></a>
+                        <a href="#" class="btn-product btn-wishlist wishlist <%= isProductinWishlist ? 'badge  border-success text-success' : '' %>" title="Wishlist"  data-product-id="<%= product._id %>"><span><%= isProductinWishlist ? 'Added to Wishlist' : 'Add to Wishlist' %></span></a>
                     </div><!-- End .product-details-action -->
                 </div><!-- End .col-6 -->
             </div><!-- End .row -->
@@ -249,7 +249,14 @@
 
     <!-- Mobile Menu -->
     <%- include('navBarMobile.ejs') %>
-
+<style>
+    .hover-color:hover{
+        background-color: #28a745; /* Green background color */
+    border-color: #28a745; 
+           /* Green border color */
+    color: #fff;
+    }
+</style>
     <!-- Plugins JS File -->
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
@@ -280,6 +287,7 @@
                 url:'/addToCart',
                 data:{productId:productId},
                 success:function(data){
+                    $('.product-details-top').load(window.location.href + ' .product-details-top');
                     console.log('data',data);
                     if (data.notLoggedIn){
                         console.log('request reached inside not logged in');
@@ -344,11 +352,14 @@
                     url: '/addToWishlist',
                     data: { productId: productId },
                     success: function (data) {
+                        $('.product-details-top').load(window.location.href + ' .product-details-top');
+
                       if (data.notLoggedIn){
                         console.log('request reached inside not logged in');
                         window.location.href = '/login'
                       }
                         else if (data.success){
+                          
                             const Toast = Swal.mixin({
           toast: true,
           position: "top-end",

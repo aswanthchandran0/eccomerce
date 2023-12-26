@@ -1,22 +1,28 @@
 const wishListData = require('../models/wishlistModel')
 const product = require('../models/productModel')
+const cartModel = require('../models/cartModel')
 const wishList = {
   wishlistPage: async(req,res)=>{
     try{
      if(req.session.user){
       const userId = req.session.user._id
       const userWishlist = await wishListData.findOne({userId:userId})
+      let userCart
       let products
+      let productIds
       if(userWishlist){
         for(i=0;i<userWishlist.products.length;i++){
-          const productIds = userWishlist.products.map(product => product.productId);
+          productIds = userWishlist.products.map(product => product.productId);
         products = await product.find({ _id: { $in: productIds } });
+      
         }
+        userCart = await cartModel.findOne({userId:userId})
+        console.log('user cart',userCart);
       }
       if(products){
-        res.render('wishlist',{products})  
+        res.render('wishlist',{products,userCart,currentPage:'wishlist'})  
       }else{
-        res.render('wishlist',{products:''})
+        res.render('wishlist',{products:'',currentPage:'wishlist'})
       }
      }else{
       res.redirect('/login')

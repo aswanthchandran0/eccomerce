@@ -16,7 +16,7 @@ const homePage = {
                 numberOfProduct  =  userCart ? userCart.products.length : 0;
             }
         
-            res.render('index', { products: products,numberOfProduct:numberOfProduct,banners });
+            res.render('index', { products: products,numberOfProduct:numberOfProduct,banners,currentPage:'home' });
 
 
         }catch (error){

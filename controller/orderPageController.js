@@ -46,9 +46,9 @@ const order = {
           totalPrice -= discountAmount;
         const allTotal = totalPrice+shippingPrice
            if(address == null || address == undefined){
-           return res.render('orderPage',{address:'',products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount })
+           return res.render('orderPage',{address:'',products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount,currentPage:'' })
            }
-              res.render('orderPage',{address,products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount })
+              res.render('orderPage',{address,products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount,currentPage:'' })
         }catch(error){
             console.log(error); 
             res.status(500).send('internal server error')

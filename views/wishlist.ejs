@@ -1,6 +1,7 @@
+
 <%- include('indexHeader.ejs')  %>
     <div class="page-wrapper">
-
+    
         <%- include('./indexNavBar2.ejs') %>
         <main class="main">
         	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
@@ -51,7 +52,17 @@
 								</td>
 								<td class="price-col">₹<%= product.ProductPrice %></td>
 								<td class="stock-col"><span class="<%= product.ProductCount === 0 ? 'out-of-stock' : 'in-stock' %>"><%= product.ProductCount === 0? 'out of stock':'in stock' %></span></td>
-							<form action="/deleteWishist/<%=product._id %>" method="get">
+							
+                              <td>
+                              <% if(userCart && userCart.products.some(p=> p.productId === product._id)){%>
+                                   <span class="in-stock"><%= product._id %></span>
+                                
+                                    <%}else{%>
+                                    
+                                        <a href="#" class="btn-product btn-cart cart  "  data-product-id="<%= product._id %>"><span>Add to Cart</span></a>
+                                        <%}%>
+                              </td>
+                                <form action="/deleteWishist/<%=product._id %>" method="get">
 								<td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
                             </form>
 							</tr>
@@ -195,8 +206,74 @@
     <script src="assets/js/jquery.waypoints.min.js"></script>
     <script src="assets/js/superfish.min.js"></script>
     <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script>
+
+$(document).ready(function (){
+            $('.cart').click(function(e){
+                e.preventDefault();
+                const productId = $(this).data('product-id')
+                addToCart(productId)
+            })
+        })
+
+            function addToCart(productId){
+            $.ajax({
+                type:'POST',
+                url:'/addToCart',
+                data:{productId:productId},
+                success:function(data){
+                    $('.product-details-top').load(window.location.href + ' .product-details-top');
+                    console.log('data',data);
+                    if (data.notLoggedIn){
+                        console.log('request reached inside not logged in');
+                        window.location.href = '/login'
+                      }
+    
+                   else if(data.success){
+                            const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "product Added"
+        });
+    
+                        }
+    
+                        
+                        else if(data.productExist){
+                            const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "Already added"
+        });
+                        }
+    
+                }
+            })
+        }
+    </script>
 </body>
 
 </html>
