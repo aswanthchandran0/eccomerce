@@ -73,7 +73,7 @@ const productController = {
     }
   },
   deleteImage: async (req, res) => {
-    console.log('request reached in the delete function');
+   
     const { fileName } = req.query;
     console.log('fileName', fileName);
     try {
@@ -84,6 +84,27 @@ const productController = {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
+  },
+
+
+  deleteUpdatingImage: async (req, res) => {
+    const { productId, fileName } = req.query;
+    console.log('request reaching in the deleteUpdateimage');
+  try {
+    // Delete the image file from the server
+    await fs.unlink(`${fileName}`);
+ 
+    // Update the ProductModel by removing the image name from the images array
+    const product = await ProductDetails.findById(productId);
+    const updatedImages = product.images.filter(image => image !== fileName);
+    product.images = updatedImages;
+    await product.save();
+
+    res.status(200).json({ message: 'Image deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
   },
 
 
@@ -103,9 +124,12 @@ const productController = {
       res.status(500)
     }
   },
-  updateProduct: async (req, res) => {
+  // ...
+
+updateProduct: async (req, res) => {
+  try {
     const { productId, ProductName, ProductPrice, ProductExpense, Catagory, ProductCount, ProductDiscription, ProductSize, SelectedBrand } = req.body;
-    console.log('info', req.body);
+
     const errors = {
       ProductName: iSValidProductName(ProductName),
       ProductPrice: isValidProductPrice(ProductPrice),
@@ -114,29 +138,55 @@ const productController = {
       ProductDiscription: isValidProductDiscription(ProductDiscription),
       category: isValidCatagory(Catagory),
     }
-    const hasError = Object.values(errors).some((error) => error !== null)
+
+    const hasError = Object.values(errors).some((error) => error !== null);
     if (hasError) {
       console.log('errors ', errors);
       return res.redirect(`/admin/editProduct/?id=${productId}&errors=${encodeURIComponent(JSON.stringify(errors))}`);
     }
 
-    const product = await ProductDetails.findById(productId)
+    const product = await ProductDetails.findById(productId);
 
-      product.ProductName = ProductName;
-      product.ProductPrice = ProductPrice;
-      product.ProductExpense = ProductExpense;
-      product.Catagory = Catagory;
-      product.ProductCount = ProductCount;
-      product.ProductDiscription = ProductDiscription;
-      product.ProductSize = ProductSize;
-      product.SelectedBrand = SelectedBrand;
+    product.ProductName = ProductName;
+    product.ProductPrice = ProductPrice;
+    product.ProductExpense = ProductExpense;
+    product.Catagory = Catagory;
+    product.ProductCount = ProductCount;
+    product.ProductDiscription = ProductDiscription;
+    product.ProductSize = ProductSize;
+    product.SelectedBrand = SelectedBrand;
 
-      await product.save();
-       res.redirect('/admin/productDetails')
+    if (req.files && req.files.length > 0) {
+      console.log('request file',req.files);
+      // Replace existing images with new ones
+      const newImages = await Promise.all(req.files.map(async (file) => {
+        const buffer = await sharp(file.path)
+          .resize({ width: 624, height: 832 })
+          .toBuffer();
 
+          const newPath = `uploads/resized-${file.filename}`;
+          const filePath = `uploads/${file.filename}`;
+          
 
+        await fs.writeFile(newPath, buffer);
+        await sharp(filePath).metadata();
+       
 
+        return newPath;
+      }));
+
+      product.images = newImages;
+    }
+
+    await product.save();
+    res.redirect('/admin/productDetails');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
+}
+
+// ...
 
 
 }

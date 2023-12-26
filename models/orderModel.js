@@ -90,7 +90,9 @@ const orderSchema = mongoose.Schema({
       default:'Pending',
       required:true
      },
-    
+    returnReason:{
+      type:String,
+    }
     
      
     

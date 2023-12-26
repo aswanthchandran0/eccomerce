@@ -222,7 +222,7 @@
                               
                               <p class="card-description">  </p>
                               <p class="card-description">  </p>
-                              <form class="forms-sample" action="/admin/updateProduct" method="post">
+                              <form class="forms-sample" action="/admin/updateProduct" method="post" enctype="multipart/form-data" >
                                 <div class="form-group">
                                   <label for="exampleInputName1"> Product Name</label>
                                   <input type="text" class="form-control" id="exampleInputName1" name="ProductName" value="<%=product.ProductName %>"   placeholder=" Product Name">
@@ -284,20 +284,14 @@
                                     <p style="color: tomato;"><%=errors.ProductCount %></p>
                                     <%} %>
                                 </div>
-                                <div class="form-group">
-                                  <label>Image upload</label>
-                                  <div class="input-group col-xs-12" style="width: 50%;">
-                                    <input type="file" class="form-control" id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple onchange="viewImage(event)" accept="image/*">
-                                    <span class="input-group-append"></span>
-                                  </div>
-                                
-                                </div>
+                              
                                 <div class="row">
                                 <% if(product !== null && product !== undefined){%>
                                 <% product.images.forEach(image => { %>
+                                  
                                     <div class="col-md-2 mb-2">
                                         <div>
-                                            <img src="https://localhost:3000/<%= image %>" alt="Product Image" style="height: 200px;">
+                                            <img src="http://localhost:3000/<%= image %>" alt="Product Image" style="height: 200px;">
                                             <button type="button" class="btn btn-danger" onclick="deleteExistingImage('<%= productId %>', '<%= image %>')">Delete</button>
                                         </div>
                                     </div>
@@ -306,7 +300,14 @@
                                 <%}%>
                             </div>
 
-                                
+                                <!-- Display new images -->
+<div class="form-group">
+  <label>Additional Images</label>
+  <div class="input-group col-xs-12" style="width: 50%;">
+      <input type="file" class="form-control" id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple onchange="viewImage(event)" accept="image/*">
+      <span class="input-group-append"></span>
+  </div>
+</div>
                                 <!-- Display images in a separate container below the input field -->
                                 <div class="form-group">
                                   <label>Image Preview</label>
@@ -365,12 +366,12 @@
     console.log('fileName', fileName);
     var $j = jQuery.noConflict();
     $j.ajax({
-        url: `/admin/deleteImage?productId=${productId}&fileName=${fileName}`,
+        url: `/admin/deleteUpdatingImage?productId=${productId}&fileName=${fileName}`,
         method: 'DELETE',
         success: function (response) {
             console.log(response);
-            location.reload();
-
+            $j(`img[src="http://localhost:3000/${fileName}"]`).parent().parent().remove();
+            
             
         },
         error: function (error) {
@@ -442,8 +443,30 @@
           newFiles.forEach(file => newFileList.items.add(file));
       
           inputElement.files = newFileList.files;
-        }
-      }
+          imageList.innerHTML = '';
+    fileNames.forEach((fileName, i) => {
+      const colDiv = document.createElement('div');
+      colDiv.className = 'col-md-2 mb-2';
+
+      const listItem = document.createElement('div');
+
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(newFiles[i]);
+      img.alt = 'Product Image';
+      img.style.height = '200px';
+
+      // Attach a click event listener to each image
+      img.addEventListener('click', function() {
+        deleteImage(i);
+      });
+
+      listItem.appendChild(img);
+      colDiv.appendChild(listItem);
+
+      imageList.appendChild(colDiv);
+    });
+  }
+}
       
       </script>
       

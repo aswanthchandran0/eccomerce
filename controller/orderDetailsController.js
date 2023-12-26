@@ -30,7 +30,7 @@ const orderDetails = {
             const orderId = req.params.orderId
             const orderStatus = req.query.orderStatus
             const userId = req.session.user._id
-          
+            const reason = req.body.reason
       const updatedOrder =  await orderData.findOneAndUpdate(
                 { _id:orderId },
                 { $set: { orderStatus: 'canceled' } },
@@ -49,7 +49,7 @@ const orderDetails = {
               );
               await userData.findByIdAndUpdate(userId,{Wallet:updatedWallet},{new:true}) 
 
-            await orderData.findByIdAndUpdate(orderId,{Total:0,paymentStatus:'Returned'},{new:true})
+            await orderData.findByIdAndUpdate(orderId,{Total:0,returnReason:reason,paymentStatus:'Returned'},{new:true})
             
         console.log('user',user);
       } else if(updatedOrder.paymentMethod === 'Wallet' &&  updatedOrder.orderStatus === 'canceled'){
@@ -63,8 +63,8 @@ const orderDetails = {
             { $push: { walletStatus: creditedTransaction } }
           );
           await userData.findByIdAndUpdate(userId,{Wallet:updatedWallet},{new:true}) 
-          await orderData.findByIdAndUpdate(orderId,{Total:0,paymentStatus:'Returned'},{new:true})
-
+          await orderData.findByIdAndUpdate(orderId,{Total:0,returnReason:reason,paymentStatus:'Returned'},{new:true})
+              
       }  
 
             console.log('orderstatus',updatedOrder.orderStatus);

@@ -288,6 +288,7 @@
                 data:{productId:productId},
                 success:function(data){
                     $('.product-details-top').load(window.location.href + ' .product-details-top');
+                    $('.sticky-bar').load(window.location.href + ' .sticky-bar');
                     console.log('data',data);
                     if (data.notLoggedIn){
                         console.log('request reached inside not logged in');
@@ -353,6 +354,7 @@
                     data: { productId: productId },
                     success: function (data) {
                         $('.product-details-top').load(window.location.href + ' .product-details-top');
+                        $('.sticky-bar').load(window.location.href + ' .sticky-bar');
 
                       if (data.notLoggedIn){
                         console.log('request reached inside not logged in');

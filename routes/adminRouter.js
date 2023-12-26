@@ -91,6 +91,7 @@ const upload = multer({storage:storage})
 
 router.post('/addProduct', upload.array('images', 4), productController.addproduct);  
 router.delete('/deleteImage', productController.deleteImage);
+router.delete('/deleteUpdatingImage', productController.deleteUpdatingImage);
 
 // deteting images from product add
 
@@ -98,7 +99,8 @@ router.delete('/deleteImage', productController.deleteImage);
 
 //product edit
 router.get('/editProduct',productController.editProductPage)
-router.post('/updateProduct',productController.updateProduct)
+
+router.post('/updateProduct', upload.array('images', 4), productController.updateProduct);
 
 //coupon router
  
