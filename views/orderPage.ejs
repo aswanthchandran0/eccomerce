@@ -26,7 +26,7 @@
                                 <% if(discountError !== null && discountError !== undefined){%>
                                     <label for="checkout-discount-input" class="text-truncate"><span><%= discountError %></span></label>
                                     <%}else{%>
-            					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
+            					<label for="checkout-discount-input" class="text-truncate couponfield">Have a coupon? <span>Click here to enter your code</span></label>
                                 <%} %>
             				</form>
             			</div><!-- End .checkout-discount -->
@@ -509,6 +509,29 @@ function verifyPayment(payment,order){
 }
     </script>
     
+    <script>
+        if(<%=discountsucess%>){
+
+           var couponField = document.getElementsByClassName('couponfield')[0]
+           couponField.innerHTML = '<span>Coupon added</span>';
+
+            const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "success",
+          title: "coupon added"
+        });
+        }
+    </script>
 
 
 </body>

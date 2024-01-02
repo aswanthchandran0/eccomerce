@@ -6,7 +6,49 @@ const AdminPanel = {
    adminPanel: async (req,res)=>{
     try{
         const products = await productData.find()
+      
        const productExpense =  products.reduce((sum,product)=> sum + product.ProductExpense*product.ProductCount,0)
+
+       const walletPayment = await orderData.aggregate([
+        {
+            $match: { paymentMethod: 'Wallet', paymentStatus: 'Approved' }
+        },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: '$Total' }
+            }
+        }
+    ]);
+
+    const totalCashOnDeliveryPayment = await orderData.aggregate([
+        {
+            $match: { paymentMethod: 'Cash on Delivery', paymentStatus: 'Approved' }
+        },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: '$Total' }
+            }
+        }
+    ]);
+
+    const totalOnlinePayment = await orderData.aggregate([
+        {
+            $match: { paymentMethod: 'Online Payment', paymentStatus: 'Approved' }
+        },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: '$Total' }
+            }
+        }
+    ]);
+
+    const cashOnDeliveryTotal = totalCashOnDeliveryPayment.length > 0 ? totalCashOnDeliveryPayment[0].total : 0;
+    const walletTotal = walletPayment.length > 0 ? walletPayment[0].total : 0;
+    const onlinePaymentTotal = totalOnlinePayment.length > 0 ? totalOnlinePayment[0].total : 0;
+      
        const orders = await orderData.find()
        let cashOnDelivery = 0;
        let onlinePayment = 0;
@@ -90,12 +132,11 @@ const AdminPanel = {
         
         
           
-          console.log('Most Sold Product details:', mostSoldProductDetails);
-          console.log('most sold product',mostSoldProducts);
+         
           if(!mostSoldProducts || mostSoldProducts.length ===0){
-         return    res.render('AdminPanel', {productExpense,cashOnDelivery,onlinePayment,latestcashOnDeliveryDate,latesOnlinePaymentDate,todayIncome,monthlyIncome,yearlyIncome,mostSoldProducts:''})
+         return    res.render('AdminPanel', {productExpense,cashOnDelivery,onlinePayment,latestcashOnDeliveryDate,latesOnlinePaymentDate,todayIncome,monthlyIncome,yearlyIncome,mostSoldProducts:'',cashOnDeliveryTotal,walletTotal,onlinePaymentTotal})
           }
-        res.render('AdminPanel', {productExpense,cashOnDelivery,onlinePayment,latestcashOnDeliveryDate,latesOnlinePaymentDate,todayIncome,monthlyIncome,yearlyIncome,mostSoldProducts})
+        res.render('AdminPanel', {productExpense,cashOnDelivery,onlinePayment,latestcashOnDeliveryDate,latesOnlinePaymentDate,todayIncome,monthlyIncome,yearlyIncome,mostSoldProducts,cashOnDeliveryTotal,walletTotal,onlinePaymentTotal})
     }catch(error){
         console.log(error);
         res.status(500).send('internal server error')

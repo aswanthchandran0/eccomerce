@@ -1,5 +1,6 @@
 const orderData = require('../models/orderModel')
 const userData = require('../models/userModel')
+const  pdfkit = require('pdfkit')
 const orderDetails = {
     orderPage: async(req,res)=>{
         const ORDER_PER_PAGE = 5
@@ -79,19 +80,37 @@ const orderDetails = {
     },
     orderedProductView: async(req,res)=>{
         try{
+            const backButton = '/orderDetails'
             const orderId = req.query.orderId
            const orderInfo = await orderData.findById(orderId)
            .populate({
             path:'productDetails.productId',
             model:'ProductDetails'
            })
-           console.log('orderInfo',orderInfo);
-          res.render('orderedProductView',{orderInfo})
+          res.render('orderedProductView',{orderInfo,backButton})
         }catch(error){
             console.log(error);
             res.status(500)
         }
-    }
+    },
+    inVoice: async(req,res)=>{
+        try{
+           const orderId = req.query.orderId
+           const userId = req.session.user._id
+           const user =  await userData.findOne({_id:userId})
+           const order = await orderData.findById(orderId)
+           .populate({
+            path:'productDetails.productId',
+            model:'ProductDetails'
+           })
+           console.log('order ',order);
+            res.render('invoice',{order,user})
+        }catch(error){
+            console.log(error);
+            res.status(500)
+        }
+    },
+   
 
 }
 

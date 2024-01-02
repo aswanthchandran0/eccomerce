@@ -11,8 +11,8 @@ const userProfile = {
     profile: async (req,res)=>{
         try{
         errors = null; 
-            if(req.session.user){
               const userId = req.session.user._id;
+              let hideButton = 0
               const user = await model.findOne({ _id: userId });
               const currentDate = moment();
               const activeCoupons = await Coupon.find({
@@ -20,21 +20,26 @@ const userProfile = {
                 ExpireDate: { $gt: currentDate }, 
             });
               const wallet = user.Wallet
-              const walletTransactions = user.walletStatus;
+              const walletTransactions = user.walletStatus.reverse()
               console.log('wallet',wallet);
+              console.log('wallet transation ',walletTransactions);
               const orderDetails = await orderData.find({userId:userId})
               const productIds = orderDetails.map(order => order.productId).flat();
               const productDetails = await productModel.find({ _id: { $in: productIds } });
               console.log('product details'+productDetails);
               const userAddress = await AddressModel.findOne({ user: userId });
-               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet,walletTransactions,activeCoupons,updatedAddressValidationErr: req.session.updatedAddressValidationErr,currentPage:'profile'})
+              const addressCount = await AddressModel.countDocuments({ user: userId });
+              if(addressCount >=1){
+                hideButton=1
+              }
+              console.log('addresscount',addressCount);
+              console.log('active coupon',activeCoupons);
+               res.render('userProfile',{ user: req.session.user, ValidationErr:req.session.validationErr,userdata: userAddress,orderDetails,productDetails,wallet,walletTransactions,activeCoupons,updatedAddressValidationErr: req.session.updatedAddressValidationErr,currentPage:'profile',hideButton})
                req.session.AddressValidationErr = null;
                req.session.updatedAddressValidationErr = null
                
-            }
-            else{
-                res.redirect('/login')
-            }
+            
+           
            
 
         } catch(errors) {

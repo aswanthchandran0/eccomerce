@@ -1,10 +1,12 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt')
 const nodemailer= require('nodemailer')
-const { isValidFname,isValidEmail,isValidPhoneNumber,isValidPassword,isPasswordMatch}= require('../validators/userValidators')
+const { isValidFname,isValidEmail,isValidPhoneNumber,isValidPassword,isPasswordMatch,isValidOtp}= require('../validators/userValidators')
 const crypto = require('crypto');
 const otpGenerator = require('./otpGenerator')
-const { log } = require('console');
+const { log, error } = require('console');
+
+const userController = require('../controller/userController');
 
     let generatedOtp 
     let otpTimestamb
@@ -162,13 +164,131 @@ function otpGeneratedTime(){
 }
 
 
+function emailVerfication(req,res){
+try{
+  const error = req.query.error
+
+   res.render('emailverification',{error:error?error:''})
+}catch(error){
+  console.log(error);
+  res.status(500)
+}
+}
+
+ async function emailverifying(req,res){
+     try{
+     const Email = req.body.Email
+     let error = 'Enter an email'
+     if(Email){
+        error = 'Email not existing'
+     }
+     const existedUser = await User.find({Email:Email})
+      if(existedUser.length>0){
+        
+        console.log('existed user',existedUser);
+        res.redirect('/forgotPassword?Email='+encodeURIComponent(Email))
+      }else{
+        console.log('request reaching in the else case');
+        res.redirect('/emailverification?error='+encodeURIComponent(error))
+      }
+     }catch(error){
+      console.log(error);
+      res.status(500)
+     }
+}
+
+function forgotPassword(req,res){
+   try{
+    const Email = req.query.Email
+    const errors = null
+    const otpErr = null
+     res.render('forgotPassword',{Email:Email?Email:'',errors:errors?errors:'',otpErr:otpErr?otpErr:''})
+   }catch(error){
+    console.log(error);
+    res.status(500)
+   }
+}
+
+ async function changePassword(req,res){
+ try{
+    const {Email,otp,Password,cPassword} = req.body
+    const user = await User.find({Email:Email})
+    const generatedOtp = user[0].otp;
+     
+
+    const isValid = await isValidOtp(parseInt(otp), parseInt(generatedOtp));
+ console.log('generated otp',generatedOtp);
+ console.log('otp',otp);
+ console.log('isvalid..',isValid);
+ console.log('user',user);
+    if(!otp){
+      otpErr = 'Enter otp'
+      console.log('otp error in fist condition',otpErr);
+    }else if(!isValid){
+      
+      otpErr = 'invalid otp'
+      console.log('otp error in the second conditon',otpErr);
+    }
+    const errors = {
+
+      Email: isValidEmail(Email),
+      Password: isValidPassword(Password),
+      Cpassword: isPasswordMatch(Password, cPassword),
+     
+  };
+
+  const hasErrors = Object.values(errors).some(error => error !== null);
+  console.log('has error',hasErrors);
+
+  if(hasErrors === false && isValid === true){
+    const hashedPassword = await bcrypt.hash(Password,10)
+    await User.findOneAndUpdate(
+      { Email: Email },
+      { $set: { Password: hashedPassword } },
+      { new: true }
+  );
+    res.redirect('/login')
+  }
+
+if(hasErrors || otpErr){
+  res.render('forgotPassword',{Email:Email?Email:'',errors:errors?errors:'',otpErr:otpErr?otpErr:''})
+}
+
+
+ }catch(error){
+  console.log(error);
+  res.status(500)
+ }
+}
 
 
 
+const resendOtp = async (req,res)=>{
+
+  const email = req.query.email
+
+
+  const resendOtpGenerated = crypto.randomInt(100000,999999)
+   
+   const userUpdated = await User.findOneAndUpdate(
+    { Email: email },
+    { $set: { otp: resendOtpGenerated } },
+    { new: true }
+);
+
+const resendOtpTimestamb = Date.now();
+  try{
+    await otpGenerator.sendOtpEmail(email,resendOtpGenerated)
+  }catch(error){
+    console.error(error);
+        res.status(500).send('Internal Server Error');
+  }
+
+}
 
 
   module.exports = {
-    createUser,loginController,signUp,getGeneratedOtp,otpGeneratedTime
+    createUser,loginController,signUp,getGeneratedOtp,otpGeneratedTime,emailVerfication,emailverifying,forgotPassword,changePassword,resendOtp
   } 
 
 

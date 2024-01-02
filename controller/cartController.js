@@ -2,54 +2,38 @@ const product = require('../models/productModel')
 const cartModel = require('../models/cartModel');
 const { urlencoded } = require('express');
 const cart = {
+
   cartPage: async (req, res) => {
     try {
-      if(!req.session.user){
-        res.redirect('/')
-      }
-      const empty = req.query.empty
-        let error = req.query.error ? JSON.parse(decodeURIComponent(req.query.error)) : null;
-      console.log(`errors in cart page: ${JSON.stringify(error)}`);
+      const empty = req.query.empty;
+      const error = req.query.error ? JSON.parse(decodeURIComponent(req.query.error)) : null;
 
       const userCart = await cartModel.findOne({ userId: req.session.user._id });
-      console.log('usercart',userCart)
+  
       let products = null;
       let totalPrice = 0;
-      let quantity
+
       if (userCart) {
-        for (let i = 0; i < userCart.products.length; i++) {
-          const cartProduct = userCart.products[i];
-          const productData = await product.findOne({ _id: cartProduct.productId });
-           console.log('cart product',cartProduct);
-           console.log('prodouct data',productData);
-          if (productData) {
-            totalPrice += productData.ProductPrice * cartProduct.quantity;
-          }
-          quantity= cartProduct.quantity
-        }
-          
         const productIds = userCart.products.map(product => product.productId);
         products = await product.find({ _id: { $in: productIds } });
-      }else{
-        res.render('cart',{products:'',totalPrice:'',error:'',empty:'',currentPage:'cart'})
+
+        products.forEach((product) => {
+          const cartProduct = userCart.products.find((p) => p.productId === product._id.toString());
+          if (cartProduct) {
+            totalPrice += product.ProductPrice * cartProduct.quantity;
+            product.quantity = cartProduct.quantity;
+          }
+        });
       }
 
-      if (products) {
-        if(error){
-          console.log('errors reached'+error);
-          res.render('cart', { products, totalPrice: totalPrice ,error,empty,currentPage:'cart'});
-        
-        }else{
-        res.render('cart', { products, totalPrice: totalPrice ,error:null,currentPage:'cart'});
-        }
-      } else {
-        res.render('cart', { products: null,currentPage:'cart' });
-      }
+      res.render('cart', { userCart, products, totalPrice, error, empty, currentPage: 'cart' });
     } catch (error) {
       console.log(error);
-      res.status(500)
+      res.status(500).send('Internal Server Error');
     }
   },
+
+
 
 
 
@@ -59,8 +43,6 @@ const cart = {
     if (req.session.user) {
       const productId = req.body.productId
       const userId = req.session.user._id
-      console.log('user id',userId);
-      console.log('productId',productId);
      const existingProduct = await cartModel.findOne({
       userId:userId,
       'products.productId': productId,
@@ -95,14 +77,10 @@ const cart = {
 
   },
   updateTotalPrice: async (req, res) => {
-
     const { productId, quantity, productPrice } = req.body;
     const totalPrice = quantity * productPrice;
         
     try {
-      console.log('productId in updateTotalPrice ',productId);
-      console.log('quantity in updateTotalPrice ',quantity);
-      console.log('productPrice in updateTotalPrice ',productPrice);
 
       const updatedCart = await cartModel.findOneAndUpdate(
         { userId: req.session.user._id, 'products.productId': productId },
@@ -114,7 +92,11 @@ const cart = {
       updatedCart.products.forEach(product => {
         cartTotal += product.quantity * parseFloat(productPrice);
       });
-
+           const cartData = await cartModel.find({userId:userId})
+           console.log('cartData',cartData);
+           console.log('totalPrice',totalPrice);
+           console.log('cartTotal',cartTotal);
+           console.log('productiD',productId);
       res.json({ totalPrice, cartTotal, productId });
     } catch (error) {
       console.error(error);
@@ -126,7 +108,8 @@ const cart = {
   deleteCart: async (req, res) => {
    
     const userId = req.session.user._id 
-    const productId = req.params.id
+    const productId = req.query.id
+   
   
     try {
       const cdelete = await cartModel.findOneAndUpdate(
@@ -135,7 +118,7 @@ const cart = {
         { new: true }
 
       )
-      res.redirect('/cart')
+      res.json({success:true})
     } catch (error) {
       console.log(error)
       res.status(500).send('internal server error')
@@ -147,11 +130,16 @@ const cart = {
   updatePrice: async (req, res) => {
     let quantityChange = parseInt(req.params.quantityChange)
     let productId = req.params.productId
+    const user = req.session.user
+    let userId
+    if(user !==null && user !== undefined){
+       userId = user._id
+    } 
     let productPrice = parseFloat(req.params.productPrice)
     const cart = await cartModel.findOne({userId:req.session.user._id})
     const productIndex = cart.products.findIndex(product => product.productId === productId);
      const shippingPrice = req.query.shippingPrice
-    
+
   
     if(productIndex !== -1){ 
       cart.products[productIndex].quantity += quantityChange;
@@ -163,15 +151,11 @@ const cart = {
 
     const totalPrice = productPrice* cart.products[productIndex].quantity
     const updatedQuantity = cart.products[productIndex].quantity;
-      
-    console.log('totalPrice in updatePrice',totalPrice);
-    console.log('updatedQuantity in updatePrice',updatedQuantity);
       res.json({quantity: updatedQuantity,totalPrice });
     }  
    
   },
   orderData: async (req,res)=>{
-    console.log('request reached');
      try{
       const userId = req.session.user._id;
       const totalPrice = req.body.totalPrice; 
@@ -201,7 +185,6 @@ const cart = {
 shippingPrice: async (req,res)=>{
      try{
       const shippingValue = req.body.shippingValue;
-      console.log('shipping price',shippingValue);
        const updatedCart = await cartModel.findOneAndUpdate({userId:req.session.user._id},
          { shippingPrice: shippingValue}
          )
@@ -219,10 +202,8 @@ processToCheckout: async(req,res)=>{
     let cartProductInfo = []
   const userId = req.session.user._id
   const userCart = await cartModel.findOne({userId:userId})
-  console.log('user cart ',userCart);
   if(userCart.products.length ==0){
 
-    console.log('request reached inside this');
     const error = true
     return res.redirect('/cart?empty='+ urlencoded(error))
   }
@@ -233,7 +214,6 @@ processToCheckout: async(req,res)=>{
 
       if (!productInfo) {
         // Handle the case where productInfo is null (product not found)
-        console.log(`Product not found for productId: ${info.productId}`);
         return null; // or handle it according to your application logic
       }
 
@@ -248,12 +228,9 @@ processToCheckout: async(req,res)=>{
      })
  )
   
- console.log('cartProductInfo', cartProductInfo);
  let item
 let errors = []
-console.log('cart info length',cartProductInfo.length);
 for(let i=0;i<cartProductInfo.length;i++){
-  console.log('request reached inside the loop');
   if(cartProductInfo[i].quantity > cartProductInfo[i].productCount){
      item = await product.findOne({_id:cartProductInfo[i].productId})
    errors.push({productId:cartProductInfo[i].productId,error:'not enough stock',productName:item.ProductName})
@@ -262,7 +239,6 @@ for(let i=0;i<cartProductInfo.length;i++){
 }
 
 if(errors.length>0){
-  console.log('request reached in the if condition');
   const errorsString = encodeURIComponent(JSON.stringify(errors));
   await res.redirect(`/cart?error=${errorsString}`);
 }else{

@@ -15,14 +15,13 @@ const order = {
         try{ 
           const discountError = req.query.error || null;
             const userId = req.session.user._id
+            const discountsucess = req.query.discountsucess||false
             const address = await addressModel.findOne({user:userId})
-         console.log('address',address);
             const userCart = await cartModel.findOne({userId:userId})
             const productDetails = userCart.products.map(product => ({
               productId: product.productId,
               purchasedCount: product.quantity
           }));
-          console.log('product details', productDetails);
           const productIds = productDetails.map(product => product.productId);
           const products = await product.find({ _id: { $in: productIds } });
            const productPrice = products.map(product => product.ProductPrice)
@@ -46,9 +45,9 @@ const order = {
           totalPrice -= discountAmount;
         const allTotal = totalPrice+shippingPrice
            if(address == null || address == undefined){
-           return res.render('orderPage',{address:'',products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount,currentPage:'' })
+           return res.render('orderPage',{address:'',products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount,currentPage:'',discountsucess })
            }
-              res.render('orderPage',{address,products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount,currentPage:'' })
+              res.render('orderPage',{address,products,totalPrice, individualTotalArray,totalPriceArray,shippingPrice,allTotal,discountError,discountAmount,currentPage:'',discountsucess })
         }catch(error){
             console.log(error); 
             res.status(500).send('internal server error')
@@ -96,8 +95,7 @@ const order = {
         let  totalPrice = subTotalPrice+shippingPrice
             totalPrice -= discountAmount 
          
-          console.log('sub total price in order'+subTotalPrice); 
-          console.log('total price in the order'+totalPrice);
+       
               
           const daddress = { 
               Fname: userAddress.address[0].Fname,
@@ -161,21 +159,16 @@ const order = {
               const user = await userData.findById(userId)
             
               const  userWallet = user.Wallet
-              console.log('user wallet', userWallet);
-             console.log('total price of the product ', totalPrice);
              if(userWallet >= totalPrice){
                const updatedWallet = userWallet-totalPrice
-               console.log('updated wallet',updatedWallet);
              
 
                const debitTransaction = {status:'debited',amount: totalPrice, timestamp: new Date()}
-               console.log('debit transaction',debitTransaction);
                await userData.updateOne(
                 { _id: userId },
                 { $push: { walletStatus: debitTransaction } }
               );
                await userData.findByIdAndUpdate(userId,{Wallet:updatedWallet},{new:true}) 
-               console.log('user',user);
            await cartModel.updateOne({ userId }, { $unset: { products: 1 } });
               await orderModel.findOneAndUpdate(
                 { _id: orderId },
@@ -201,6 +194,8 @@ const order = {
   verifyingCoupon: async (req,res)=>{
     const userId= req.session.user._id 
     const EnteredCode = req.body.EnteredCoupon
+
+    console.log('entered coupon',EnteredCode);
     const userCart =await cartModel.findOne({userId})
     const productDetails = userCart.products.map(product => ({
       productId: product.productId,
@@ -224,20 +219,15 @@ individualTotalArray.push(individualTotal);
 totalPriceArray.push(subTotalPrice);
   } 
 let totalPrice = subTotalPrice+shippingPrice
-  console.log('sub total price in order'+subTotalPrice); 
-  console.log('total price in the order'+totalPrice);
-
-
-  console.log('total price ',totalPrice);
-  console.log("subtotal price", subTotalPrice);
-
-    console.log('enteredCode',EnteredCode); 
+ 
+   
     const coupon = await Coupon.findOne({ couponCode: EnteredCode });
+
+    console.log('existed coupon',coupon);
     if(coupon){
-      const currentDate = moment();
-      if (currentDate.isBefore(coupon.ExpireDate) && subTotalPrice>coupon.Creteria ) {
+      if (coupon.couponStatus === 'Active' ) {
         let discount = coupon.discountAmount;
-        res.redirect(`./order?discountAmount=${discount}`);
+        res.redirect(`./order?discountAmount=${discount}&discountsucess=true`);
     } else {
       res.redirect('./order?error=Coupon is expired');
     }

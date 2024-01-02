@@ -10,7 +10,6 @@ const bannerController = require('../controller/bannerController');
 const brandingController = require('../controller/brandingController');
 const productDetailsController = require('../controller/productDetailsController');
 const userDetailsController = require('../controller/userDetails');
-const { checkSession } = require('../controller/middleware');
 const addCatagoryController = require('../controller/addCatagoryController')
 const multer = require('multer')
 const path = require('path');
@@ -19,13 +18,14 @@ const productModel = require('../models/productModel')
 const catagoryModel = require('../models/catagoryModel')
 const brandData = require('../models/BrandModel')
 const adminCouponController = require('../controller/adminCouponController');
-
+const salesReportcontroller = require('../controller/salesReportController')
+const middlewares = require('../middlewares/adminMiddleware')
 //middleware
-router.use(checkSession);
+router.use(middlewares.middlewares.adminSession)
 // Admin Panel Routes
 router.get('/adminPanel', adminController.AdminPanel.adminPanel);
 router.get('/adminPanel/logout', adminController.AdminPanel.logout);
-
+   
 // Catagory Routes
 router.get('/catagory', catagoryController.catagoryData.getAllCatagory);
 router.post('/catagory/delete/:id', catagoryController.catagoryData.deleteCatagory);
@@ -41,7 +41,7 @@ router.post('/adminLogin', aLoginController.validation); // Add the admin login 
 // Admin Order Routes
 router.get('/adminOrder', adminOrderController.orderStatus.orderStatusPage);
 router.get('/adminOrder/selectedValue/:selectedValue/orderId/:orderId', adminOrderController.orderStatus.updateOrderStatus);
-
+router.get('/adminProductView',adminOrderController.orderStatus.adminProductView)
 // Branding Routes
 router.get('/branding', brandingController.branding.brandingPage);
 router.post('/addBrand', brandingController.branding.addBrand)
@@ -125,4 +125,7 @@ router.get('/banner', bannerController.banner.bannerPage)
 router.post('/addBanner',bannerUploads.single('image'), bannerController.banner.addBanner)
 router.get('/deleteBanner',bannerController.banner.deleteBanner)
 
+// sales report
+router.get('/sales',salesReportcontroller.sales.loadPage)
+router.get('/salesfilter',salesReportcontroller.sales.filter)
 module.exports = router;

@@ -11,7 +11,7 @@ const catagoryData= {
             res.render('addCatagory ', {errors})
 
         } 
-        const existedCatagory = await catagory.findOne({name:Name})
+        const existedCatagory = await catagory.findOne({name:{ $regex: new RegExp('^' + Name + '$', 'i') } })
         if(existedCatagory){
             
             const   errors = {error: 'catagory already exists'}

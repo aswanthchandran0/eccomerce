@@ -71,6 +71,19 @@ const allProducts = {
             console.log(error);
             res.status(500)
         }
+    },
+    priceRange: async (req,res)=>{
+        const minPrice = req.body.minPrice
+        const maxPrice = req.body.maxPrice
+        if(filteredProducts.length>0){
+            const filterWithPriceRange = filteredProducts.filter(product => product.ProductPrice >=minPrice && product.ProductPrice <= maxPrice)
+         return res.json({filterWithPriceRange})
+        }
+        const productInRange = await model.find({
+            ProductPrice: {$gte:minPrice,$lte:maxPrice}
+        })
+
+        res.json({productInRange})
     }
     
 }

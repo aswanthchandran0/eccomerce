@@ -24,8 +24,8 @@
                                                 <th>Product Details</th>
                                                 <th>OrderDate</th>
                                                 <th>Status</th>
-                                                <th></th>
                                                 <th>Total</th>
+                                                <th>inVoice</th>
                                                 <th></th>
                                                 
                                             </tr>
@@ -61,11 +61,22 @@
                                                                 <%= order.orderStatus %>
                                                             </div>
                                                         </td>
+                                                       
+                                                      
+                                                       
                                                         <!-- Other columns as needed -->
-                                                        <td></td>
+                                                       
                                                         <td class="total-col amount-" id="total-price">
                                                             <p>$<%= order.Total %></p>
                                                         </td>
+
+                                                        <td>
+                                                            <% if(order.orderStatus !== 'canceled'){%>
+                                                            <a href="/invoice?orderId=<%=order._id %>">recept</a>
+                                                            <%}%>
+                                                        </td>
+
+                                                        <td></td>
                                                         <% if (order.orderStatus === 'Deliverd') { %>
                                                             <td class="remove-col">
                                                                 <a href="#" onclick="conformDelete('<%= order._id %>','<%= order.productId %>','<%= order.orderStatus %>')" class="sf-with-ul" style="color: rgb(226, 43, 43); ">Return</a>

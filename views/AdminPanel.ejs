@@ -336,12 +336,20 @@
         <!-- main-panel ends -->
       </div>
       <!-- page-body-wrapper ends -->
+<!-- cashOnDeliveryTotal,walletTotal,onlinePaymentTotal -->
+      <input id="cashOnDelivery" type="hidden" value="<%= cashOnDelivery %> ">
+      <input id="wallet" type="hidden" value="<%=walletTotal %>">
+      <input id="RazorPay" type="hidden" value="<%=onlinePaymentTotal %>">
     </div>
     
     <script src="//cdn.jsdelivr.net/npm/chart.js"></script>
 
 
     <script>
+      const cashOnDelivery = document.getElementById('cashOnDelivery').value
+      const wallet = document.getElementById('wallet').value
+      const RazorPay = document.getElementById('RazorPay').value
+    
       var options = {
         animation: {
           animateRotate: true,
@@ -353,19 +361,19 @@
     
       var data = [
         {
-          value: 60,
+          value: RazorPay,
           color: "rgba(31,94,237,1)",
           backgroundColor: createLinearGradient("rgba(40,255,1,1)", "rgba(1,255,34,1)"),
           borderWidth: 0, // Set border width to 0 to remove the border
         },
         {
-          value: 15,
+          value: cashOnDelivery,
           color: "rgb(241,255,1)",
           backgroundColor: createLinearGradient("rgba(241,255,1,1)", "rgba(241,255,1,1)"),
           borderWidth: 0, // Set border width to 0 to remove the border
         },
         {
-          value: 15,
+          value:wallet,
           color: "rgb(0,31,141)",
           backgroundColor: createLinearGradient("rgba(0,31,141,1", "rgba(0,31,141,1)"),
           borderWidth: 0, // Set border width to 0 to remove the border

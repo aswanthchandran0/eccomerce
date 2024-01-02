@@ -1,4 +1,13 @@
 <%- include('./indexHeader.ejs') %>
+<style>
+  .col-lg-9::-webkit-scrollbar {
+        width: 0;  /* Remove scrollbar space */
+        background: transparent;  /* Optional: just make scrollbar invisible */
+    }
+
+
+</style>
+
     <div class="page-wrapper">
         <%- include('./indexNavBar2.ejs')-%>
         <main class="main" >
@@ -19,10 +28,10 @@
 
             <div class="page-content"  id="entireDiv">
             	<div class="cart">
-	                <div class="container">
+	                <div class="container" >
 	                	<div class="row">
-	                		<div class="col-lg-9">
-	                			<table class="table table-cart table-mobile">
+	                		<div class="col-lg-9" style="overflow: auto; max-height: 80vh;"  >
+	                			<table class="table table-cart table-mobile" >
 									<thead>
 										<tr>
 											<th>Product</th>
@@ -38,6 +47,7 @@
                                     
 
 									      <% if(products && products !== null && products !== undefined && products.length !== 0){ %>
+                                            <% if(userCart !== null && userCart !== undefined){%>
                                             <% products.forEach((Product) => { %> 
 											<td class="product-col">
 												<div class="product">
@@ -62,27 +72,27 @@
                 
                         
 
+
                 <div class="input-group input-spinner">
                     <div class="input-group-prepend">
                         <button style="min-width: 26px" class="btn btn-decrement btn-spinner" type="button" onclick="changeQuantity(-1, '<%= Product._id %>','<%= Product.ProductPrice %>')"><i class="icon-minus"></i></button>
                     </div>
-                    <input  type="text" style="text-align: center;" class="form-control" id="<%= Product._id %>" value="1" min="1" max="10" required>
+                    <input  type="text" style="text-align: center;" class="form-control" id="<%= Product._id %>" value="<%= Product.quantity %>" min="1" max="10" required>
                     <div class="input-group-append">
                         <button style="min-width: 26px" class="btn btn-increment btn-spinner" type="button" onclick="changeQuantity(1, '<%= Product._id %>','<%= Product.ProductPrice %>')"><i class="icon-plus"></i></button>
                     </div>
                 </div>
         
-
+               
 
 
                                                 </div><!-- End .cart-product-quantity -->                                 
                                             </td>
 											<td  class="total-col amount-<%= Product._id %>" id="total-price">₹<%= Product.ProductPrice%></td>
-                                            <form action="/cart/deleteCart/<%= Product._id %>" method="GET">
-                                            <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
-                                        </form>
-                                         
-										</tr>					<tr>
+                                          
+                                            <td onclick="deleteProduct('<%= Product._id %>')" class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                                       
+										</tr><tr>
                                             <%})%>
                                         <% }  
                                         else { %>
@@ -91,6 +101,7 @@
                                                     <p>cart is empty</p>
                                                 </td>
                                             </tr>
+                                            <%}%>
                                         <% } %> 
 									</tbody>
 								</table><!-- End .table table-wishlist -->
@@ -154,7 +165,7 @@
 	                						</tr><!-- End .summary-shipping-row -->
 
 	                						<tr class="summary-shipping-estimate">
-	                							<td>Estimate for Your Country<br> <a href="dashboard.html">Change address</a></td>
+	                							
 	                							<td>&nbsp;</td>
 	                						</tr><!-- End .summary-shipping-estimate -->
 
@@ -164,7 +175,7 @@
 	                						</tr><!-- End .summary-total -->
                                    
                                             <% } %>
-                                        
+                                    
 	                					</tbody>
 	                				</table><!-- End .table table-summary -->
 
@@ -224,7 +235,31 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.all.min.js"></script>
 
+   
+
+<script>
+    function deleteProduct(productId){
+      
+        $.ajax({
+            url:`/deleteCart?id=${productId}`,
+            method:'GET',
+            success: function(response){
+                $('#entireDiv').load('/cart #entireDiv');
+            }
+        })
+    }
+</script>
+
+    <script>
+        function getProductQuantity(userCart,productId){
+            const product = userCart.products.find(product => product.productId === productId);
+            console.log('product',product);
+            return product ? product.quantity : 1;
+        }
+    </script>
+
     
+
 <script> 
      function changeQuantity(quantityChange,productId,productPrice,shippingValue){
   const url = `/cart/updatePrice/${quantityChange}/${productId}/${productPrice}`
@@ -237,10 +272,6 @@ if (productPriceElement) {
         productPriceValue = productPriceElement.innerText;
         productPriceValueFloat = parseFloat(productPriceValue.replace('₹', ''));
     }
-
-    console.log(productPriceValueFloat);
-    console.log(quantityChange);
-    console.log(productId);
  
   
   $.ajax({
@@ -248,12 +279,11 @@ if (productPriceElement) {
     url:url,
 
     success:function(response){
-        console.log('Response from server:', response);
+       
     if(response.quantity !== undefined && response.totalPrice !== undefined){
-        console.log('hello');
         $('#entireDiv').load('/cart #entireDiv', function(){
-            $(`#${productId}`).val(response.quantity)
-            $('.total-col.amount-' + productId).text('$' + response.totalPrice); 
+            updateUI(productId, response.quantity, response.totalPrice);
+        
         }) 
 
        
@@ -262,13 +292,16 @@ if (productPriceElement) {
     }
  
     const updatedShippingValue = shipping(shippingValue);
-console.log('Updated Shipping value in changeQuantity:', updatedShippingValue);
+
   
 }
   })
 
   
      }
+
+
+
      function shipping(value) {
    // console.log(value);
     const subtotalElement = document.getElementById('subTotal');
@@ -278,8 +311,7 @@ console.log('Updated Shipping value in changeQuantity:', updatedShippingValue);
     const totalValue = subtotalValue + value;
 
        
-console.log('subtotal value',subtotalValue);
-console.log('total value',totalValue);
+
 const totalElement = document.getElementById('totalAmount');
     if (totalElement) {
         totalElement.innerText = '₹' + totalValue.toFixed(2);
@@ -298,6 +330,15 @@ xhr.onload = function () {
     }
 };
 xhr.send(JSON.stringify({ shippingValue: value }));
+}
+
+
+function updateUI(productId, newQuantity, newTotalPrice) {
+    $(`#${productId}`).val(newQuantity);
+    $('.total-col.amount-' + productId).text('$' + newTotalPrice);
+
+    // Optionally, update any other UI elements here
+    // ...
 }
 </script>
 
@@ -324,10 +365,11 @@ xhr.send(JSON.stringify({ shippingValue: value }));
 <% if (typeof empty !== 'undefined' && empty) { %>
    
     <div class="alert alert-danger" role="alert">
-      Custom animation with Animate.css
+      cart is empty
     </div>
   <% } %>
   
 
+  
 </body>
 </html>

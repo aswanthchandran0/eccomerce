@@ -37,9 +37,15 @@ const couponController = {
     },
 
     couponAdd: async (req, res) => {
+        const COUPON_PER_PAGE = 10
         try {
+            const page = parseInt(req.query.page) || 1
+            const totalCoupon = await Coupon.countDocuments({})
+            const totalPages = Math.ceil(totalCoupon/COUPON_PER_PAGE)    
             const { couponName, couponCode, ActiveDate, ExpireDate, Creteria, discountAmount } = req.body;
-            const coupons = await Coupon.find({});
+            const coupons = await Coupon.find({})
+            .skip((page -1)*COUPON_PER_PAGE)
+            .limit(COUPON_PER_PAGE)
             const currentDate = moment();
 
             for (const coupon of coupons) {
@@ -59,7 +65,7 @@ const couponController = {
             const hasError = Object.values(errors).some((error) => error !== null);
             if (hasError) {
                 console.log('errors ', errors);
-                return res.render('adminCoupon', { errors , coupons});
+                return res.render('adminCoupon', { errors , coupons,totalPages,currentPage:page});
             }
 
             const newCoupon = new Coupon({

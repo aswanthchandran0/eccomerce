@@ -4,7 +4,6 @@ const cartModel = require('../models/cartModel')
 const wishList = {
   wishlistPage: async(req,res)=>{
     try{
-     if(req.session.user){
       const userId = req.session.user._id
       const userWishlist = await wishListData.findOne({userId:userId})
       let userCart
@@ -24,9 +23,7 @@ const wishList = {
       }else{
         res.render('wishlist',{products:'',currentPage:'wishlist'})
       }
-     }else{
-      res.redirect('/login')
-     }
+     
     }catch(error){
         console.log(error);
         res.status(500)

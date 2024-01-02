@@ -54,8 +54,8 @@
 								<td class="stock-col"><span class="<%= product.ProductCount === 0 ? 'out-of-stock' : 'in-stock' %>"><%= product.ProductCount === 0? 'out of stock':'in stock' %></span></td>
 							
                               <td>
-                              <% if(userCart && userCart.products.some(p=> p.productId === product._id)){%>
-                                   <span class="in-stock"><%= product._id %></span>
+                              <% if(userCart && userCart.products.some(p=> p.productId == product._id)){%>
+                                   <span class="in-stock">Added To cart</span>
                                 
                                     <%}else{%>
                                     
@@ -225,7 +225,7 @@ $(document).ready(function (){
                 url:'/addToCart',
                 data:{productId:productId},
                 success:function(data){
-                    $('.product-details-top').load(window.location.href + ' .product-details-top');
+                    $('.page-content').load(window.location.href + ' .page-content');
                     console.log('data',data);
                     if (data.notLoggedIn){
                         console.log('request reached inside not logged in');
@@ -233,6 +233,7 @@ $(document).ready(function (){
                       }
     
                    else if(data.success){
+
                             const Toast = Swal.mixin({
           toast: true,
           position: "top-end",

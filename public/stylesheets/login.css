@@ -135,3 +135,10 @@ a {
 .input-field input.normal {
     /* Add styles for the normal state here */
 }
+
+.send-btn{
+   background: none;
+   border-radius: 5px;
+   color: white;
+   border:none
+}

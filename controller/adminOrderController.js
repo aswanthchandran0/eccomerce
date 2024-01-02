@@ -31,7 +31,23 @@ const orderStatus ={
         console.log(error);
         res.status(500).send('internal server error')
       }
-    }
+    },
+    adminProductView: async(req,res)=>{
+      try{
+          const backButton = '/admin/adminOrder' 
+          const orderId = req.query.orderId
+         const orderInfo = await orderDetails.findById(orderId)
+         .populate({
+          path:'productDetails.productId',
+          model:'ProductDetails'
+         })
+         console.log('orderInfo',orderInfo);
+        res.render('orderedProductView',{orderInfo,backButton})
+      }catch(error){
+          console.log(error);
+          res.status(500)
+      }
+  }
 }
 
 
