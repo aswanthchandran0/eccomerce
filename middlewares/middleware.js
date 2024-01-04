@@ -4,9 +4,20 @@ const middlewares = {
       try{
             if(req.session.user){
           const uservalidation = await userData.findById(req.session.user._id)
-              if(uservalidation && uservalidation.Authentication === 'verified'){
+
+              if(uservalidation && uservalidation.Authentication === 'verified' && uservalidation.userStatus ==='active'){
                 return next()
               }
+           
+              req.session.destroy((err) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Internal server error');
+                }
+        
+        
+            });
+
               res.redirect('/login')
             }else{
               res.redirect('/login')

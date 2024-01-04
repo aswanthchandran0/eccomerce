@@ -50,7 +50,7 @@ const allProducts = {
     },
     showSearchedProducts : async (req,res)=>{
         try{
-            let searchResults = []
+            let searchResults = []     
        console.log('filteredProduct',filteredProducts );
             if (req.query.searchResults) {
                 searchResults = JSON.parse(req.query.searchResults);
