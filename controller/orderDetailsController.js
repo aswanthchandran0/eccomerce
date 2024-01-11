@@ -18,7 +18,7 @@ const orderDetails = {
              .limit(ORDER_PER_PAGE)
            
     
-
+                    console.log('ordered products',orderedProducts);
             res.render('orderDetails',{ orderedProducts: orderedProducts,totalPages,currentPage:page})
         }catch(error){
              console.log(error);

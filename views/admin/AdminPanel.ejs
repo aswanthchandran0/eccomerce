@@ -1,0 +1,411 @@
+<%- include('./layout/header.ejs') %>
+   <% currentPage = 'Dashboard' %>
+    <div class="container-scroller">
+      <!-- partial:partials/_sidebar.html -->
+    <%- include('./layout/sideBar.ejs')  %>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo-mini" href="index.html"><img src="/images/mainLogo.png" alt="logo" /></a>
+          </div>
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav w-100">
+              <li class="nav-item w-100">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                  <input type="text" class="form-control" placeholder="Search products">
+                </form>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+              <li class="nav-item dropdown d-none d-lg-block">
+           
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  <h6 class="p-3 mb-0">Projects</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-web text-info"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">UI Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-layers text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Testing</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all projects</p>
+                </div>
+              </li>
+              
+             
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                  <div class="navbar-profile">
+                   <img class="img-xs rounded-circle" src="images/IMG_20220322_182702_732.jpg" alt=""> 
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">aswanth</p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                        
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <a href="/admin/adminPanel/logout"><p style="text-decoration: none; color: aliceblue; margin-top: -38%; margin-left: 45%;" class="preview-subject mb-1" >Log out</p></a>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                </div>
+              </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+              <span class="mdi mdi-format-line-spacing"></span>
+            </button>
+          </div>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+           
+            <div class="row">
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">
+                            <% if(yearlyIncome !== null && yearlyIncome !== undefined){%>
+                              ₹<%= yearlyIncome %>
+                              <%}else{%>
+                                ₹0
+                                <%}%>
+                           </h3>
+                          <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success ">
+                          <span class="mdi mdi-arrow-top-right icon-item"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Yearly revenue</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">
+                            <% if(monthlyIncome !== null && monthlyIncome !== undefined){%>
+                              ₹<%= monthlyIncome %>
+                              <%}else{%>
+                                ₹0
+                                <%}%>
+                           </h3>
+                          <p class="text-success ml-2 mb-0 font-weight-medium">+11%</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success">
+                          <span class="mdi mdi-arrow-top-right icon-item"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Monthly income</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">
+                            <% if(todayIncome  !== null && todayIncome  !== undefined){%>
+                              ₹<%= todayIncome %>
+                              <%}else{%>
+                                ₹0
+                                <%}%>
+
+                            </h3>
+                          <p class="text-danger ml-2 mb-0 font-weight-medium">-2.4%</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-danger">
+                          <span class="mdi mdi-arrow-bottom-left icon-item"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Daily Income</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">
+                            <% if(productExpense !== null && productExpense!== undefined){%>
+                              ₹<%= productExpense %>
+                              
+                              <%}else{%>
+                                ₹0
+                                <%}%>
+                              </h3>
+                          
+                          <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success ">
+                          <span class="mdi mdi-arrow-top-right icon-item"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Expense current</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Transaction History</h4>
+                    <!---->
+
+                    <div class="holder">
+                      <canvas id='day' width='150px'></canvas>
+                      </div>
+                      
+                    <!---->
+
+                   <!-- <canvas id="transaction-history" class="transaction-chart"></canvas>  -->
+                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
+                      <div class="text-md-center text-xl-left">
+                        <h6 class="mb-1">Transfer to RazorPay</h6>
+                        <p class="text-muted mb-0">  
+                          <% if(latesOnlinePaymentDate !== null && latesOnlinePaymentDate !== undefined){%>
+                          
+                            <%= latesOnlinePaymentDate.toLocaleString() %>
+                            <%}else{%>
+                            Date
+                              <%}%>
+
+                         </p>
+                      </div>
+                      <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
+                        <h6 class="font-weight-bold mb-0">
+                          <% if(onlinePayment !== null && onlinePayment !== undefined){%>
+                          
+                            ₹ <%= onlinePayment %>
+                            <%}else{%>
+                           ₹0
+                              <%}%>
+
+                          </h6>
+                      </div>
+                    </div>
+                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
+                      <div class="text-md-center text-xl-left">
+                        <h6 class="mb-1">Cash on delevery</h6>
+                        <p class="text-muted mb-0">   <% if(latestcashOnDeliveryDate !== null && latestcashOnDeliveryDate !== undefined){%>
+                          
+                          <%= latestcashOnDeliveryDate.toLocaleString() %>
+                          <%}else{%>
+                         Date
+                            <%}%>
+                            
+                            </p>
+                      </div>
+                      <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
+                        <h6 class="font-weight-bold mb-0">₹ <%= cashOnDelivery %></h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex flex-row justify-content-between">
+                      <h4 class="card-title mb-1">Most Sold Products</h4>
+                      <p class="text-muted mb-1">Product status</p>
+                    </div>
+                    <div class="row">
+                        <% if(mostSoldProducts !==null && mostSoldProducts.length>0){%>
+                          <% mostSoldProducts.forEach((product)=>{%>
+                            <%if(product.product){%>
+                      <div class="col-12">
+                        <div class="preview-list">
+                          
+                         
+                          <div class="preview-item border-bottom">
+                            <div class="preview-thumbnail">
+                              <div class="preview-icon bg-info">
+                                <img src="<%= product.product.images[0] %>" alt="Product Image">
+                              </div>
+                            </div>
+                            <div class="preview-item-content d-sm-flex flex-grow">
+                              <div class="flex-grow">
+                                <h6 class="preview-subject"><%= product.product.ProductName %></h6>
+                                <p class="text-muted mb-0"><%= product.product.ProductDiscription %></p>
+                              </div>
+                              <div class="mr-auto text-sm-right pt-2 pt-sm-0">
+                                <p class="text-muted">Sold: <%= product.count %></p>
+                                <p class="text-muted mb-0">₹:<%= product.product.ProductPrice %></p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                    
+                        </div>
+                      </div>
+                      <%}%>
+                      <%})%>
+                      <%}%>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+           
+
+
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+         
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+<!-- cashOnDeliveryTotal,walletTotal,onlinePaymentTotal -->
+      <input id="cashOnDelivery" type="hidden" value="<%= cashOnDelivery %> ">
+      <input id="wallet" type="hidden" value="<%=walletTotal %>">
+      <input id="RazorPay" type="hidden" value="<%=onlinePaymentTotal %>">
+    </div>
+    
+    <script src="//cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script>
+      const cashOnDelivery = document.getElementById('cashOnDelivery').value
+      const wallet = document.getElementById('wallet').value
+      const RazorPay = document.getElementById('RazorPay').value
+    
+      var options = {
+        animation: {
+          animateRotate: true,
+          animateScale: true,
+        },
+        percentageInnerCutout: 60,
+        segmentShowStroke: false,
+      };
+    
+      var data = [
+        {
+          value: RazorPay,
+          color: "rgba(31,94,237,1)",
+          backgroundColor: createLinearGradient("rgba(40,255,1,1)", "rgba(1,255,34,1)"),
+          borderWidth: 0, // Set border width to 0 to remove the border
+        },
+        {
+          value: cashOnDelivery,
+          color: "rgb(241,255,1)",
+          backgroundColor: createLinearGradient("rgba(241,255,1,1)", "rgba(241,255,1,1)"),
+          borderWidth: 0, // Set border width to 0 to remove the border
+        },
+        {
+          value:wallet,
+          color: "rgb(0,31,141)",
+          backgroundColor: createLinearGradient("rgba(0,31,141,1", "rgba(0,31,141,1)"),
+          borderWidth: 0, // Set border width to 0 to remove the border
+        },
+      ];
+    
+      function createLinearGradient(color1, color2) {
+        var canvas = document.createElement("canvas");
+        var ctx = canvas.getContext("2d");
+        var gradient = ctx.createLinearGradient(0, 0, 0, 200);
+        gradient.addColorStop(0, color1);
+        gradient.addColorStop(1, color2);
+        return gradient;
+      }
+    
+      var ctx = document.getElementById("day").getContext("2d");
+      var dayObject = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          datasets: [
+            {
+              data: data.map((item) => item.value),
+              backgroundColor: data.map((item) => item.backgroundColor),
+              borderWidth: data.map((item) => item.borderWidth), // Include borderWidth for each dataset
+            },
+          ],
+          labels: ["Razorpay", "Cash on Delivery", "Wallet"],
+        },
+        options: options,
+      });
+    </script>
+    
+    
+    
+    <%- include('./layout/footer.ejs') %>

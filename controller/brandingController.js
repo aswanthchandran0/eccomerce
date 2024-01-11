@@ -18,7 +18,11 @@ const branding = {
     },
     addBrand:async(req,res)=>{
       try{
-       const BrandName = req.body.brandName
+       const BrandName = req.body.brandName.trim()
+       const existedBrand = await BrandModel.findOne({Brand:{ $regex: new RegExp('^' + BrandName, 'i') }})
+       if(existedBrand){
+        return res.redirect('/admin/branding')
+       }
        if(BrandName){
         const newBrand = new BrandModel({
           Brand:BrandName

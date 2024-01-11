@@ -73,7 +73,7 @@ function updateFilterProduct(products){
         <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
             <div class="product">
                 <figure class="product-media">
-                    <span class="product-label label-new">New</span>
+                ${product.ProductCount === 0 ? '<span class="product-label label-out">Out of stock</span>' : ''}
                     <a href="./productView?id=${product._id}">
                         <img src="${product.images[0]}" alt="Product image" class="product-image">
                     </a>
@@ -84,8 +84,6 @@ function updateFilterProduct(products){
 
                     <div class="product-action action-icon-top">
                         <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
-                        <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
                     </div><!-- End .product-action -->
                 </figure><!-- End .product-media -->
 
@@ -95,19 +93,9 @@ function updateFilterProduct(products){
                     </div><!-- End .product-cat -->
                     <h3 class="product-title"><a href="product.html">${product.ProductName}</a></h3><!-- End .product-title -->
                     <div class="product-price">
-                        $${product.ProductPrice}
+                        ₹${product.ProductPrice}
                     </div><!-- End .product-price -->
-                    <div class="ratings-container">
-                        <div class="ratings">
-                            <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
-                        </div><!-- End .ratings -->
-                        <span class="ratings-text">( 0 Reviews )</span>
-                    </div><!-- End .rating-container -->
-
-                    <div class="product-nav product-nav-dots">
-                        <a href="#" style="background: #cc9966;"><span class="sr-only">Color name</span></a>
-                        <a href="#" class="active" style="background: #ebebeb;"><span class="sr-only">Color name</span></a>
-                    </div><!-- End .product-nav -->
+                   
                 </div><!-- End .product-body -->
             </div><!-- End .product -->
         </div><!-- End .col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2 -->

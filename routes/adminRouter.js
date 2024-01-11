@@ -1,16 +1,18 @@
-// adminRoutes.js
-
 const express = require('express');
-const router = express.Router();
+const adminRoute = express()
+const bodyParser = require('body-parser');
+adminRoute.use(bodyParser.json())
+adminRoute.use(bodyParser.urlencoded({ extended: true }))
+adminRoute.set('view engine', 'ejs')
+adminRoute.set('views', './views/admin' )
 const adminController = require('../controller/AdminPanelController');
 const catagoryController = require('../controller/catagoryController');
-const aLoginController = require('../controller/aLoginController');
+const aLoginController = require('../controller/adminLoginController');
 const adminOrderController = require('../controller/adminOrderController');
 const bannerController = require('../controller/bannerController');
 const brandingController = require('../controller/brandingController');
 const productDetailsController = require('../controller/productDetailsController');
 const userDetailsController = require('../controller/userDetails');
-const addCatagoryController = require('../controller/addCatagoryController')
 const multer = require('multer')
 const path = require('path');
 const productController = require('../controller/productController');
@@ -21,47 +23,58 @@ const adminCouponController = require('../controller/adminCouponController');
 const salesReportcontroller = require('../controller/salesReportController')
 const middlewares = require('../middlewares/adminMiddleware')
 //middleware
-router.use(middlewares.middlewares.adminSession)
+adminRoute.use((req,res,next)=>{
+     console.log('Request path:', req.path);
+    if(req.path.includes('/adminLogin'|| req.path.includes('/login'))){
+        next()
+    }else{
+        middlewares.middlewares.adminSession(req, res, next);
+    }
+})
+
+
 // Admin Panel Routes
-router.get('/adminPanel', adminController.AdminPanel.adminPanel);
-router.get('/adminPanel/logout', adminController.AdminPanel.logout);
+adminRoute.get('/', adminController.AdminPanel.adminPanel)
+adminRoute.get('/adminPanel', adminController.AdminPanel.adminPanel);
+adminRoute.get('/adminPanel/logout', adminController.AdminPanel.logout);
    
 // Catagory Routes
-router.get('/catagory', catagoryController.catagoryData.getAllCatagory);
-router.post('/catagory/delete/:id', catagoryController.catagoryData.deleteCatagory);
-router.get('/addCatagory', (req, res) => {
+adminRoute.get('/catagory', catagoryController.catagoryData.getAllCatagory);
+adminRoute.post('/catagory/delete/:id', catagoryController.catagoryData.deleteCatagory);
+adminRoute.get('/addCatagory', (req, res) => {
     res.render('addCatagory', { title: 'Express', errors: null });
 }); 
-router.post('/add' ,addCatagoryController.catagoryData.createCatagory)
+adminRoute.post('/addCategory' ,catagoryController.catagoryData.addCategory)
 // Admin Login Routes
 // Add the admin login route
-router.post('/adminLogin', aLoginController.validation); // Add the admin login validation route
+adminRoute.get('/adminLogin',middlewares.middlewares.AuthenticationMiddleware, aLoginController.loginPage)
+adminRoute.post('/adminLogin',middlewares.middlewares.AuthenticationMiddleware,aLoginController.validation); // Add the admin login validation route
 
 
 // Admin Order Routes
-router.get('/adminOrder', adminOrderController.orderStatus.orderStatusPage);
-router.get('/adminOrder/selectedValue/:selectedValue/orderId/:orderId', adminOrderController.orderStatus.updateOrderStatus);
-router.get('/adminProductView',adminOrderController.orderStatus.adminProductView)
+adminRoute.get('/adminOrder', adminOrderController.orderStatus.orderStatusPage);
+adminRoute.get('/adminOrder/selectedValue/:selectedValue/orderId/:orderId', adminOrderController.orderStatus.updateOrderStatus);
+adminRoute.get('/adminProductView',adminOrderController.orderStatus.adminProductView)
 // Branding Routes
-router.get('/branding', brandingController.branding.brandingPage);
-router.post('/addBrand', brandingController.branding.addBrand)
-router.post('/deleteBrand',brandingController.branding.deleteBrand)
+adminRoute.get('/branding', brandingController.branding.brandingPage);
+adminRoute.post('/addBrand', brandingController.branding.addBrand)
+adminRoute.post('/deleteBrand',brandingController.branding.deleteBrand)
 
 // Product Details Routes
-router.get('/productDetails', productDetailsController.product.getAllProduct);
-router.post('/productDetails/delete/:id', productDetailsController.product.deleteProduct);
+adminRoute.get('/productDetails', productDetailsController.product.getAllProduct);
+adminRoute.post('/productDetails/delete/:id', productDetailsController.product.deleteProduct);
 
 // User Details Routes
-router.get('/userDetails', userDetailsController.getAllUser);
-router.post('/userDetails/user/block/:id', userDetailsController.blockUser);
-router.post('/userDetails/user/unblock/:id', userDetailsController.unblockUser);
-router.post('/userDetails/delete/:id', userDetailsController.deleteUser);
-router.get('/userDetails/edit/:id', userDetailsController.renderEditUserForm);
-router.post('/userDetails/edit/:id', userDetailsController.editUser);
-router.get('/userDetails/search', userDetailsController.searchUser);
+adminRoute.get('/userDetails', userDetailsController.getAllUser);
+adminRoute.post('/userDetails/user/block/:id', userDetailsController.blockUser);
+adminRoute.post('/userDetails/user/unblock/:id', userDetailsController.unblockUser);
+adminRoute.post('/userDetails/delete/:id', userDetailsController.deleteUser);
+adminRoute.get('/userDetails/edit/:id', userDetailsController.renderEditUserForm);
+adminRoute.post('/userDetails/edit/:id', userDetailsController.editUser);
+adminRoute.get('/userDetails/search', userDetailsController.searchUser);
 
 //addproduct
-router.get('/productAdd', async (req, res) => {
+adminRoute.get('/productAdd', async (req, res) => {
     const ProductId = req.query.id;
     const Catagories = await catagoryModel.find({});
     const brands = await brandData.find({})
@@ -89,23 +102,23 @@ const upload = multer({storage:storage})
 
 
 
-router.post('/addProduct', upload.array('images', 4), productController.addproduct);  
-router.delete('/deleteImage', productController.deleteImage);
-router.delete('/deleteUpdatingImage', productController.deleteUpdatingImage);
+adminRoute.post('/addProduct', upload.array('images', 4), productController.addproduct);  
+adminRoute.delete('/deleteImage', productController.deleteImage);
+adminRoute.delete('/deleteUpdatingImage', productController.deleteUpdatingImage);
 
 // deteting images from product add
 
 
 
 //product edit
-router.get('/editProduct',productController.editProductPage)
+adminRoute.get('/editProduct',productController.editProductPage)
 
-router.post('/updateProduct', upload.array('images', 4), productController.updateProduct);
+adminRoute.post('/updateProduct', upload.array('images', 4), productController.updateProduct);
 
 //coupon router
  
-router.get('/coupon',adminCouponController.couponController.couponPage);
-router.post('/addCoupon',adminCouponController.couponController.couponAdd);
+adminRoute.get('/coupon',adminCouponController.couponController.couponPage);
+adminRoute.post('/addCoupon',adminCouponController.couponController.couponAdd);
 
 // banner
 
@@ -121,11 +134,11 @@ const bannerStorage = multer.diskStorage({
 
 const bannerUploads = multer({storage:bannerStorage})
 
-router.get('/banner', bannerController.banner.bannerPage)
-router.post('/addBanner',bannerUploads.single('image'), bannerController.banner.addBanner)
-router.get('/deleteBanner',bannerController.banner.deleteBanner)
+adminRoute.get('/banner', bannerController.banner.bannerPage)
+adminRoute.post('/addBanner',bannerUploads.single('image'), bannerController.banner.addBanner)
+adminRoute.get('/deleteBanner',bannerController.banner.deleteBanner)
 
 // sales report
-router.get('/sales',salesReportcontroller.sales.loadPage)
-router.get('/salesfilter',salesReportcontroller.sales.filter)
-module.exports = router;
+adminRoute.get('/sales',salesReportcontroller.sales.loadPage)
+adminRoute.get('/salesfilter',salesReportcontroller.sales.filter)
+module.exports =adminRoute

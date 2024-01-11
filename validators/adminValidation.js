@@ -1,7 +1,8 @@
 //product Validation
 
+
 function iSValidProductName(ProductName){
-    if(ProductName.length=== 0){
+    if(ProductName.trim().length=== 0){
         return 'product Name is required'
     }
     return null
@@ -14,11 +15,14 @@ function isValidProductPrice(ProductPrice){
     return null
 }
 
-function isValidProductExpense(ProductExpense){
-    if(ProductExpense === null || ProductExpense <=0){
-        return 'valid expense is required'
-    }
-    return null
+function isValidProductExpense(ProductExpense,ProductPrice){
+        if(ProductExpense>ProductPrice){
+            return 'product expense is greater the product price'
+        }else if(ProductExpense.trim().length<=0){
+            return 'valid price is required'
+        }
+        return null
+
 }
 
 function isValidProductProductCount(ProductCount){
@@ -29,7 +33,7 @@ function isValidProductProductCount(ProductCount){
 }
 
 function isValidProductDiscription(ProductDiscription){
-    if(ProductDiscription.length === 0){
+    if(ProductDiscription.trim().length === 0){
         return 'discription is requied'
     }
     return null

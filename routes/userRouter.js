@@ -1,5 +1,11 @@
 const express = require('express');
-const router = express.Router();
+const userRouter = express();
+const bodyParser = require('body-parser')
+const path = require('path');
+userRouter.use(bodyParser.json())
+userRouter.use(bodyParser.urlencoded({ extended: true }))
+userRouter.set('view engine', 'ejs')
+userRouter.set('views', './views/user')
 const indexController = require('../controller/indexControler')
 const productListController = require('../controller/productListController')
 const productViewController = require('../controller/productViewController')
@@ -14,63 +20,63 @@ const rateLimit = require('express-rate-limit');
 const navBar2Controller = require('../controller/navBar2Controller')
 const wishlistController = require('../controller/wishlistController')
 const middleware = require('../middlewares/middleware')
-router.get('/productView', productViewController.productViewAll.productView);
+userRouter.get('/productView', productViewController.productViewAll.productView);
 
 //homePage 
-router.get('/', indexController.homePage.showProducts);
+userRouter.get('/', indexController.homePage.showProducts);
 
 
 //cart
-router.get( '/cart',middleware.middlewares.userSession, cartController.cart.cartPage)
-router.post('/addToCart',middleware.middlewares.userSession,cartController.cart.addToCart)
-router.get('/deleteCart', cartController.cart.deleteCart);
-router.get('/cart/updatePrice/:quantityChange/:productId/:productPrice',cartController.cart.updatePrice)
-router.get('/cart/orderData/:totalPrice/:subtotalPrice/:shippingPrice/:quantity', cartController.cart.orderData);
-router.post('/cart/shippingPrice',cartController.cart.shippingPrice)
-router.get("/cart/processToCheckout",cartController.cart.processToCheckout)
+userRouter.get( '/cart',middleware.middlewares.userSession, cartController.cart.cartPage)
+userRouter.post('/addToCart',cartController.cart.addToCart)
+userRouter.get('/deleteCart',middleware.middlewares.userSession, cartController.cart.deleteCart);
+userRouter.get('/cart/updatePrice/:quantityChange/:productId/:productPrice',middleware.middlewares.userSession, cartController.cart.updatePrice)
+userRouter.get('/cart/orderData/:totalPrice/:subtotalPrice/:shippingPrice/:quantity', cartController.cart.orderData);
+userRouter.post('/cart/shippingPrice',middleware.middlewares.userSession,cartController.cart.shippingPrice)
+userRouter.get("/cart/processToCheckout",middleware.middlewares.userSession, cartController.cart.processToCheckout)
 
 //order
-router.get('/order', orderPageController.order.orderPage)
-router.post('/order/order', orderPageController.order.order)
-router.post('/order/verifyPayment', paymentGateway.paymentGateway.verifyPayment)
-router.post('/coupon',orderPageController.order.verifyingCoupon)
-
+userRouter.get('/order',middleware.middlewares.userSession,middleware.middlewares.orderPageMiddleware, orderPageController.order.orderPage)
+userRouter.post('/order/order',middleware.middlewares.userSession,middleware.middlewares.orderPageMiddleware, orderPageController.order.order)
+userRouter.post('/order/verifyPayment',middleware.middlewares.userSession,middleware.middlewares.orderPageMiddleware, paymentGateway.paymentGateway.verifyPayment)
+userRouter.post('/coupon',middleware.middlewares.userSession,middleware.middlewares.orderPageMiddleware, orderPageController.order.verifyingCoupon)
+userRouter.get('/api/getUpdatedData',middleware.middlewares.userSession,middleware.middlewares.orderPageMiddleware, orderPageController.order.updateOrderPage)
 //userProfile
-router.get('/userProfile',middleware.middlewares.userSession, userProfileController.userProfile.profile,)
-router.post('/userProfile/address',userProfileController.userProfile.userAddress)
-router.get('/userProfile/signout', userProfileController.userProfile.signout)
-router.get('/userProfile/orderCancel', userProfileController.userProfile.cancelOrder)
-router.get('/addressHandler',userProfileController.userProfile.addressHandler)
-router.post ('/updateAddress',userProfileController.userProfile.updateAddress)
+userRouter.get('/userProfile',middleware.middlewares.userSession, userProfileController.userProfile.profile,)
+userRouter.post('/userProfile/address',middleware.middlewares.userSession, userProfileController.userProfile.userAddress)
+userRouter.get('/userProfile/signout',middleware.middlewares.userSession, userProfileController.userProfile.signout)
+userRouter.get('/userProfile/orderCancel',middleware.middlewares.userSession, userProfileController.userProfile.cancelOrder)
+userRouter.get('/addressHandler',middleware.middlewares.userSession, userProfileController.userProfile.addressHandler)
+userRouter.post ('/updateAddress',middleware.middlewares.userSession, userProfileController.userProfile.updateAddress)
 //orderDetails
-router.get('/orderDetails' , orderDetailsController.orderDetails.orderPage)
-router.delete('/orderDetails/detetOrder/:orderId/',orderDetailsController.orderDetails.deleteOrder)
-router.get('/orderedProduct',orderDetailsController.orderDetails.orderedProductView)
-router.get('/invoice',middleware.middlewares.userSession,orderDetailsController.orderDetails.inVoice)
+userRouter.get('/orderDetails' ,middleware.middlewares.userSession, orderDetailsController.orderDetails.orderPage)
+userRouter.delete('/orderDetails/detetOrder/:orderId/',middleware.middlewares.userSession, orderDetailsController.orderDetails.deleteOrder)
+userRouter.get('/orderedProduct',middleware.middlewares.userSession, orderDetailsController.orderDetails.orderedProductView)
+userRouter.get('/invoice',middleware.middlewares.userSession, middleware.middlewares.userSession,orderDetailsController.orderDetails.inVoice)
 //orderSucess
-router.get('/orderSucess', function(req, res, next) {
+userRouter.get('/orderSucess', function(req, res, next) {
     res.render('orderSucess', { title: 'Express' }); 
   });
 
 //login
-router.get('/login',middleware.middlewares.AuthenticationMiddleware, function(req, res, next) {
+userRouter.get('/login',middleware.middlewares.AuthenticationMiddleware, function(req, res, next) {
     res.render('login', { title: 'Express',errors:{} });
   });    
-router.post('/login',userController.loginController)
+userRouter.post('/login',userController.loginController)
 
 //sign up
-router.get('/signup',middleware.middlewares.AuthenticationMiddleware, function(req, res, next) {
+userRouter.get('/signup',middleware.middlewares.AuthenticationMiddleware, function(req, res, next) {
   res.render('signup', { title: 'Express',errors:{} });
 }); 
-router.post('/signin', userController.signUp);
+userRouter.post('/signin', userController.signUp);
 
 // forgot password
 
-router.get('/emailverification',middleware.middlewares.AuthenticationMiddleware, userController.emailVerfication)
-router.post('/emailverifying',userController.emailverifying)
-router.get('/forgotpassword',middleware.middlewares.AuthenticationMiddleware, userController.forgotPassword)
-router.post('/changePassword',userController.changePassword)
-router.post('/f-otp',userController.resendOtp)
+userRouter.get('/emailverification',middleware.middlewares.AuthenticationMiddleware, userController.emailVerfication)
+userRouter.post('/emailverifying',userController.emailverifying)
+userRouter.get('/forgotpassword',middleware.middlewares.AuthenticationMiddleware, userController.forgotPassword)
+userRouter.post('/changePassword',userController.changePassword)
+userRouter.post('/f-otp',middleware.middlewares.AuthenticationMiddleware, userController.resendOtp)
 //otp 
 const limiter = rateLimit({ 
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -78,25 +84,25 @@ const limiter = rateLimit({
     message: 'Too many requests from this IP, please try again later'
   });
   
-  router.get('/otp', function (req, res) {
-    res.render('otp', { title: 'otp', otpError: null });
+  userRouter.get('/otp', middleware.middlewares.forOtpPage, function (req, res) {
+    res.render('otp',  { title: 'otp', otpError: null });
   });
   
-  router.post('/otpValidation', limiter, otpController.validateOtp);
-  router.post('/resend-otp', otpController.resendOtp)  
+  userRouter.post('/otpValidation', limiter, otpController.validateOtp);
+  userRouter.post('/resend-otp', otpController.resendOtp)  
 
   // product list controller
-  router.get('/productList', productListController.allProducts.showProducts);
-  router.post('/selectedBrands',productListController.allProducts.selectedBrands)
-  router.post('/priceRange',productListController.allProducts.priceRange)
+userRouter.get('/productList', productListController.allProducts.showProducts);
+userRouter.post('/selectedBrands',productListController.allProducts.selectedBrands)
+userRouter.post('/priceRange',productListController.allProducts.priceRange)
 
   //search navBar2 controller
-router.post('/productSearch', navBar2Controller.navBar.search)
-router.get('/searchedProduct',productListController.allProducts.showSearchedProducts)
+userRouter.post('/productSearch', navBar2Controller.navBar.search)
+userRouter.get('/searchedProduct',productListController.allProducts.showSearchedProducts)
 
 //wishlist 
-router.get('/wishlist',middleware.middlewares.userSession,wishlistController.wishList.wishlistPage)
-router.post('/addToWishlist',middleware.middlewares.userSession, wishlistController.wishList.addToWishlist)
-router.get('/deleteWishist/:productId',wishlistController.wishList.delete)
+userRouter.get('/wishlist',middleware.middlewares.userSession,wishlistController.wishList.wishlistPage)
+userRouter.post('/addToWishlist', wishlistController.wishList.addToWishlist)
+userRouter.get('/deleteWishist/:productId',wishlistController.wishList.delete)
 
-module.exports = router;
+module.exports = userRouter

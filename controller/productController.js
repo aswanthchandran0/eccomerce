@@ -38,7 +38,7 @@ const productController = {
       const errors = {
         ProductName: iSValidProductName(ProductName),
         ProductPrice: isValidProductPrice(ProductPrice),
-        ProductExpense: isValidProductExpense(ProductExpense),
+        ProductExpense: isValidProductExpense(ProductExpense,ProductPrice),
         ProductCount: isValidProductProductCount(ProductCount),
         ProductDiscription: isValidProductDiscription(ProductDiscription),
         category: isValidCatagory(Catagory),

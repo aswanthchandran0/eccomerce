@@ -5,10 +5,12 @@ const Banners = require('../models/bannerModel')
 const homePage = {
         showProducts : async (req,res)=>{
             try{
+                console.log('request reaching');
             let userId
             let numberOfProduct
             let userLoged = 0
             const products =  await productModel.find({}) 
+            console.log('products',products);
             const banners = await Banners.find({})
             if (req.session.user && req.session.user._id) {
                 userId = req.session.user._id;

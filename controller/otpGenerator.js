@@ -12,7 +12,7 @@ async function sendOtpEmail(email, otp) {
         from: 'aswanthc26@gmail.com',
         to: email,
         subject: 'Lexxive otp verification',
-        text: `your otp for verification is: ${otp}`
+        text: `your otp for verification is: ${otp} it will expire after 3 minutes`
     };
 
     try {

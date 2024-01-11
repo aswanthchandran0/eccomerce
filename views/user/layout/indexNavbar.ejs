@@ -1,0 +1,104 @@
+ <header class="header header-5">
+            <div class="header-middle sticky-header">
+                <div class="container-fluid">
+                    <div class="header-left">
+                        <button class="mobile-menu-toggler">
+                            <span class="sr-only">Toggle mobile menu</span>
+                            <i class="icon-bars"></i>
+                        </button>
+
+                        <a href="#" class="logo">
+                        <div class="demo-title" style="color: #fff; font-size: large;">Lexxive</div>
+                        </a>
+
+                        <nav class="main-nav">
+                            <ul class="menu sf-arrows">
+                                <li class="megamenu-container <%= currentPage === 'home'?'active': '' %>">
+                                    <a href="./" >Home</a>
+
+                                 
+                                </li>
+                    
+                             
+                                <li class="<%= currentPage === 'products'?'active':''%>">
+                                    <a href="./productList" class="">Shop</a>
+
+                                 
+                                </li>
+                                <% if(userLoged === 0){%>
+                                <li>
+                                  <button onclick="redirectToLoginPage()" style="background:none; border-radius: 15px; color: #fff; border-color: white;">sign/login</button>                            
+                                </li>
+                                <%}%>
+                               
+                            </ul><!-- End .menu -->
+                        </nav><!-- End .main-nav -->
+                    </div><!-- End .header-left -->
+
+                    <div class="header-right">
+                        <div class="header-search header-search-extended header-search-visible">
+                            <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                            <form action="#" method="get">
+                                <div class="header-search-wrapper">
+                                    <label for="q" class="sr-only">Search</label>
+                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..." required>
+                                    <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                                </div><!-- End .header-search-wrapper -->
+                            </form>
+                        </div><!-- End .header-search -->
+                        
+                        <a href="/wishlist" class="wishlist-link">
+                            <i class="icon-heart-o"></i>
+                        </a>
+
+                        <div class="dropdown cart-dropdown" id="cart-container" >
+                            <a href="./cart" class="dropdown-toggle" role="button"  aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <i style="margin-left: -8px;" class="icon-shopping-cart"></i>
+                                <% if(numberOfProduct !==null && numberOfProduct>0){%>
+                                <span class="cart-count"><%= numberOfProduct %></span>
+                                <%}%>
+                            </a>
+                        </div><!-- End .cart-dropdown -->
+                        <a href="./userProfile" class="wishlist-link">
+                            <i class="fa-regular fa-user fa-xs" style="margin-left: -15px; margin-top: 3px;"></i>
+                            
+                        </a>
+                    </div><!-- End .header-right -->
+                </div><!-- End .container-fluid -->
+            </div><!-- End .header-middle -->
+        </header><!-- End .header -->
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function(){
+        let timeout;
+
+        $('#q').on('input', function(){
+            clearTimeout(timeout);
+
+            // Set a delay of 800 milliseconds (adjust as needed)
+            timeout = setTimeout(function() {
+                var searchQuery = $('#q').val();
+                $.ajax({
+                    url:'/productSearch',
+                    method:'POST',
+                    data:{q:searchQuery},
+                    success: function(response){
+                        window.location.href = '/searchedProduct?searchResults=' + encodeURIComponent(JSON.stringify(response.searchResults));
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }, 800);
+        });
+    });
+</script>
+
+
+<script>
+    function redirectToLoginPage() {
+
+        window.location.href = '/login';
+    }
+</script>

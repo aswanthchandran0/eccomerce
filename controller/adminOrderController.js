@@ -41,7 +41,7 @@ const orderStatus ={
           path:'productDetails.productId',
           model:'ProductDetails'
          })
-         console.log('orderInfo',orderInfo);
+        
         res.render('orderedProductView',{orderInfo,backButton})
       }catch(error){
           console.log(error);

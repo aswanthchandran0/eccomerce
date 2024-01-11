@@ -175,6 +175,16 @@ const order = {
                 { $set: {paymentStatus: 'Approved' } },
               
               );
+
+              const cartProductInfo = await Promise.all(
+                userCart.products.map(async (info)=>{
+                  const product = await productModel.findOne({_id:info.productId})
+                  let ProductCount = product.ProductCount
+                      ProductCount -= info.quantity 
+                      await productModel.findByIdAndUpdate({_id:info.productId},{$set:{ProductCount:ProductCount}},{new:true})
+                })
+              ) 
+              
               res.json({walletSucess:true})
              }else{
               res.json({walletSucess:false, message:'Insufficent balance in  the wallet'})
@@ -234,6 +244,56 @@ let totalPrice = subTotalPrice+shippingPrice
     }else {
       res.redirect('./order?error=invalid coupon');
     }
+  },
+  updateOrderPage: async(req,res)=>{
+    try{
+      const userId = req.session.user._id
+      const userCart = await cartModel.findOne({userId:userId})
+      const productDetails = userCart.products.map(product => ({
+        productId: product.productId,
+        purchasedCount: product.quantity
+    }));
+
+    const productIds = productDetails.map(product => product.productId);
+    const products = await product.find({ _id: { $in: productIds } });
+     const productPrice = products.map(product => product.ProductPrice)
+     const quantities = productDetails.map(product => product.purchasedCount);
+     const shippingPrice = userCart ? userCart.shippingPrice : 0;
+        
+
+const totalPriceArray = [];
+const individualTotalArray = [];
+
+    let totalPrice = 0
+    for(let i =0;i<products.length;i++){
+      const individualTotal = productPrice[i] * quantities[i];
+  totalPrice += individualTotal;
+
+  individualTotalArray.push(individualTotal);
+  totalPriceArray.push(totalPrice);
+    }
+
+    const discountAmount = req.query.discountAmount || 0;
+    totalPrice -= discountAmount;
+
+  
+  const allTotal = totalPrice+shippingPrice
+
+  
+        res.json({
+            products,
+            individualTotalArray,
+            totalPrice,
+            shippingPrice,
+            allTotal,
+        });
+  
+  
+    }catch(error){
+      console.log(error);
+      res.status(500)
+    }
+
   }
  
 }

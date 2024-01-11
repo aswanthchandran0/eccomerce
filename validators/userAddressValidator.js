@@ -1,63 +1,67 @@
 function isValidFname( Fname){
-    if( Fname.length ===0){
-        return 'name is required'
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    if(Fname.trim().length===0){
+      return 'please enter your first name.'
+    }else if(!nameRegex.test(Fname)){
+      return 'name should only contain letter'
     }
     return null
 }
 
 function isValidEmail(Email){
-    if(Email.length ===0){
-        return 'email is required'
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailRegex.test(Email)){
+      return 'please enter a valid email address' 
     }
     return null
 }
 
 function isValidPhoneNumber(PhoneNumber){
-    if(PhoneNumber.length !== 10){
-        return ' invalid phonenumber'
-    }
-    return null
+    if(!/^\d{10}$/.test(PhoneNumber) || PhoneNumber ==='0000000000'){
+        return 'please enter a valid 10-digit phone number'
+      }
+      return null
 }
 
 
 function isValidPincode(Pincode){
 
-    if(Pincode.length === 0){
+    if(Pincode.trim().length === 0){
         return 'pincode is required'
     }
     return null
 }
 
 function isValidAddress(Address){
-    if(Address.length ===0){
+    if(Address.trim().length ===0){
         return 'address is required'
     }
     return null
 }
 
 function isValidPlace(Place){
-    if(Place.length ===0){
+    if(Place.trim().length ===0){
         return 'place is required'
     }
     return null
 }
 
 function isValidstate(state){
-    if(state.length ===0){
+    if(state.trim().length ===0){
         return 'state is required'
     }
     return null
 }
 
 function isValidLandMark(LandMark){
-    if(LandMark.length ===0){
+    if(LandMark.trim().length ===0){
         return 'landmark is required'
     }
     return null
 }
 
 function isValidAphoneNumber(AphoneNumber){
-    if(AphoneNumber.length !== 10 ){
+    if(!/^\d{10}$/.test(AphoneNumber) || AphoneNumber ==='0000000000' ){
         return 'valid phonenumber is required'
     }
     return null

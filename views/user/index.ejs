@@ -1,0 +1,507 @@
+
+
+<%- include('./layout/header.ejs') -%>
+    <div class="page-wrapper">
+       <%- include('./layout/indexNavbar.ejs') -%>
+        <main class="main">
+            <div class="intro-slider-container mb-0">
+                <div class="intro-slider owl-carousel owl-theme owl-nav-inside owl-light" data-toggle="owl" data-owl-options='{"nav": false, "dots": false}'>
+                    <% if(banners !== null && banners !== undefined){%>
+                        <% banners.forEach((banner)=>{%>
+                    <div class="intro-slide" style="background-image: url(/bannerImages/<%=banner.image%>)">
+                        <div class="container intro-content text-center">
+                            <h3 class="intro-subtitle text-white"><%= banner.subText1 %></h3><!-- End .h3 intro-subtitle -->
+                            <h1 class="intro-title text-white"><%= banner.mainText %></h1><!-- End .intro-title -->
+                            <div class="intro-text text-white"><%= banner.subText2 %></div><!-- End .intro-text -->
+                            <a href="<%= banner.url %>" class="btn btn-primary"><%= banner.buttonText %></a>
+                        </div><!-- End .intro-content -->
+                    </div><!-- End .intro-slide -->
+                    <%})%>
+                    <%}%>
+                   
+                </div><!-- End .intro-slider owl-carousel owl-theme -->
+
+                <span class="slider-loader text-white"></span><!-- End .slider-loader -->
+            </div><!-- End .intro-slider-container -->
+
+   
+            <div class="mb-4"></div><!-- End .mb-6 -->
+
+<!---->
+<!---->
+<!---->
+
+
+<section class="collection bg-light position-relative py-5" style="margin-top: -3%;">
+    <div class="container">
+      <div class="row">
+        <div class="title-xlarge text-uppercase txt-fx domino">Collection</div>
+        <div class="collection-item d-flex flex-wrap my-5">
+          <div class="col-md-6 column-container">
+            <div class="image-holder">
+              <img src="images/single-image-2.jpg" alt="collection" class="product-image img-fluid">
+            </div>
+          </div>
+          <div class="col-md-6 column-container bg-white ">
+            <div class="collection-content p-5 m-0 m-md-5 ">
+              <h3 class="element-title text-uppercase">Classic winter collection</h3>
+              <p >Dignissim lacus, turpis ut suspendisse vel tellus. Turpis purus, gravida orci, fringilla a. Ac sed eu
+                fringilla odio mi. Consequat pharetra at magna imperdiet cursus ac faucibus sit libero. Ultricies quam
+                nunc, lorem sit lorem urna, pretium aliquam ut. In vel, quis donec dolor id in. Pulvinar commodo mollis
+                diam sed facilisis at cursus imperdiet cursus ac faucibus sit faucibus sit libero.</p>
+              <a href="/productList" class="btn btn-dark text-uppercase mt-3">Shop</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+    <!---->        
+    <!---->        
+    <!---->               
+            <div class="container">
+                <div class="heading heading-center mb-3">
+                    <h2 class="title">Trendy Products</h2><!-- End .title -->
+
+                    <ul class="nav nav-pills justify-content-center" role="tablist">
+                        
+                    
+                    </ul>
+                </div><!-- End .heading -->
+
+                <div class="tab-content tab-content-carousel">
+                    <div class="tab-pane p-0 fade show active" id="trendy-all-tab" role="tabpanel" aria-labelledby="trendy-all-link">
+                        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                            data-owl-options='{
+                                "nav": false, 
+                                "dots": true,
+                                "margin": 20,
+                                "loop": false,
+                                "responsive": {
+                                    "0": {
+                                        "items":2
+                                    },
+                                    "480": {
+                                        "items":2
+                                    },
+                                    "768": {
+                                        "items":3
+                                    },
+                                    "992": {
+                                        "items":4
+                                    },
+                                    "1200": {
+                                        "items":4,
+                                        "nav": true
+                                    }
+                                }
+                            }'>
+                            <% if(products !== null && products !== undefined){%>
+                                <%  products.slice(0,8).forEach((product)=>{%>
+                            <div class="product product-2 " id="product-list">
+                           
+                                <figure class="product-media">
+                                    <% if(product.ProductCount === 0){%>
+                                        <span class="product-label label-out">Out of stock</span>
+                                        <%}%>
+                                    
+                                    <a href="./productView?id=<%= product._id %>">
+                                        <img src="<%= product.images[0] %>" alt="Product image" class="product-image">
+                                        <img src="<%= product.images[1] %>" alt="Product image" class="product-image-hover">
+                                    </a>
+
+                                    <div class="product-action-vertical">
+                                        <a href="#" class="btn-product-icon btn-wishlist wishlist btn-expandable" title="Add to wishlist" data-product-id="<%= product._id %>"><span>add to wishlist</span></a>
+                                    </div><!-- End .product-action -->
+
+                                    <div class="product-action product-action-transparent">
+                                        <a href="#" class="btn-product btn-cart cart"  data-product-id="<%= product._id %>"><span>add to cart</span></a>
+                                    </div><!-- End .product-action -->
+                                </figure><!-- End .product-media -->
+
+                                <div class="product-body">
+                                    <div class="product-cat">
+                                        <a href="#"><%= product.ProductName %></a>
+                                    </div><!-- End .product-cat -->
+                                    <h3 class="product-title"><a href="product.html"><%= product.ProductDiscription %></a></h3><!-- End .product-title -->
+                                    <div class="product-price">
+                                       ₹<%= product.ProductPrice %>
+                                    </div><!-- End .product-price -->
+                                </div><!-- End .product-body -->
+                              
+                            </div><!-- End .product -->
+                            <%}) %>
+                            <%} %>
+                            
+
+                        </div><!-- End .owl-carousel -->
+                
+                    </div><!-- .End .tab-pane -->
+
+                            
+                <div class="more-container text-center mt-1 mb-3">
+                    <a href="/productList" class="btn btn-outline-primary-2 btn-round btn-more">Load more</a>
+                </div><!-- End .more-container -->
+                    
+
+                    <div class="tab-pane p-0 fade" id="trendy-women-tab" role="tabpanel" aria-labelledby="trendy-women-link">
+                        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                            data-owl-options='{
+                                "nav": false, 
+                                "dots": true,
+                                "margin": 20,
+                                "loop": false,
+                                "responsive": {
+                                    "0": {
+                                        "items":2
+                                    },
+                                    "480": {
+                                        "items":2
+                                    },
+                                    "768": {
+                                        "items":3
+                                    },
+                                    "992": {
+                                        "items":4
+                                    },
+                                    "1200": {
+                                        "items":4,
+                                        "nav": true
+                                    }
+                                }
+                            }'>
+                        </div><!-- End .owl-carousel -->
+                    </div><!-- .End .tab-pane -->
+                    <div class="tab-pane p-0 fade" id="trendy-men-tab" role="tabpanel" aria-labelledby="trendy-men-link">
+                        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                            data-owl-options='{
+                                "nav": false, 
+                                "dots": true,
+                                "margin": 20,
+                                "loop": false,
+                                "responsive": {
+                                    "0": {
+                                        "items":2
+                                    },
+                                    "480": {
+                                        "items":2
+                                    },
+                                    "768": {
+                                        "items":3
+                                    },
+                                    "992": {
+                                        "items":4
+                                    },
+                                    "1200": {
+                                        "items":4,
+                                        "nav": true
+                                    }
+                                }
+                            }'>
+                        </div><!-- End .owl-carousel -->
+                    </div><!-- .End .tab-pane -->
+                    <div class="tab-pane p-0 fade" id="trendy-access-tab" role="tabpanel" aria-labelledby="trendy-access-link">
+                        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                            data-owl-options='{
+                                "nav": false, 
+                                "dots": true,
+                                "margin": 20,
+                                "loop": false,
+                                "responsive": {
+                                    "0": {
+                                        "items":2
+                                    },
+                                    "480": {
+                                        "items":2
+                                    },
+                                    "768": {
+                                        "items":3
+                                    },
+                                    "992": {
+                                        "items":4
+                                    },
+                                    "1200": {
+                                        "items":4,
+                                        "nav": true
+                                    }
+                                }
+                            }'>
+                        </div><!-- End .owl-carousel -->
+                    </div><!-- .End .tab-pane -->
+                </div><!-- End .tab-content -->
+            </div><!-- End .container -->
+
+            <div class="mb-5"></div><!-- End .mb-5 -->
+
+            <section class="video py-5 overflow-hidden">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="video-content open-up" data-aos="zoom-out" style="position: relative;">
+                      <div class="video-bg">
+                        <img src="images/video-image.jpg" alt="video" class="video-image img-fluid">
+                      </div>
+                      <div class="video-player" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                        <a class="youtube cboxElement" href="https://www.youtube.com/embed/pjtsGzQjFM4">
+                          <svg width="24" height="24" viewBox="0 0 24 24">
+                            <use xlink:href="#play"></use>
+                          </svg>
+                        </a>
+                      </div>
+                      <!-- Separate container for the text pattern with rotation -->
+                      <div class="text-pattern-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);">
+                        <img src="images/text-pattern.png" alt="pattern" class="text-rotate" style="width: 100%; height: 100%;">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              
+         
+
+            <div class="container pt-6 new-arrivals">
+       
+
+
+                <div class="tab-content">
+
+             
+                   
+                   
+                   
+                   
+                   
+                   
+              
+
+
+                   
+                    <div class="tab-pane p-0 fade" id="new-access-tab" role="tabpanel" aria-labelledby="new-access-link">
+                        <div class="products">
+                            <div class="row justify-content-center">
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <div class="product product-2">
+                                        <figure class="product-media">
+                                            <a href="product.html">
+                                                <img src="assets/images/demos/demo-5/products/product-8-1.jpg" alt="Product image" class="product-image">
+                                                <img src="assets/images/demos/demo-5/products/product-8-2.jpg" alt="Product image" class="product-image-hover">
+                                            </a>
+
+                                            <div class="product-action-vertical">
+                                                <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                                            </div><!-- End .product-action -->
+
+                                            <div class="product-action product-action-transparent">
+                                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                            </div><!-- End .product-action -->
+                                        </figure><!-- End .product-media -->
+
+                                        <div class="product-body">
+                                            <div class="product-cat">
+                                                <a href="#">Handbags</a>
+                                            </div><!-- End .product-cat -->
+                                            <h3 class="product-title"><a href="product.html">Paper straw shopper</a></h3><!-- End .product-title -->
+                                            <div class="product-price">
+                                                $398.00
+                                            </div><!-- End .product-price -->
+                                        </div><!-- End .product-body -->
+                                    </div><!-- End .product -->
+                                </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <div class="product product-2">
+                                        <figure class="product-media">
+                                            <a href="product.html">
+                                                <img src="assets/images/demos/demo-5/products/product-9-1.jpg" alt="Product image" class="product-image">
+                                                <img src="assets/images/demos/demo-5/products/product-9-2.jpg" alt="Product image" class="product-image-hover">
+                                            </a>
+
+                                            <div class="product-action-vertical">
+                                                <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                                            </div><!-- End .product-action -->
+
+                                            <div class="product-action product-action-transparent">
+                                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                            </div><!-- End .product-action -->
+                                        </figure><!-- End .product-media -->
+
+                                        <div class="product-body">
+                                            <div class="product-cat">
+                                                <a href="#">Handbags</a>
+                                            </div><!-- End .product-cat -->
+                                            <h3 class="product-title"><a href="product.html">Bucket bag</a></h3><!-- End .product-title -->
+                                            <div class="product-price">
+                                                $350.00
+                                            </div><!-- End .product-price -->
+                                            <div class="product-nav product-nav-dots">
+                                                <a href="#" class="active" style="background: #e3a84d;"><span class="sr-only">Color name</span></a>
+                                                <a href="#" style="background: #f48a5b;"><span class="sr-only">Color name</span></a>
+                                                <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
+                                            </div><!-- End .product-nav -->
+                                        </div><!-- End .product-body -->
+                                    </div><!-- End .product -->
+                                </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
+                            </div><!-- End .row -->
+                        </div><!-- End .products -->
+                    </div><!-- .End .tab-pane -->
+                </div><!-- End .tab-content -->
+
+            </div><!-- End .container -->
+                
+            <div class="mb-2"></div><!-- End .mb-2 -->
+
+            <div class="container">
+                <div class="cta cta-separator mb-5">
+                    <div class="row">
+                        
+                      
+                    </div><!-- End .row -->
+                </div><!-- End .cta -->
+            </div><!-- End .container -->
+
+        </main><!-- End .main -->
+
+    </div><!-- End .page-wrapper -->
+    <%- include('./layout/navBarMobile.ejs') -%>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/main.js"></script>
+<script>
+    $(document).ready(function (){
+        $('.cart').click(function(e){
+            e.preventDefault();
+            const productId = $(this).data('product-id')
+            addToCart(productId)
+        })
+    })
+
+    function addToCart(productId){
+        $.ajax({
+            type:'POST',
+            url:'/addToCart',
+            data:{productId:productId},
+            success:function(data){
+                $('#cart-container').load(window.location.href + ' #cart-container');
+                if (data.notLoggedIn){
+                    window.location.href = '/login'
+                  }
+
+               else if(data.success){
+                        const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "product Added"
+    });
+
+                    }
+
+                    
+                    else if(data.productExist){
+                        const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Already added"
+    });
+                    }else if(data.outOfStock){
+                        const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "error",
+      title: "Out of stock"
+    }); 
+                    }
+
+            }
+        })
+    }
+</script>
+
+    <script>
+          $(document).ready(function () {
+        $('.wishlist').click(function (e) {
+            e.preventDefault(); 
+
+            const productId = $(this).data('product-id');
+            addToWishlist(productId);
+        });
+
+        function addToWishlist(productId) {
+            $.ajax({
+                type: 'POST',
+                url: '/addToWishlist',
+                data: { productId: productId },
+                success: function (data) {
+                  if (data.notLoggedIn){
+                    window.location.href = '/login'
+                  }
+                    else if (data.success){
+                        const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "product Added"
+    });
+                    }else if(data.productExist){
+                        const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Already added"
+    });
+                    }
+                },
+                error: function (error) {
+                    // Handle the error
+                    console.error('Error:', error);
+                }
+            });
+        }
+    });
+    </script>
+  <%- include('./layout/footer.ejs') -%>

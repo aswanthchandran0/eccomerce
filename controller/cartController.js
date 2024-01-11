@@ -43,6 +43,13 @@ const cart = {
     if (req.session.user) {
       const productId = req.body.productId
       const userId = req.session.user._id
+      const productinfo = await product.findOne({_id:productId})
+      console.log('product info',productinfo);
+      console.log('stock',productinfo.ProductCount);
+      if(productinfo.ProductCount == 0){
+        console.log('request reaching inside the out of stock condition');
+        return res.json({outOfStock:true})
+      }
      const existingProduct = await cartModel.findOne({
       userId:userId,
       'products.productId': productId,

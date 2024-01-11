@@ -60,6 +60,10 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
         default:'not verified'
+    },
+    otpTimeStamb:{
+        type:Date,
+        default:null
     }
 })
 

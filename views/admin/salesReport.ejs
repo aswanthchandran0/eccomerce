@@ -1,0 +1,403 @@
+<%- include('./layout/header.ejs')-%>
+<% currentPage = 'Sales Report' %>
+<link rel="stylesheet" href="http://localhost:3000/assets/css/adminSidePagination.css">
+
+
+
+
+
+
+
+    <div class="container-scroller">
+      <!-- partial:partials/_sidebar.html -->
+    <%- include('./layout/sideBar.ejs') -%>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo.png" alt="logo" /></a>
+          </div>
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav w-100">
+              <li class="nav-item w-100">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                  <input type="text" class="form-control" placeholder="Search products">
+                </form>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+              <li class="nav-item dropdown d-none d-lg-block">
+           
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  <h6 class="p-3 mb-0">Projects</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-web text-info"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">UI Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-layers text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Testing</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all projects</p>
+                </div>
+              </li>
+              <li class="nav-item nav-settings d-none d-lg-block">
+                <a class="nav-link" href="#">
+                  <i class="mdi mdi-view-grid"></i>
+                </a>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                  <i class="mdi mdi-email"></i>
+                  <span class="count bg-success"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                  <h6 class="p-3 mb-0">Messages</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <img src="assets/images/faces/face4.jpg" alt="image" class="rounded-circle profile-pic">
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
+                      <p class="text-muted mb-0"> 1 Minutes ago </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <img src="assets/images/faces/face2.jpg" alt="image" class="rounded-circle profile-pic">
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
+                      <p class="text-muted mb-0"> 15 Minutes ago </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <img src="images/IMG_20220322_182702_732.jpg" alt="image" class="rounded-circle profile-pic">
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
+                      <p class="text-muted mb-0"> 18 Minutes ago </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">4 new messages</p>
+                </div>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <i class="mdi mdi-bell"></i>
+                  <span class="count bg-danger"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-calendar text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Event today</p>
+                      <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event today </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                      <p class="text-muted ellipsis mb-0"> Update dashboard </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-link-variant text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Launch Admin</p>
+                      <p class="text-muted ellipsis mb-0"> New admin wow! </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all notifications</p>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                  <div class="navbar-profile">
+                    <img class="img-xs rounded-circle" src="images/IMG_20220322_182702_732.jpg" alt="">
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">aswanth</p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                        
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <a href="/AdminPanel/logout"><p style="text-decoration: none; color: aliceblue; margin-top: -38%; margin-left: 45%;" class="preview-subject mb-1" >Log out</p></a>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                </div>
+              </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+              <span class="mdi mdi-format-line-spacing"></span>
+            </button>
+          </div>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+           
+            <div class="row">
+             
+              <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div id="printableContent" class="card-body">
+                    <div class="d-flex flex-row justify-content-between">
+                      <h4 class="card-title mb-1">Sales Report</h4>
+                      <p class="text-muted mb-1"></p>
+                      <select  id="filterDropdown" class="filter  hide-on-print" name="filter" onchange="sentToserver()">
+                        <option value="all">all</option>
+                        <option value="Day">Day</option>
+                        <option value="Month">Month</option>
+                        <option value="year">year</option>
+                      </select>
+                      <div class="badge badge-outline-success hide-on-print" onclick="download()">download</div>
+                    </div>
+                    <div class="row ">
+                      <div class="col-12">
+                        <div class="preview-list">
+                          <!---->
+                         
+                          <div class="table-responsive ">
+
+            
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                <th>NO</th>
+                                <th>order Id</th>
+                                <th>order Date</th>
+                                <th>Payment Status</th>
+                                <th>Payment method</th>
+                                <th>Amount</th>
+                                
+                                </tr>
+                              </thead>
+                              <tbody id="orderTableBody">
+                                <% if(orderData !==null && orderData !== undefined){%>
+                                  <% orderData.forEach((order,index)=>{%>
+                                    <tr>
+                                      <td><%= index+1 %></td>
+                                        <td><%= order._id %></td>
+                                        <td><%= order.orderDate.toLocaleDateString(); %></td>
+                                        <td><%= order.orderStatus %></td>
+                                        <td><%= order.paymentMethod %></td>
+                                        <td>₹<%= order.Total %></td>
+                                        
+                                    </tr>
+                                    <%})%>
+                                    <%}%>
+                                    <div id="totalPrice" colspan="6" class="text-right">
+                                      <tr>
+                                        <td colspan="6" class="text-right"><strong>Total</strong></td>
+                                        <td>₹<%=totalPrice %></td>
+                                      </tr>
+                                    </div>
+                                    
+                                 </tbody>
+                            </table>
+
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="pagination mx-auto">
+                    <% if (currentPage > 1) { %>
+                      <a href="?page=<%= currentPage - 1 %>" class="pagination__arrow pagination__arrow--left ">
+                        <span class="pagination__arrow-half "><i class="fa-solid fa-chevron-left"></i></span>
+                        <span class="pagination__arrow-half "></span>
+                      </a>
+                    <% } %>
+                    
+                    <span class="pagination__number-indicator"></span>
+                    
+                    <% for (let i = 1; i <= totalPages; i++) { %> 
+                      <a href="?page=<%= i %>" class="pagination__number <%= i === currentPage ? 'pagination__number--active' : '' %>">
+                        <%= i %>
+                      </a>
+                    <% } %>
+                    
+                    <% if (currentPage < totalPages) { %>
+                      <a href="?page=<%= currentPage + 1 %>" class="pagination__arrow pagination__arrow--right">
+                        <span class="pagination__arrow-half"></span>
+                        <span class="pagination__arrow-half"><i class="fa-solid fa-chevron-left"></i></span>
+                      </a>
+                    <% } %>
+                  </div>
+                  
+
+                </div>
+              </div>
+            </div>
+           
+           
+
+
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+         
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Your existing HTML code -->
+
+
+
+<script>
+  
+    $(document).ready(function () {
+       
+        $('#couponForm').hide();
+
+       
+        $('#addCouponLink').click(function () {
+            $('#couponForm').toggle();
+        });
+        $('#couponForm').submit(function () {
+          
+        });
+    });
+</script>
+
+<script>
+ function download() {
+  const printableContent = document.getElementById('printableContent').innerHTML;
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write('<html><head><title>Print</title>');
+  printWindow.document.write('<link rel="stylesheet" type="text/css" href="path/to/print-styles.css">');
+  printWindow.document.write('</head><body>');
+  printWindow.document.write(printableContent);
+  printWindow.document.write('</body></html>');
+  printWindow.document.close();
+  printWindow.print();
+  removePrintStyles();
+}
+
+</script>
+
+<script>
+  function sentToserver(){
+          const selectedValue = document.getElementById('filterDropdown').value
+          const totalPriceElement = document.getElementById('totalPrice');
+          console.log(totalPriceElement)
+          $.ajax({
+            url:`/admin/salesfilter?value=${selectedValue}`,
+            method:'GET',
+            success: function(response){
+              
+              const orderTableBody = document.getElementById('orderTableBody');
+              orderTableBody.innerHTML = '';
+
+              if(response.filteredOrders && response.filteredOrders.length > 0) {
+        response.filteredOrders.forEach((order, index) => {
+
+          const orderDate = order.orderDate instanceof Date ? order.orderDate : new Date(order.orderDate);
+          const row = `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${order._id}</td>
+              <td>${orderDate.toLocaleDateString()}</td>
+              <td>${order.orderStatus}</td>
+              <td>${order.paymentMethod}</td>
+              <td>₹${order.Total}</td>
+            </tr>
+          `;
+          orderTableBody.innerHTML += row;
+          
+        });
+      }
+      
+      totalPriceElement.innerText = `Total: ₹${response.totalPrice}`;
+    
+            }
+          })
+  }
+</script>
+<script src="http://localhost:3000/assets/js/pagination.js"></script>
+       
+    
+
+
+    <%- include('./layout/footer.ejs')-%>

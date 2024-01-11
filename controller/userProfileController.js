@@ -120,7 +120,7 @@ console.log('userAddress',userAddress);
    },
 
    signout: async (req,res)=>{
-      req.session.destroy()
+      req.session.user = false
       res.redirect('/')
    },
    cancelOrder: async (req,res)=>{

@@ -1,0 +1,162 @@
+  <!-- partial:partials/_sidebar.html -->
+  <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+      <!--<a class="sidebar-brand brand-logo" href="https://localhost:3000/index.html"><img src="" alt="logo" /></a>
+      <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="" alt="logo" /></a> -->
+        <div class="h3 sidebar-brand brand-logo" style="color: rgba(215, 215, 215, 0.855);">Lexxive</div>
+    </div>
+    <ul class="nav">
+      <li class="nav-item profile">
+        <div class="profile-desc">
+          <div class="profile-pic">
+            <div class="count-indicator">
+          
+              <img class="img-xs rounded-circle" src="/images/IMG_20220322_182702_732.jpg" alt="">
+
+              <span class="count bg-success"></span>
+            </div>
+            <div class="profile-name">
+              <h5 class="mb-0 font-weight-normal">aswanth</h5>
+              <span></span>
+            </div>
+          </div>
+          <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+          <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
+            <a href="#" class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-dark rounded-circle">
+                  <i class="mdi mdi-settings text-primary"></i>
+                </div>
+              </div>
+              <div class="preview-item-content">
+                <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+              </div>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-dark rounded-circle">
+                  <i class="mdi mdi-onepassword  text-info"></i>
+                </div>
+              </div>
+              <div class="preview-item-content">
+                <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+              </div>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item preview-item">
+              <div class="preview-thumbnail">
+                <div class="preview-icon bg-dark rounded-circle">
+                  <i class="mdi mdi-calendar-today text-success"></i>
+                </div>
+              </div>
+              <div class="preview-item-content">
+                <p class="preview-subject ellipsis mb-1 text-small">To-do list</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item nav-category">
+        <span class="nav-link">Navigation</span>
+      </li>
+      <li class="nav-item menu-items <%= currentPage ==='Dashboard'?'active':'' %>">
+        <a class="nav-link SideBar " href="/admin/adminPanel">
+          <span class="menu-icon">
+            <i class="mdi mdi-speedometer"></i>
+          </span>
+          <span class="menu-title">Dashboard</span>
+        </a>
+      </li>
+        <li class="nav-item menu-items <%= currentPage === 'Branding' ? 'active' : '' %>">
+        <a class="nav-link  SideBar" href="./branding">
+          <span class="menu-icon">
+            <i class="fa-brands fa-squarespace" style="color: #00f552;"></i>
+          </span>
+       <span class="menu-title">Branding</span>
+        </a>
+      </li>
+      <li class="nav-item menu-items <%= currentPage === 'Product Management' ? 'active' : '' %>">
+        <a class="nav-link  SideBar" href="./productDetails">
+          <span class="menu-icon">
+            <i class="mdi mdi-laptop"></i>
+          </span>
+          <span class="menu-title">Product Management</span>
+        </a>
+      </li>
+      <li class="nav-item menu-items <%= currentPage === 'Category' ? 'active' : '' %>">
+        <a class="nav-link  SideBar" href="/admin/Catagory" >
+          <span class="menu-icon">
+            <i class="mdi mdi-table-large"></i>
+          </span>
+          <span class="menu-title">Category</span>
+        </a>
+      </li>
+      <li class="nav-item menu-items <%= currentPage === 'Order Status' ? 'active' : '' %>">
+        <a class="nav-link  SideBar" href="./adminOrder" >
+          <span class="menu-icon">
+            <i class="mdi mdi-playlist-play"></i>
+          </span>
+          <span class="menu-title">Order Status</span>
+        </a>
+      </li>
+      <li class="nav-item menu-items <%= currentPage === 'User' ? 'active' : '' %>">
+        <a class="nav-link  SideBar" href="./userDetails" >
+          <span class="menu-icon">
+            <i class="mdi mdi-security"></i>
+          </span>
+          <span class="menu-title">User</span>
+        </a>
+      </li>
+
+      <li class="nav-item menu-items <%= currentPage === 'Banner' ? 'active' : '' %>">
+        <a class="nav-link  SideBar" href="./banner">
+          <span class="menu-icon">
+            <i class="fa-brands fa-trello" style="color: #4d91ea;"></i>
+          </span>
+        <span class="menu-title">Banner</span>
+        </a>
+      </li>
+ 
+      <li class="nav-item menu-items <%= currentPage === 'Coupon' ? 'active' : '' %>">
+        <a class="nav-link  SideBar" href="/admin/coupon">
+          <span class="menu-icon">
+  
+            <i class="fa-solid fa-ticket"></i>
+          </span>
+        <span class="menu-title">coupon</span>
+        </a>
+      </li>
+
+      <li class="nav-item menu-items <%= currentPage === 'Sales Report' ? 'active' : '' %>">
+        <a class="nav-link  SideBar" href="/admin/sales">
+          <span class="menu-icon">
+  
+            <i class="fa-brands fa-nfc-symbol"></i>
+          </span>
+        <span class="menu-title">sale's report</span>
+        </a>
+      </li>
+      <li class="nav-item menu-items">
+        <a class="nav-link  SideBar" href="/admin/adminPanel/logout">
+          <span class="menu-icon">
+  
+            <i class="mdi mdi-logout text-danger"></i>
+                        
+          </span>
+        <span class="menu-title">Log out</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- partial -->
+
+  <script>
+    document.querySelectorAll('.SideBar').forEach(link => {
+      link.classList.remove('active');
+    });
+  
+    const currentPath = window.location.pathname;
+    document.querySelector(`.SideBar[href="${currentPath}"]`).classList.add('active');
+  </script>
+  

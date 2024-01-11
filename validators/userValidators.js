@@ -2,8 +2,11 @@
 // validation function
 
 function isValidFname(Fname){
-    if(Fname.length===0){
+  const nameRegex = /^[a-zA-Z\s]+$/;
+    if(Fname.trim().length===0){
       return 'please enter your first name.'
+    }else if(!nameRegex.test(Fname)){
+      return 'name should only contain letter'
     }
     return null
   }
@@ -17,15 +20,17 @@ function isValidFname(Fname){
   }
   
   function isValidPhoneNumber(PhoneNumber){
-    if(!/^\d{10}$/.test(PhoneNumber)){
+    if(!/^\d{10}$/.test(PhoneNumber) || PhoneNumber ==='0000000000'){
       return 'please enter a valid 10-digit phone number'
     }
     return null
   }
   
   function isValidPassword(Password){
-   if(Password.length<6){
+   if(Password.trim().length<6){
     return 'password must be atleast 6 character long'
+   }else if(Password.includes(' ')){
+    return 'password doesnot contain any space'
    }
    return null
   }

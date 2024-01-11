@@ -1,21 +1,22 @@
 const { isValidOtp } = require('../validators/userValidators');
-const userController = require('../controller/userController');
 const otpGenerator = require('./otpGenerator')
 const crypto = require('crypto');
 const userModel = require('../models/userModel')
 
-const otp_Expire_Duration = 2 * 60 * 1000
-const otpTimestamb = userController.otpGeneratedTime();
+const otp_Expire_Duration = 3 * 60 * 1000
 async function validateOtp(req, res) {
   const { otp } = req.body;
+  const user = await userModel.findById(req.session.user._id)
+  const otpTimeStamb = user.otpTimeStamb
+  console.log('otp time statmp',otpTimeStamb);
   const currentTimestamb = Date.now();
          const userId = req.session.user._id
-  if (currentTimestamb - otpTimestamb > otp_Expire_Duration) {
+  if (currentTimestamb - otpTimeStamb > otp_Expire_Duration) {
     res.render('otp', { title: 'otp', otpError: 'OTP has expired. Please request a new OTP.' });
     return;
   }
-       const user = await userModel.findById(req.session.user._id)
-       console.log('user',user);
+       
+    
 
   const generatedOtp =user.otp
   try {
@@ -23,7 +24,7 @@ async function validateOtp(req, res) {
     if (!isValid) {
       res.render('otp', { title: 'otp', otpError: 'Invalid OTP' });
     } else {
-      const verified = await userModel.findByIdAndUpdate(userId, {Authentication:'verified'})
+      const verified = await userModel.findByIdAndUpdate(userId, {Authentication:'verified',otpTimeStamb:null})
       res.redirect('/');
     }
   } catch (error) {
@@ -40,10 +41,11 @@ const resendOtp = async (req,res)=>{
   console.log('user email'+email);
 
   const resendOtpGenerated = crypto.randomInt(100000,999999)
+  const resendOtpTimestamb = Date.now()
    console.log('resend otp',resendOtpGenerated);
-  const  userUpdated = await userModel.findByIdAndUpdate(userId,{otp:resendOtpGenerated})
+  const  userUpdated = await userModel.findByIdAndUpdate(userId,{otp:resendOtpGenerated,otpTimeStamb:resendOtpTimestamb})
    userUpdated.save()
-  resendOtpTimestamb = Date.now()
+  
  
   try{
     await otpGenerator.sendOtpEmail(email,resendOtpGenerated)

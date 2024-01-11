@@ -1,0 +1,490 @@
+<%- include('./layout/header.ejs')-%>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-Cnqt0n8e6F5v2mKRA1VT3O42XjzqstTxwabylgh+IbpgrvuJh0tN17ABX4nvmTvjG1yWmlG6h7Qq5ROJdgy0mA==" crossorigin="anonymous" />
+
+    <div class="container-scroller">
+      <!-- partial:partials/_sidebar.html -->
+    <%- include('./layout/sideBar.ejs') -%>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo-mini" href=""><img src="images/logo.png" alt="logo" /></a>
+          </div>
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav w-100">
+              <li class="nav-item w-100">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                  <input type="text" class="form-control" placeholder="Search products">
+                </form>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+              <li class="nav-item dropdown d-none d-lg-block">
+           
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  <h6 class="p-3 mb-0">Projects</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-web text-info"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">UI Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-layers text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Testing</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all projects</p>
+                </div>
+              </li>
+              <li class="nav-item nav-settings d-none d-lg-block">
+                <a class="nav-link" href="#">
+                  <i class="mdi mdi-view-grid"></i>
+                </a>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                  <i class="mdi mdi-email"></i>
+                  <span class="count bg-success"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                  <h6 class="p-3 mb-0">Messages</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <img src="assets/images/faces/face4.jpg" alt="image" class="rounded-circle profile-pic">
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
+                      <p class="text-muted mb-0"> 1 Minutes ago </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <img src="assets/images/faces/face2.jpg" alt="image" class="rounded-circle profile-pic">
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
+                      <p class="text-muted mb-0"> 15 Minutes ago </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <img src="images/IMG_20220322_182702_732.jpg" alt="image" class="rounded-circle profile-pic">
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
+                      <p class="text-muted mb-0"> 18 Minutes ago </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">4 new messages</p>
+                </div>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <i class="mdi mdi-bell"></i>
+                  <span class="count bg-danger"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-calendar text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Event today</p>
+                      <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event today </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                      <p class="text-muted ellipsis mb-0"> Update dashboard </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-link-variant text-warning"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Launch Admin</p>
+                      <p class="text-muted ellipsis mb-0"> New admin wow! </p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all notifications</p>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                  <div class="navbar-profile">
+                    <img class="img-xs rounded-circle" src="https://localhost:3000/images/IMG_20220322_182702_732.jpg" alt="">
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">aswanth</p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                        
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <a href="/AdminPanel/logout"><p style="text-decoration: none; color: aliceblue; margin-top: -38%; margin-left: 45%;" class="preview-subject mb-1" >Log out</p></a>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                </div>
+              </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+              <span class="mdi mdi-format-line-spacing"></span>
+            </button>
+          </div>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+           
+            <div class="row">
+             
+              <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex flex-row justify-content-between">
+                      <h4 class="card-title mb-1">Product add</h4>
+                      <p class="text-muted mb-1"></p>
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="preview-list">
+                          <!---->
+                          
+                              
+                              <p class="card-description">  </p>
+                              <p class="card-description">  </p>
+                              <form class="forms-sample" action="/admin/updateProduct" method="post" enctype="multipart/form-data" >
+                                <div class="form-group">
+                                  <label for="exampleInputName1"> Product Name</label>
+                                  <input type="text" class="form-control" id="exampleInputName1" name="ProductName" value="<%=product.ProductName %>"   placeholder=" Product Name">
+                                  <input type="hidden" name="productId" value="<%= productId %>">
+                                  <% if(errors && errors.ProductName){%>
+                                    <p style="color: tomato;"><%=errors.ProductName %></p>
+                                    <%} %>
+                                </div>
+                                <div class="form-group">
+                                  <label for="exampleInputEmail3">Product Price</label>
+                                  <input type="number" class="form-control" id="exampleInputEmail3"  value="<%= product.ProductPrice %>" name="ProductPrice" placeholder="₹:0.00" min="1">
+                                  <% if(errors && errors.ProductPrice){%>
+                                    <p style="color: tomato;"><%=errors.ProductPrice %></p>
+                                    <%} %>
+                                </div>
+                                <div class="form-group">
+                                  <label for="exampleInputPassword4">Product Expense</label>
+                                  <input type="number" class="form-control" id="exampleInputPassword4"  value="<%= product.ProductExpense %>" name="ProductExpense" placeholder="₹:0.00" >
+                                  <% if(errors && errors.ProductExpense){%>
+                                    <p style="color: tomato;"><%=errors.ProductExpense %></p>
+                                    <%} %>
+                                </div>
+                                <div class="form-group">
+                                  <label for="exampleSelectGender">Catagory</label>
+                                  <select class="form-control" id="exampleSelectGender" name="Catagory">
+                                    <% Catagories.forEach(category => { %>
+                                      <option value="<%= category.name %>"><%= category.name %></option>
+                                  <% }); %>
+                                
+                                  </select>
+                                  <% if(errors && errors.category){%>
+                                    <p style="color: tomato;"><%=errors.category %></p>
+                                    <%} %>
+                                  <br>
+
+                                  <label for="selectsize">Size</label>
+                                  <select  class="form-control" name="ProductSize">
+                                    <option value="XS">XS</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
+                                  </select>
+                                    <br>
+                                  <label for="brands">Brands</label>
+                                  <select class="form-control" name="SelectedBrand" >
+                                    <% brands.forEach(brands => { %>
+                                      <option value="<%= brands.Brand %>"><%=  brands.Brand  %></option>
+                                  <% }); %>  
+                                  </select>
+                                
+
+                                </div>
+                                <div class="form-group">
+                                  <label for="exampleInputPassword4">Product Count</label>
+                                  <input style="width: 10%;" type="number" class="form-control" id="exampleInputPassword4"  value="<%= product.ProductCount %>" name="ProductCount"  min="1">
+                                  <% if(errors && errors.ProductCount){%>
+                                    <p style="color: tomato;"><%=errors.ProductCount %></p>
+                                    <%} %>
+                                </div>
+                              
+                                <div class="row">
+                                <% if(product !== null && product !== undefined){%>
+                                <% product.images.forEach(image => { %>
+                                  
+                                    <div class="col-md-2 mb-2">
+                                        <div>
+                                            <img src="http://localhost:3000/<%= image %>" alt="Product Image" style="height: 200px;">
+                                            <button type="button" class="btn btn-danger" onclick="deleteExistingImage('<%= productId %>', '<%= image %>')">Delete</button>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                                
+                                <%}%>
+                            </div>
+
+                                <!-- Display new images -->
+<div class="form-group">
+  <label>Additional Images</label>
+  <div class="input-group col-xs-12" style="width: 50%;">
+      <input type="file" class="form-control" id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple onchange="viewImage(event)" accept="image/*">
+      <span class="input-group-append"></span>
+  </div>
+</div>
+                                <!-- Display images in a separate container below the input field -->
+                                <div class="form-group">
+                                  <label>Image Preview</label>
+                                  <div class="row" id="imgView" class="existing-images list-unstyled d-flex flex-wrap"></div>
+                                </div>
+                                
+                              
+                                <div class="form-group">
+                                  <label for="exampleTextarea1">Product Discription</label>
+                                  <textarea class="form-control" id="exampleTextarea1" name="ProductDiscription"   rows="4">    <%= product.ProductDiscription %>
+                                  </textarea>
+                                  <% if(errors && errors.ProductDiscription){%>
+                                    <p style="color: tomato;"><%=errors.ProductDiscription %></p>
+                                    <%} %>
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                <button type="button" class="btn btn-dark  " id="cancelBtn">Cancel</button>
+                              </form>
+                               
+                              
+                              
+                        
+                          
+                          
+                            
+            
+                         <!---->
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+           
+
+
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+         
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <script>
+  function deleteExistingImage(productId, fileName) {
+    console.log('productID', productId);
+    console.log('fileName', fileName);
+    var $j = jQuery.noConflict();
+    $j.ajax({
+        url: `/admin/deleteUpdatingImage?productId=${productId}&fileName=${fileName}`,
+        method: 'DELETE',
+        success: function (response) {
+            console.log(response);
+            $j(`img[src="http://localhost:3000/${fileName}"]`).parent().parent().remove();
+            
+            
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+}
+
+  </script>
+
+
+    <script>
+        function viewImage(event) {
+          const imageList = document.getElementById('imgView');
+          const files = event.target.files;
+          const fileNames = [];
+      
+          for (let i = 0; i < files.length; i++) {
+            fileNames.push(files[i].name);
+      
+            // Create a new container for each image
+            const colDiv = document.createElement('div');
+            colDiv.className = 'col-md-2 mb-2';
+      
+            const listItem = document.createElement('div');
+      
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(files[i]);
+            img.alt = 'Product Image';
+            img.style.height = '200px';
+      
+            // Attach a click event listener to each image
+            img.addEventListener('click', function() {
+              deleteImage(fileNames.indexOf(files[i].name));
+            });
+      
+            listItem.appendChild(img);
+            colDiv.appendChild(listItem);
+      
+            imageList.appendChild(colDiv);
+          }
+          imageList.setAttribute('data-file-names', JSON.stringify(fileNames));
+        }
+      
+        function deleteImage(index) {
+        const imageList = document.getElementById('imgView');
+        const images = imageList.getElementsByClassName('col-md-2');
+        const inputElement = document.getElementById('imageInput');
+      
+        if (index >= 0 && index < images.length) {
+          // Retrieve file names from the data attribute
+          const fileNames = JSON.parse(imageList.getAttribute('data-file-names'));
+      
+          // Remove the deleted image from the fileNames array
+          fileNames.splice(index, 1);
+      
+          // Update the data-file-names attribute
+          imageList.setAttribute('data-file-names', JSON.stringify(fileNames));
+      
+          // Remove the corresponding image container
+          images[index].parentNode.removeChild(images[index]);
+      
+          // Update the input files to remove the deselected image
+          const newFiles = Array.from(inputElement.files);
+          newFiles.splice(index, 1);
+      
+          // Create a new FileList and assign it to the input files
+          const newFileList = new DataTransfer();
+          newFiles.forEach(file => newFileList.items.add(file));
+      
+          inputElement.files = newFileList.files;
+          imageList.innerHTML = '';
+    fileNames.forEach((fileName, i) => {
+      const colDiv = document.createElement('div');
+      colDiv.className = 'col-md-2 mb-2';
+
+      const listItem = document.createElement('div');
+
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(newFiles[i]);
+      img.alt = 'Product Image';
+      img.style.height = '200px';
+
+      // Attach a click event listener to each image
+      img.addEventListener('click', function() {
+        deleteImage(i);
+      });
+
+      listItem.appendChild(img);
+      colDiv.appendChild(listItem);
+
+      imageList.appendChild(colDiv);
+    });
+  }
+}
+      
+      </script>
+      
+      
+      
+      <!-- ... Remaining HTML code ... -->
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+          
+              
+           
+          
+          <%- include('./layout/footer')-%>

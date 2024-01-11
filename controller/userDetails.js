@@ -1,5 +1,5 @@
 const User = require('../models/userModel')
-
+const {isValidFname,isValidEmail,isValidPhoneNumber} = require('../validators/userValidators')
 
 const userData = {
     getAllUser: async (req,res)=>{
@@ -50,22 +50,33 @@ const userData = {
     },
     renderEditUserForm: async (req, res) => {
         const userId = req.params.id;
+        const errors = null
         try {
             const user = await User.findById(userId);
-            res.render('editUser', { user }); // Assuming you have an 'editUser' EJS template
+            res.render('editUser', { user,errors }); // Assuming you have an 'editUser' EJS template
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');
         }
-    },
+    }, 
 
     // Update user data
     editUser: async (req, res) => {
         const userId = req.params.id;
         const { Fname, Email, PhoneNumber } = req.body;
-
+        const user = await User.findById(userId)
         try {
-            const user = await User.findByIdAndUpdate(userId, { Fname, Email, PhoneNumber }, { new: true });
+            const errors = {
+                Fname:isValidFname(Fname),
+                Email:isValidEmail(Email),
+                PhoneNumber:isValidPhoneNumber(PhoneNumber)  
+                 }
+               const hasError = Object.values(errors).some(error => error !== null)
+               console.log('errors',errors);
+               if(hasError){
+                return res.render('editUser',{user,errors})
+               }
+             await User.findByIdAndUpdate(userId, { Fname, Email, PhoneNumber }, { new: true });
             res.redirect('/admin/userDetails');
         } catch (error) {
             console.error(error);
