@@ -14,7 +14,6 @@ const loginPage = async (req,res)=>{
 
 
 const validation = async (req,res)=>{
-  console.log('request reaching');
  const {Email,Password}= req.body
   const admin = await Admin.findOne({Email:Email})
 
