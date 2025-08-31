@@ -1,0 +1,62 @@
+
+<!-- Edit Brand Modal -->
+<div id="editBrandModal-<%= brand._id %>" 
+     class="edit-brand-modal" 
+     style="display:none; height:300px; width:700px; position: fixed; 
+            top:50%; left:55%; transform: translate(-50%, -50%); 
+            background:#0e1111; padding:20px; border-radius:10px; 
+            z-index:1000;">
+    <h4>Edit Brand</h4>
+    <form>
+        <div class="mb-3">
+            <label for="brandName-<%= brand._id %>" class="form-label">Brand Name</label>
+            <input type="text" class="form-control" id="brandName-<%= brand._id %>" name="name" value="<%= brand.name %>" required>
+              <div id="brandNameError-<%= brand._id %>" class="text-danger mt-1"></div>
+        </div>
+        <div class="mb-3">
+            <label for="brandDesc-<%= brand._id %>" class="form-label">Description</label>
+            <textarea class="form-control" id="brandDesc-<%= brand._id %>" name="description" rows="3"><%= brand.description %></textarea>
+               <div id="brandDescriptionError-<%= brand._id %>" class="text-danger mt-1"></div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-success">Save</button>
+            <button type="button" class="btn btn-danger" onclick="toggleEditBrandModal('<%= brand._id %>')">Cancel</button>
+        </div>
+    </form>
+</div>
+
+
+
+<script src="/javascripts/ajax.js"></script>
+<script>
+  document.querySelector("#editBrandModal-<%= brand._id %> form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("brandName-<%= brand._id %>").value.trim();
+    const description = document.getElementById("brandDesc-<%= brand._id %>").value.trim();
+
+    const result = await ajaxRequest("/admin/brands/<%=brand._id %>", "PUT", { name, description });
+
+    if (result.success) {
+      window.location.href = "/admin/brands";
+    } else {
+      if (result.errors && typeof result.errors === "object") {
+        if (result.errors.name) {
+          document.getElementById("brandNameError-<%= brand._id %>").innerText = result.errors.name;
+        }
+        if (result.errors.description) {
+          document.getElementById("brandDescriptionError-<%= brand._id %>").innerText = result.errors.description;
+        }
+      } else {
+        Toastify({
+          text: result.message || "Something went wrong",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "red",
+          stopOnFocus: true
+        }).showToast();
+      }
+    }
+  });
+</script>

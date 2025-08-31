@@ -1,0 +1,150 @@
+<%- include('../layout/header.ejs')-%>
+<% currentPage = 'Branding' %>
+<!-- <link rel="stylesheet" href="/assets/css/adminSidePagination.css"> -->
+
+
+<div class="container-scroller">
+  <!-- partial:partials/_sidebar.html -->
+  <%- include('../layout/sideBar.ejs') -%>
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_navbar.html -->
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+
+        <div class="row">
+          <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                  <h4 class="card-title">Category</h4>
+
+                  <div class="flex">
+                    <%-include("../../partials/search.ejs") -%>
+                  </div>
+                  <button id="addButton" class="btn btn-primary btn-sm">Add</button>
+                </div>
+
+                <div class="table-container">
+                  <% if (categories && categories.length > 0) { %>
+                  <table class="table  align-middle">
+                    <thead class="table-dark text-center">
+                      <tr>
+                        <th>No</th>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Date Created</th>
+                        <th>Last Updated</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="list">
+                      <% categories.forEach((category, index) => { %>
+                      <tr>
+                        <td><%= (pagination.page - 1) * pagination.limit + index + 1 %></td>
+                        <td><%= category.name %></td>
+                        <td class="text-truncate" style="max-width: 200px;" title="<%= category.description %>">
+                          <%= category.description || "—" %>
+                        </td>
+                        <td>
+                          <% if (category.is_active) { %>
+                          <span class="text-success">Active</span>
+                          <% } else { %>
+                          <span class="text-danger">Blocked</span>
+                          <% } %>
+                        </td>
+                        <td><%= category.createdAt.toLocaleDateString() %></td>
+                        <td><%= category.updatedAt.toLocaleDateString() %></td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-warning" onclick="toggleEditBrandModal('<%= category._id %>')">Edit</button>
+                          <button class="btn btn-sm <%= category.is_active ? 'btn-danger' : 'btn-success' %>" onclick="toggleStatusModal('<%= category._id %>')">
+                            <%= category.is_active ? 'Block' : 'Unblock' %>
+                          </button>
+                        </td>
+
+                      </tr>
+                        <%- include("./modals/edit", { category: category }) %>
+                      <%- include('./modals/status', { category: category }) %>
+
+                      <% }) %>
+                    </tbody>
+                  </table>
+                  <% } else { %>
+                  <div class="alert alert-info text-center">No categories found. Add a new categories to get started.</div>
+                  <% } %>
+                </div> <!-- table-container -->
+              </div> <!-- card-body -->
+         
+            <%-include('../../partials/pagination.ejs') -%>
+
+
+            </div> <!-- card -->
+
+     
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- main-panel ends -->
+</div>
+<!-- page-body-wrapper ends -->
+</div>
+ <%- include('./modals/add') %>
+
+<script>
+  //block modal
+  function toggleStatusModal(categoryId) {
+    const modal = document.getElementById(`statusCategoryModal-${categoryId}`);
+    const overlay = document.getElementById(`statuCategoryOverlay-${categoryId}`);
+    console.log("button clicked for toggle block button")
+
+    if (modal.style.display === "none") {
+      modal.style.display = "block";
+      overlay.style.display = "block";
+    } else {
+      modal.style.display = "none";
+      overlay.style.display = "none";
+    }
+  }
+</script>
+
+<script>
+  // edit modal
+  function toggleEditBrandModal(categoryId) {
+    const modal = document.getElementById(`editCategoryModal-${categoryId}`);
+    const overlay = document.getElementById(`editCategoryOverlay-${categoryId  }`);
+    console.log("button clicked for toggle edit button")
+    if (modal.style.display === "none") {
+      modal.style.display = "block";
+      overlay.style.display = "block";
+    } else {
+      modal.style.display = "none";
+      overlay.style.display = "none";
+    }
+  }
+</script>
+
+<script>
+  // add modal
+
+  // open modal
+  document.getElementById('addButton').addEventListener('click', () => {
+    document.getElementById("addCategory").style.display = "block"
+    console.log(
+      'button was clicked'
+    )
+    // close modal 
+    document.getElementById('cancelCategoryCreation').addEventListener('click', () => {
+      document.getElementById("addCategory").style.display = "none"
+    })
+  })
+</script>
+
+
+
+
+<script src="/assets/js/pagination.js"></script>
+<%- include('../layout/footer.ejs')-%>

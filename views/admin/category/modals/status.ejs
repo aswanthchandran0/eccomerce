@@ -1,0 +1,53 @@
+<!-- Change Status Modal for Category -->
+<div id="statusCategoryModal-<%= category._id %>" 
+     class="status-category-modal" 
+     style="display:none; height:220px; width:500px; position: fixed; 
+            top:50%; left:50%; transform: translate(-50%, -50%); 
+            background:#0e1111; padding:20px; border-radius:10px; 
+            z-index:1000; color:#fff;">
+
+    <h4 class="mb-3">Change Category Status</h4>
+    <p>
+      Are you sure you want to 
+      <strong style="color:<%= category.is_active ? 'red' : 'lime' %>;">
+        <%= category.is_active ? 'Deactivate' : 'Activate' %>
+      </strong> 
+      the category <strong><%= category.name %></strong>?
+    </p>
+
+    <form>
+        <input type="hidden" name="status" value="<%= !category.is_active %>">
+
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn <%= category.is_active ? 'btn-danger' : 'btn-success' %>">
+                Yes, <%= category.is_active ? 'Deactivate' : 'Activate' %>
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="toggleStatusModal('statusCategoryModal-<%= category._id %>')">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    document.querySelector('#statusCategoryModal-<%= category._id %> form')
+      .addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const result = await ajaxRequest("/admin/categories/<%= category._id %>", "PATCH");
+
+        if(result.success){
+            window.location.href = "/admin/categories";
+        } else {
+            Toastify({
+              text: result.message || "Something went wrong",
+              duration: 4000,
+              gravity: "top",
+              position: "right",
+              backgroundColor: "red",
+              stopOnFocus: true
+            }).showToast();
+        }
+    });
+</script>

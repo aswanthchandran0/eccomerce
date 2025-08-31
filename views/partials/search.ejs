@@ -1,0 +1,74 @@
+<style>
+        .search-container {
+            position: relative;
+            width: 300px;
+        }
+        
+        .search-input {
+            padding-left: 40px;
+            padding-right: 40px;
+            border-radius: 25px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #718096;
+        }
+        
+        .search-clear {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #718096;
+            cursor: pointer;
+            display: none;
+        }
+        
+        .search-clear:hover {
+            color: #e53e3e;
+        }
+</style>
+
+<div class="search-container">
+    <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search brands..."
+        class="form-control search-input"
+    />
+    <i class="fas fa-search search-icon"></i>
+    <i class="fas fa-times search-clear" id="searchClear"></i>
+</div>
+
+
+<script type="module">
+  import { ajaxRequest } from "../utils/ajax.js";
+  import { debounce } from "../utils/debounce.js";
+   console.log("script working")
+  const searchInput = document.getElementById("searchInput");
+ console.log('search input', searchInput)
+
+ const handleSearch = debounce(async (e) => {
+    const query = e.target.value.trim();
+    console.log('query',query)
+    const url = `/admin/users?search=${encodeURIComponent(query)}&page=1&limit=10`;
+
+    const result = await ajaxRequest(url);
+    console.log("Search result:", result);
+
+    // TODO: update your UI table/list with result
+  }, 500);
+
+  searchInput.addEventListener("input", handleSearch);
+</script>

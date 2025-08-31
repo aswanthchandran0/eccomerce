@@ -23,9 +23,40 @@
 
 <!-- Bootstrap JS (loaded over HTTPS) -->
 <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js" integrity="sha512-cMD9oqLt9v8KZ2w0x4LzwMz/e2r2h+4r3n7lyYfMQLTQpRU1CDq1Wa/3HHf9ztsuMD41r/NAL6KPMYamfKJd6A==" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+  const successMessage = <%- JSON.stringify((typeof successMessage !=='undefined' && successMessage[0]) || null) %>;
+  const errorMessage = <%- JSON.stringify((typeof errorMessage !=='undefined' && errorMessage[0]) || null) %>;
+  if (successMessage) {
+    console.log("entered inside the if  sucess ")
+    Toastify({
+      text: successMessage,
+      duration: 3000,
+      gravity: "top",
+      position: "right",
+      backgroundColor: "green",
+      close: true
+    }).showToast();
+  }
+
+  if (errorMessage) {
+    console.log("entered inside the if  failed ")
+
+    Toastify({
+      text: errorMessage,
+      duration: 3000,
+      gravity: "top",
+      position: "right",
+      backgroundColor: "red",
+      close: true
+    }).showToast();
+  }
+
+</script>
 
   </body>
 

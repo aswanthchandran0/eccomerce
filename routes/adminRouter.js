@@ -6,7 +6,7 @@ adminRoute.use(bodyParser.urlencoded({ extended: true }))
 adminRoute.set('view engine', 'ejs')
 adminRoute.set('views', './views/admin' )
 const adminController = require('../controller/AdminPanelController');
-const catagoryController = require('../controller/catagoryController');
+const categoryController = require('../controller/categoryController');
 const aLoginController = require('../controller/adminLoginController');
 const adminOrderController = require('../controller/adminOrderController');
 const bannerController = require('../controller/bannerController');
@@ -38,13 +38,7 @@ adminRoute.get('/', adminController.AdminPanel.adminPanel)
 adminRoute.get('/adminPanel', adminController.AdminPanel.adminPanel);
 adminRoute.get('/adminPanel/logout', adminController.AdminPanel.logout);
    
-// Catagory Routes
-adminRoute.get('/catagory', catagoryController.catagoryData.getAllCatagory);
-adminRoute.post('/catagory/delete/:id', catagoryController.catagoryData.deleteCatagory);
-adminRoute.get('/addCatagory', (req, res) => {
-    res.render('addCatagory', { title: 'Express', errors: null });
-}); 
-adminRoute.post('/addCategory' ,catagoryController.catagoryData.addCategory)
+
 // Admin Login Routes
 // Add the admin login route
 adminRoute.get('/adminLogin',middlewares.middlewares.AuthenticationMiddleware, aLoginController.loginPage)
@@ -56,16 +50,24 @@ adminRoute.get('/adminOrder', adminOrderController.orderStatus.orderStatusPage);
 adminRoute.get('/adminOrder/selectedValue/:selectedValue/orderId/:orderId', adminOrderController.orderStatus.updateOrderStatus);
 adminRoute.get('/adminProductView',adminOrderController.orderStatus.adminProductView)
 // Branding Routes
-adminRoute.get('/branding', brandingController.branding.brandingPage);
-adminRoute.post('/addBrand', brandingController.branding.addBrand)
-adminRoute.post('/deleteBrand',brandingController.branding.deleteBrand)
+adminRoute.post('/brands',brandingController.branding.addBrand)
+adminRoute.put('/brands/:id',brandingController.branding.editBrand)
+adminRoute.patch('/brands/:id',brandingController.branding.toggleBrandStatus)
+adminRoute.get('/brands', brandingController.branding.brandingPage);
+adminRoute.get('/brands/:id')
+// Catagory Routes
+adminRoute.post('/categories',categoryController.category.addCategory)
+adminRoute.put('/categories/:id',categoryController.category.editCategory)
+adminRoute.patch('/categories/:id',categoryController.category.toggleCategoryStatus)
+adminRoute.get('/categories', categoryController.category.categoryPage);
+adminRoute.get('/categories/:id')
 
 // Product Details Routes
 adminRoute.get('/productDetails', productDetailsController.product.getAllProduct);
 adminRoute.post('/productDetails/delete/:id', productDetailsController.product.deleteProduct);
 
 // User Details Routes
-adminRoute.get('/userDetails', userDetailsController.getAllUser);
+// adminRoute.get('/userDetails', userDetailsController.getAllUser);
 adminRoute.post('/userDetails/user/block/:id', userDetailsController.blockUser);
 adminRoute.post('/userDetails/user/unblock/:id', userDetailsController.unblockUser);
 adminRoute.post('/userDetails/delete/:id', userDetailsController.deleteUser);
@@ -120,11 +122,11 @@ adminRoute.post('/updateProduct', upload.array('images', 4), productController.u
 adminRoute.get('/coupon',adminCouponController.couponController.couponPage);
 adminRoute.post('/addCoupon',adminCouponController.couponController.couponAdd);
 
-// banner
+// banner 
 
 const bannerStorage = multer.diskStorage({
     destination: function(req,res,cb){
-        cb(null,'bannerImages/');
+        cb(null,'uploads/banners');
     },
     filename:function(req,file,cb){
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -134,9 +136,9 @@ const bannerStorage = multer.diskStorage({
 
 const bannerUploads = multer({storage:bannerStorage})
 
-adminRoute.get('/banner', bannerController.banner.bannerPage)
-adminRoute.post('/addBanner',bannerUploads.single('image'), bannerController.banner.addBanner)
-adminRoute.get('/deleteBanner',bannerController.banner.deleteBanner)
+adminRoute.get('/banners', bannerController.banner.bannerPage)
+adminRoute.post('/banners',bannerUploads.single('image'), bannerController.banner.addBanner)
+// adminRoute.get('/deleteBanner',bannerController.banner.deleteBanner)
 
 // sales report
 adminRoute.get('/sales',salesReportcontroller.sales.loadPage)

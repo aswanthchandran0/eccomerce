@@ -1,0 +1,68 @@
+<!-- Edit Brand Modal -->
+<div id="addCategory" class="add-category" style="display:none; height:300px; width:700px; position: fixed; 
+            top:50%; left:55%; transform: translate(-50%, -50%); 
+            background:#0e1111; padding:20px; border-radius:10px; 
+            z-index:1000;">
+  <h4>Add Brand</h4>
+  <form>
+    <div class="mb-3">
+      <label for="categoryName" class="form-label">Brand Name</label>
+      <input type="text" class="form-control" id="categoryName" name="name" placeholder="gave category name " required>
+        <div id="categoryNameError" class="text-danger mt-1"></div>
+    </div>
+    <div class="mb-3">
+      <label for="categoryDescription" class="form-label">Description</label>
+      <textarea class="form-control" id="categoryDescription" name="description" placeholder="gave the description" rows="3"></textarea>
+       <div id="categoryDescriptionError" class="text-danger mt-1"></div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <button type="submit" class="btn btn-success">create</button>
+      <button type="button" id="cancelCategoryCreation" class="btn btn-danger">Cancel</button>
+    </div>
+  </form>
+</div>
+
+
+
+<script src="/javascripts/ajax.js"></script>
+
+<script>
+  document.querySelector('#addCategory form').addEventListener("submit", async (e) => {
+    e.preventDefault()
+    const name = document.getElementById("categoryName").value.trim()
+    const description = document.getElementById("categoryDescription").value.trim()
+
+    const result = await ajaxRequest("/admin/categories", "POST", {
+      name,
+      description
+    })
+
+    if(result.success){
+        window.location.href = "/admin/categories"
+    }
+      else {
+    if(result.errors && typeof result.errors === "object"){
+
+       for(const field in result.errors){
+    if(field === "name"){
+      document.getElementById("categoryNameError").innerText = result.errors[field];
+    }
+    if(field === "description"){
+      document.getElementById("categoryDescriptionError").innerText = result.errors[field];
+    }
+  }
+    } else {
+     
+         Toastify({
+          text: result.message || "Something went wrong",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "red",
+          stopOnFocus: true
+        }).showToast()
+        
+    }
+  }
+});
+</script>,

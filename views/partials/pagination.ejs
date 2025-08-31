@@ -1,0 +1,28 @@
+
+<!-- Pagination Partial -->
+<div class="pagination-container">
+    <ul class="pagination">
+        <!-- Prev Button -->
+        <li class="page-item page-prev <%= pagination.page === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="?page=<%= pagination.page - 1 %>&limit=<%= pagination.limit %>">
+                <i class="fas fa-chevron-left me-1"></i> Prev
+            </a>
+        </li>
+
+        <!-- Page Numbers -->
+        <% for(let p = 1; p <= pagination.totalPages; p++){ %>
+            <li class="page-item <%= p === pagination.page ? 'active' : '' %>">
+                <a class="page-link" href="?page=<%= p %>&limit=<%= pagination.limit %>">
+                    <%= p %>
+                </a>
+            </li>
+        <% } %>
+
+        <!-- Next Button -->
+        <li class="page-item page-next <%= pagination.page === pagination.totalPages ? 'disabled' : '' %>">
+            <a class="page-link" href="?page=<%= pagination.page + 1 %>&limit=<%= pagination.limit %>">
+                Next <i class="fas fa-chevron-right ms-1"></i>
+            </a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,105 @@
+<!-- Add Banner Modal -->
+<div id="addBanner" class="modal fade" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark text-light rounded-3 shadow-lg">
+      <div class="modal-header border-0">
+        <h4 class="modal-title">Add Banner</h4>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form id="bannerForm" enctype="multipart/form-data">
+        <div class="modal-body">
+          <!-- Image upload -->
+          <div class="mb-3">
+            <label for="bannerImage" class="form-label">Banner Image</label>
+            <input type="file" class="form-control" id="bannerImage" name="image" accept="image/*" required>
+            <div id="bannerImageError" class="text-danger mt-1"></div>
+          </div>
+
+          <!-- Eyebrow Text -->
+          <div class="mb-3">
+            <label for="eyebrowText" class="form-label">Eyebrow Text</label>
+            <input type="text" class="form-control" id="eyebrowText" name="eyebrowText" placeholder="Enter eyebrow text" >
+            <div id="eyebrowTextError" class="text-danger mt-1"></div>
+          </div>
+
+          <!-- Headline -->
+          <div class="mb-3">
+            <label for="headline" class="form-label">Headline</label>
+            <input type="text" class="form-control" id="headline" name="headline" placeholder="Enter headline" >
+            <div id="headlineError" class="text-danger mt-1"></div>
+          </div>
+
+          <!-- Sub-Headline -->
+          <div class="mb-3">
+            <label for="subHeadline" class="form-label">Sub-Headline</label>
+            <textarea class="form-control" id="subHeadline" name="subHeadline" placeholder="Enter sub-headline" rows="2" ></textarea>
+            <div id="subHeadlineError" class="text-danger mt-1"></div>
+          </div>
+
+          <!-- Call to Action -->
+          <div class="mb-3">
+            <label for="callToAction" class="form-label">Call to Action</label>
+            <input type="text" class="form-control" id="callToAction" name="callToAction" placeholder="Enter CTA (e.g., Shop Now)" >
+            <div id="callToActionError" class="text-danger mt-1"></div>
+          </div>
+
+          <!-- URL -->
+          <div class="mb-3">
+            <label for="url" class="form-label">Redirect URL</label>
+            <input type="url" class="form-control" id="url" name="url" placeholder="https://example.com or /relative-path">
+            <div id="urlError" class="text-danger mt-1"></div>
+          </div>
+        </div>
+
+        <div class="modal-footer border-0 d-flex justify-content-between">
+          <button type="submit" class="btn btn-success px-4">Create</button>
+          <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<script src="/javascripts/ajax.js"></script>
+
+<script>
+  // Handle banner form submission
+document.getElementById("bannerForm").addEventListener("submit", async (e) => {
+  console.log("the event called for banner submition")
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form); // handles file + text
+
+  const result = await ajaxRequest("/admin/banners", "POST", formData, true);
+
+  if (result.success) {
+    window.location.reload(); // refresh the page to show new banner
+  } else {
+    // Clear previous errors
+    ["bannerImage","eyebrowText","headline","subHeadline","callToAction","url"].forEach(id => {
+      document.getElementById(id + "Error").innerText = "";
+    });
+
+    if (result.errors && typeof result.errors === "object") {
+      for (const field in result.errors) {
+        const errorElement = document.getElementById(field + "Error");
+        if (errorElement) {
+          errorElement.innerText = result.errors[field];
+        }
+      }
+    } else {
+      Toastify({
+        text: result.message || "Something went wrong",
+        duration: 4000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "red",
+        stopOnFocus: true
+      }).showToast();
+    }
+  }
+});
+</script>

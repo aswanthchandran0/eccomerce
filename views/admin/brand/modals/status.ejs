@@ -1,0 +1,55 @@
+<!-- Change Status Modal -->
+<div id="statusBrandModal-<%= brand._id %>" 
+     class="status-brand-modal" 
+     style="display:none; height:220px; width:500px; position: fixed; 
+            top:50%; left:50%; transform: translate(-50%, -50%); 
+            background:#0e1111; padding:20px; border-radius:10px; 
+            z-index:1000; color:#fff;">
+
+    <h4 class="mb-3">Change Brand Status</h4>
+    <p>
+      Are you sure you want to 
+      <strong style="color:<%= brand.is_active ? 'red' : 'lime' %>;">
+        <%= brand.is_active ? 'Deactivate' : 'Activate' %>
+      </strong> 
+      the brand <strong><%= brand.name %></strong>?
+    </p>
+
+    <form>
+        <input type="hidden" name="status" value="<%= !brand.is_active %>">
+
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn <%= brand.is_active ? 'btn-danger' : 'btn-success' %>">
+                Yes, <%= brand.is_active ? 'Deactivate' : 'Activate' %>
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="toggleStatusModal('<%= brand._id %>')">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    document.querySelector('#statusBrandModal-<%= brand._id %> form').addEventListener("submit",async(e)=>{
+        e.preventDefault()
+
+        const result = await ajaxRequest("/admin/brands/<%=brand._id %>", "PATCH")
+
+        if(result.success){
+            window.location.href = "/admin/brands";
+        }else{
+              Toastify({
+          text: result.message || "Something went wrong",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "red",
+          stopOnFocus: true
+        }).showToast();
+        }
+    })
+</script>
+
+
+
