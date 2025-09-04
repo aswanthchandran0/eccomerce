@@ -120,10 +120,10 @@
                                                 <% products.forEach((product,index)=>{%>
                                                   
 		                						<tr>
-		                							<td><a href="#"><%= product.ProductName %></a></td>
+		                							<td><a href="#"><%= product.name %></a></td>
 		                							<td>₹<%= individualTotalArray[index] %></td>
 		                						</tr>
-                                                <% product.ProductPrice; %>
+                                                <% product.price; %>
                                                 <%})  %>
 		                						<tr class="summary-subtotal">
 		                							<td>Subtotal:</td>
@@ -367,7 +367,7 @@
         data.products.forEach((product, index) => {
             const newRow = document.createElement('tr');
             const productNameCell = document.createElement('td');
-            productNameCell.innerHTML = `<a href="#">${product.ProductName}</a>`;
+            productNameCell.innerHTML = `<a href="#">${product.name}</a>`;
             newRow.appendChild(productNameCell);
 
             const totalCell = document.createElement('td');
@@ -565,7 +565,7 @@ function verifyPayment(payment,order){
     </script>
     
     <script>
-        if(<%=discountsucess%>){
+        if(<%=discountSuccess%>){
 
            var couponField = document.getElementsByClassName('couponfield')[0]
            couponField.innerHTML = '<span>Coupon added</span>';

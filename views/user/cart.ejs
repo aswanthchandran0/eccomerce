@@ -58,14 +58,14 @@
 													</figure>
 
 													<h3 class="product-title">
-														<a href="#"><%= Product.ProductName %></a>
+														<a href="#"><%= Product.name %></a>
                                                     
                                                     
 													</h3><!-- End .product-title -->
                                                  
 											</td>
                                             
-											<td class="price-col" >₹<%= Product.ProductPrice %></td>
+											<td class="price-col" >₹<%= Product.price %></td>
 											<td class="quantity-col">
                                                 <div class="cart-product-quantity">
                                                     
@@ -75,11 +75,11 @@
 
                 <div class="input-group input-spinner">
                     <div class="input-group-prepend">
-                        <button style="min-width: 26px" class="btn btn-decrement btn-spinner" type="button" onclick="changeQuantity(-1, '<%= Product._id %>','<%= Product.ProductPrice %>')"><i class="icon-minus"></i></button>
+                        <button style="min-width: 26px" class="btn btn-decrement btn-spinner" type="button" onclick="changeQuantity(-1, '<%= Product._id %>','<%= Product.price %>')"><i class="icon-minus"></i></button>
                     </div>
                     <input  type="text" style="text-align: center;" class="form-control" id="<%= Product._id %>" value="<%= Product.quantity %>" min="1" max="10" required>
                     <div class="input-group-append">
-                        <button style="min-width: 26px" class="btn btn-increment btn-spinner" type="button" onclick="changeQuantity(1, '<%= Product._id %>','<%= Product.ProductPrice %>')"><i class="icon-plus"></i></button>
+                        <button style="min-width: 26px" class="btn btn-increment btn-spinner" type="button" onclick="changeQuantity(1, '<%= Product._id %>','<%= Product.price %>')"><i class="icon-plus"></i></button>
                     </div>
                 </div>
         
@@ -88,7 +88,7 @@
 
                                                 </div><!-- End .cart-product-quantity -->                                 
                                             </td>
-											<td  class="total-col amount-<%= Product._id %>" id="total-price">₹<%= Product.ProductPrice%></td>
+											<td  class="total-col amount-<%= Product._id %>" id="total-price">₹<%= Product.price%></td>
                                           
                                             <td onclick="deleteProduct('<%= Product._id %>')" class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
                                        
@@ -126,7 +126,7 @@
                                     
                                           
 	                						<tr class="summary-subtotal">
-	                							<td>Subtotal:</td>
+	                							<td>  total:</td>
 	                							<td id="subTotal">₹<%= totalPrice %></td>
 	                						</tr><!-- End .summary-subtotal -->
 	                						<tr class="summary-shipping">
@@ -335,7 +335,7 @@ xhr.send(JSON.stringify({ shippingValue: value }));
 
 function updateUI(productId, newQuantity, newTotalPrice) {
     $(`#${productId}`).val(newQuantity);
-    $('.total-col.amount-' + productId).text('$' + newTotalPrice);
+    $('.total-col.amount-' + productId).text('₹' + newTotalPrice);
 
     // Optionally, update any other UI elements here
     // ...

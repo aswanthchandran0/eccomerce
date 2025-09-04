@@ -1,4 +1,4 @@
-const Category = require('../models/catagoryModel')
+const Category = require('../models/categoryModel')
 const categoryValidator =require("../validators/categoryValidation");
 const categoryService = require("../services/categoryService");
 

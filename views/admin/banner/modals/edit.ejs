@@ -1,54 +1,50 @@
 <!-- Edit Banner Modal -->
-<div id="editBannerModal-<%= brandId %>" class="modal fade" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="editBannerModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content bg-dark text-light rounded-3 shadow-lg">
       <div class="modal-header border-0">
         <h4 class="modal-title">Edit Banner</h4>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
 
       <form id="editBannerForm">
         <input type="hidden" id="editBannerId" name="id">
+
         <div class="modal-body">
-          <!-- Eyebrow Text -->
           <div class="mb-3">
             <label for="editEyebrowText" class="form-label">Eyebrow Text</label>
-            <input type="text" class="form-control" id="editEyebrowText" name="eyebrowText" required>
+            <input type="text" class="form-control" id="editEyebrowText" name="eyebrowText">
             <div id="editEyebrowTextError" class="text-danger mt-1"></div>
           </div>
 
-          <!-- Headline -->
           <div class="mb-3">
             <label for="editHeadline" class="form-label">Headline</label>
-            <input type="text" class="form-control" id="editHeadline" name="headline" required>
+            <input type="text" class="form-control" id="editHeadline" name="headline">
             <div id="editHeadlineError" class="text-danger mt-1"></div>
           </div>
 
-          <!-- Sub-Headline -->
           <div class="mb-3">
             <label for="editSubHeadline" class="form-label">Sub-Headline</label>
-            <textarea class="form-control" id="editSubHeadline" name="subHeadline" rows="2" required></textarea>
+            <textarea class="form-control" id="editSubHeadline" name="subHeadline"></textarea>
             <div id="editSubHeadlineError" class="text-danger mt-1"></div>
           </div>
 
-          <!-- Call to Action -->
           <div class="mb-3">
             <label for="editCallToAction" class="form-label">Call to Action</label>
-            <input type="text" class="form-control" id="editCallToAction" name="callToAction" required>
+            <input type="text" class="form-control" id="editCallToAction" name="callToAction">
             <div id="editCallToActionError" class="text-danger mt-1"></div>
           </div>
 
-          <!-- URL -->
           <div class="mb-3">
             <label for="editUrl" class="form-label">Redirect URL</label>
-            <input type="url" class="form-control" id="editUrl" name="url" required>
+            <input type="url" class="form-control" id="editUrl" name="url">
             <div id="editUrlError" class="text-danger mt-1"></div>
           </div>
         </div>
 
-        <div class="modal-footer border-0 d-flex justify-content-between">
-          <button type="submit" class="btn btn-success px-4">Update</button>
-          <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal">Cancel</button>
+        <div class="modal-footer border-0">
+          <button type="submit" class="btn btn-success">Update</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
         </div>
       </form>
     </div>
@@ -57,22 +53,57 @@
 
 
 <script>
-    document.querySelectorAll(".editBannerBtn").forEach(button => {
-  button.addEventListener("click", (event) => {
-    const banner = JSON.parse(button.getAttribute("data-banner"));
+  document.getElementById("editBannerForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    document.getElementById('editBannerId').value = banner._id;
-    document.getElementById('editEyebrowText').value = banner.eyebrowText;
-    document.getElementById('editHeadline').value = banner.headline;
-    document.getElementById('editSubHeadline').value = banner.subHeadline;
-    document.getElementById('editCallToAction').value = banner.callToAction;
-    document.getElementById('editUrl').value = banner.url;
+  const id = document.getElementById("editBannerId").value;
 
-    // Clear previous errors
-    ["editEyebrowText","editHeadline","editSubHeadline","editCallToAction","editUrl"].forEach(id => {
-      document.getElementById(id + "Error").innerText = "";
-    });
-  });
+  // collect data
+  const data = {
+    eyebrowText: document.getElementById("editEyebrowText").value,
+    headline: document.getElementById("editHeadline").value,
+    subHeadline: document.getElementById("editSubHeadline").value,
+    callToAction: document.getElementById("editCallToAction").value,
+    url: document.getElementById("editUrl").value,
+  };
+
+  // call your ajaxRequest
+  const result = await ajaxRequest(`/admin/banners/${id}`, "PUT", data);
+
+  if (result.success) {
+    window.location.reload()
+  } else {
+    if(result.errors && typeof result.errors =='object'){
+      if(result.errors.eyebrowText){
+        document.getElementById('editEyebrowTextError').innerText = result.errors.eyebrowText
+      }
+      if(result.errors.headline){
+        document.getElementById('editHeadlineError').innerText = result.errors.headline
+      }
+
+      if(result.errors.subHeadline){
+        document.getElementById('editSubHeadlineError').innerText = result.errors.subHeadline
+      }
+
+      if(result.errors.callToAction){
+        document.getElementById('editCallToActionError').innerText = result.errors.callToAction
+      }
+
+        if(result.errors.url){
+        document.getElementById('editUrlError').innerText = result.errors.url
+      }
+    }
+    else {
+        Toastify({
+          text: result.message || "Something went wrong",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "red",
+          stopOnFocus: true
+        }).showToast();
+      }
+  }
 });
 
 </script>

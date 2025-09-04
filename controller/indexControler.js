@@ -12,6 +12,7 @@ const homePage = {
             const products =  await productModel.find({}) 
             console.log('products',products);
             const banners = await Banners.find({})
+            console.log("banners",banners)
             if (req.session.user && req.session.user._id) {
                 userId = req.session.user._id;
                  const user = await userData.findById(userId)

@@ -16,9 +16,6 @@ const userDetailsController = require('../controller/userDetails');
 const multer = require('multer')
 const path = require('path');
 const productController = require('../controller/productController');
-const productModel = require('../models/productModel')
-const catagoryModel = require('../models/catagoryModel')
-const brandData = require('../models/BrandModel')
 const adminCouponController = require('../controller/adminCouponController');
 const salesReportcontroller = require('../controller/salesReportController')
 const middlewares = require('../middlewares/adminMiddleware')
@@ -54,7 +51,7 @@ adminRoute.post('/brands',brandingController.branding.addBrand)
 adminRoute.put('/brands/:id',brandingController.branding.editBrand)
 adminRoute.patch('/brands/:id',brandingController.branding.toggleBrandStatus)
 adminRoute.get('/brands', brandingController.branding.brandingPage);
-adminRoute.get('/brands/:id')
+adminRoute.get('/brands/:id') 
 // Catagory Routes
 adminRoute.post('/categories',categoryController.category.addCategory)
 adminRoute.put('/categories/:id',categoryController.category.editCategory)
@@ -64,10 +61,10 @@ adminRoute.get('/categories/:id')
 
 // Product Details Routes
 adminRoute.get('/productDetails', productDetailsController.product.getAllProduct);
-adminRoute.post('/productDetails/delete/:id', productDetailsController.product.deleteProduct);
+adminRoute.put('/productDetails/:id/toggle-block', productDetailsController.product.toggleProductStatus);
 
 // User Details Routes
-// adminRoute.get('/userDetails', userDetailsController.getAllUser);
+adminRoute.get('/userDetails', userDetailsController.getAllUser);
 adminRoute.post('/userDetails/user/block/:id', userDetailsController.blockUser);
 adminRoute.post('/userDetails/user/unblock/:id', userDetailsController.unblockUser);
 adminRoute.post('/userDetails/delete/:id', userDetailsController.deleteUser);
@@ -76,18 +73,7 @@ adminRoute.post('/userDetails/edit/:id', userDetailsController.editUser);
 adminRoute.get('/userDetails/search', userDetailsController.searchUser);
 
 //addproduct
-adminRoute.get('/productAdd', async (req, res) => {
-    const ProductId = req.query.id;
-    const Catagories = await catagoryModel.find({});
-    const brands = await brandData.find({})
-
-    let product = {}; // Initialize product as an empty object
-    if (ProductId) {
-        product = await productModel.findById(ProductId);
-    }
-
-    res.render('productAdd', { brands,Catagories, product, errors: {} });
-});
+adminRoute.get('/productAdd', productController.productCreationPage);
 
 
 const storage = multer.diskStorage({
@@ -104,18 +90,60 @@ const upload = multer({storage:storage})
 
 
 
-adminRoute.post('/addProduct', upload.array('images', 4), productController.addproduct);  
-adminRoute.delete('/deleteImage', productController.deleteImage);
-adminRoute.delete('/deleteUpdatingImage', productController.deleteUpdatingImage);
 
-// deteting images from product add
+// CREATE a product
+adminRoute.post(
+  '/products',
+  upload.array('images', 4),
+  productController.createProduct
+);
+
+// UPDATE a product
+adminRoute.put(
+  '/products/:id',
+  upload.array('images', 4),
+  productController.updateProduct
+);
+
+// Delete an image (AJAX)
+adminRoute.delete("/products/:id/images", productController.deleteUpdatingImage);
+
+adminRoute.get(
+  '/products/:id',
+  productController.productEditPage
+)
+
+// READ all products (list)
+// adminRoute.get('/products', productController.getAllProducts);
+
+// READ one product (edit page / details)
+// adminRoute.get('/products/:id', productController.getProductById);
 
 
 
-//product edit
-adminRoute.get('/editProduct',productController.editProductPage)
+// DELETE a product
+// adminRoute.delete('/products/:id', productController.deleteProduct);
 
-adminRoute.post('/updateProduct', upload.array('images', 4), productController.updateProduct);
+// // DELETE a specific image from a product
+// adminRoute.delete(
+//   '/products/:id/images/:imageId',
+//   productController.deleteProductImage
+// );
+
+
+
+// adminRoute.post('/addProduct', upload.array('images', 4), productController.addproduct);  
+// adminRoute.delete('/deleteImage', productController.deleteImage);
+
+
+// // deteting images from product add
+
+
+
+// //product edit
+// adminRoute.get('/editProduct',productController.editProductPage)
+
+// adminRoute.post('/updateProduct', upload.array('images', 4), productController.updateProduct);
 
 //coupon router
  
@@ -138,6 +166,8 @@ const bannerUploads = multer({storage:bannerStorage})
 
 adminRoute.get('/banners', bannerController.banner.bannerPage)
 adminRoute.post('/banners',bannerUploads.single('image'), bannerController.banner.addBanner)
+adminRoute.put('/banners/:id',bannerController.banner.editBanner)
+adminRoute.delete('/banners/:id',bannerController.banner.deleteBanner)
 // adminRoute.get('/deleteBanner',bannerController.banner.deleteBanner)
 
 // sales report

@@ -1,5 +1,5 @@
 const model = require('../models/productModel')
-const categoryData = require('../models/catagoryModel')
+const categoryData = require('../models/categoryModel')
 const brandData =require('../models/BrandModel')
 const productfilter = require('../validators/productFilter')
 
@@ -21,9 +21,9 @@ const allProducts = {
                 .limit(ITEMS_PER_PAGE)
                 .exec();
 
-             const category = await categoryData.find({})
+             const categories = await categoryData.find({})
              const brands =  await brandData.find({})
-            res.render('productList', { products: products ,category,brands,totalPages, currentPage: 'products'});
+            res.render('productList', { products: products ,categories,brands,totalPages, currentPage: 'products'});
 
         }catch (error){
             console.error(error);

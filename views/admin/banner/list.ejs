@@ -69,14 +69,26 @@
 
 
                       <td class="text-center">
-  <button class="btn btn-sm btn-warning editBannerBtn"
-          data-bs-toggle="modal"
-          data-bs-target="#editBannerModal"
-          data-banner='<%= JSON.stringify(banner) %>'>
-    Edit
-  </button>
-  <button class="btn btn-sm btn-danger">Delete</button>
+ <button class="btn btn-sm btn-warning editBannerBtn"
+        data-bs-toggle="modal"
+        data-bs-target="#editBannerModal"
+        data-banner='<%= JSON.stringify(banner) %>'>
+  Edit
+</button>
+
+ <!-- Example delete button inside your banner card/table -->
+<button 
+  class="btn btn-sm btn-danger delete-banner-btn" 
+  data-id="<%= banner._id %>" 
+  data-bs-toggle="modal" 
+  data-bs-target="#deleteBannerModal">
+  Delete
+</button>
+
+
 </td>
+
+
 
 
 
@@ -106,7 +118,12 @@
 <!-- page-body-wrapper ends -->
 </div>
 
+
+
+
+<%-include('./modals/edit') %>
 <%- include('./modals/add') %>
+<%- include('./modals/delete') %>
 
 
 

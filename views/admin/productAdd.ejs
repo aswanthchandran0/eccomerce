@@ -30,96 +30,115 @@
                               
                               <p class="card-description">  </p>
                               <p class="card-description">  </p>
-                              <form class="forms-sample" action="/admin/addProduct" method="post" enctype="multipart/form-data">
-                                <div class="form-group">
-                                  <label for="exampleInputName1"> Product Name</label>
-                                  <input type="text" class="form-control" id="exampleInputName1" name="ProductName"   placeholder=" Product Name">
-                                <% if(errors && errors.ProductName){%>
-                                  <p style="color: tomato;"><%=errors.ProductName %></p>
-                                  <%} %>
-                                </div>
-                                <div class="form-group">
-                                  <label for="exampleInputEmail3">Product Price</label>
-                                  <input type="number" class="form-control" id="exampleInputEmail3"  value="" name="ProductPrice" placeholder="₹:0.00" min="1">
-                                  <% if(errors && errors.ProductPrice){%>
-                                    <p style="color: tomato;"><%=errors.ProductPrice %></p>
-                                    <%} %>
-                                </div>
-                                <div class="form-group">
-                                  <label for="exampleInputPassword4">Product Expense</label>
-                                  <input type="number" class="form-control" id="exampleInputPassword4"  value="" name="ProductExpense" placeholder="₹:0.00" >
-                                  <% if(errors && errors.ProductExpense){%>
-                                    <p style="color: tomato;"><%=errors.ProductExpense %></p>
-                                    <%} %>
-                                </div>
-                                <div class="form-group">
-                                  <label for="exampleSelectGender">Catagory</label>
-                                  <select class="form-control" id="exampleSelectGender" name="Catagory">
-                                    <% Catagories.forEach(category => { %>
-                                      <option value="<%= category.name %>"><%= category.name %></option>
-                                  <% }); %>
-                                
-                                  </select>
-                                  <% if(errors && errors.category){%>
-                                    <p style="color: tomato;"><%=errors.category %></p>
-                                    <%} %>
-                                  <br>
+                           <form id="productForm" class="forms-sample" enctype="multipart/form-data">
+  <!-- Product Name -->
+  <div class="form-group">
+    <label for="name">Product Name</label>
+    <input 
+      type="text" 
+      class="form-control" 
+      id="name" 
+      name="name" 
+      placeholder="Product Name"
+    >
+    <% if(errors && errors.name){ %>
+      <p style="color: tomato;"><%= errors.name %></p>
+    <% } %>
+  </div>
 
-                                  <label for="selectsize">Size</label>
-                                  <select  class="form-control" name="ProductSize">
-                                    <option value="XS">XS</option>
-                                    <option value="S">S</option>
-                                    <option value="M">M</option>
-                                    <option value="L">L</option>
-                                    <option value="XL">XL</option>
-                                    <option value="XXL">XXL</option>
-                                  </select>
-                                    <br>
-                                  <label for="brands">Brands</label>
-                                  <select class="form-control" name="SelectedBrand" >
-                                    <% brands.forEach(brands => { %>
-                                      <option value="<%= brands.Brand %>"><%=  brands.Brand  %></option>
-                                  <% }); %>  
-                                  </select>
-                                
+  <!-- Price -->
+  <div class="form-group">
+    <label for="price">Product Price</label>
+    <input 
+      type="number" 
+      class="form-control" 
+      id="price" 
+      name="price" 
+      placeholder="₹0.00" 
+      min="1"
+    >
+    <% if(errors && errors.price){ %>
+      <p style="color: tomato;"><%= errors.price %></p>
+    <% } %>
+  </div>
 
-                                </div>
-                                <div class="form-group">
-                                  <label for="exampleInputPassword4">Product Count</label>
-                                  <input style="width: 10%;" type="number" class="form-control" id="exampleInputPassword4"  value="" name="ProductCount"  min="1">
-                                  <% if(errors && errors.ProductCount){%>
-                                    <p style="color: tomato;"><%=errors.ProductCount %></p>
-                                    <%} %>
-                                </div>
-                                <div class="form-group">
-                                  <label>Image upload</label>
-                                  <div class="input-group col-xs-12" style="width: 50%;">
-                                    <input type="file" class="form-control" id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple onchange="viewImage(event)" accept="image/*">
-                                    <span class="input-group-append"></span>
-                                  </div>
-                                  <% if(errors && errors.Image){ %>
-                                    <p style="color: tomato;"><%=errors.Image %></p>
-                                  <% } %>
-                                </div>
-                                
-                                <!-- Display images in a separate container below the input field -->
-                                <div class="form-group">
-                                  <label>Image Preview</label>
-                                  <div class="row" id="imgView" class="existing-images list-unstyled d-flex flex-wrap"></div>
-                                </div>
-                                
-                              
-                                <div class="form-group">
-                                  <label for="exampleTextarea1">Product Discription</label>
-                                  <textarea class="form-control" id="exampleTextarea1" name="ProductDiscription"  value="" rows="4"></textarea>
-                                  <% if(errors && errors.ProductDiscription){%>
-                                    <p style="color: tomato;"><%=errors.ProductDiscription %></p>
-                                    <%} %>
-                                </div>
-                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                <button type="button" class="btn btn-dark  " id="cancelBtn">Cancel</button>
-                              </form>
-                               
+  <!-- Category -->
+  <div class="form-group">
+    <label for="category">Category</label>
+    <select class="form-control" id="category" name="category">
+      <% if (categories && categories.length > 0) { %>
+      <% categories.forEach(c => { %>
+        <option value="<%= c._id %>"><%= c.name %></option>
+      <% }); %>
+    <% } else { %>
+      <option disabled selected>No categories available</option>
+    <% } %>
+    </select>
+    <% if(errors && errors.category){ %>
+      <p style="color: tomato;"><%= errors.category %></p>
+    <% } %>
+  </div>
+
+  <!-- Brand -->
+  <div class="form-group">
+    <label for="brand">Brand</label>
+    <select class="form-control" id="brand" name="brand">
+      <% brands.forEach(b => { %>
+        <option value="<%= b._id %>"><%= b.name %></option>
+      <% }); %>
+    </select>
+    <% if(errors && errors.brand){ %>
+      <p style="color: tomato;"><%= errors.brand %></p>
+    <% } %>
+  </div>
+
+  <!-- Variants (example: size + stock) -->
+
+  <div class="form-group">
+  <label for="variants">Variants (Size & Count)</label>
+  <div id="variantList"></div>
+
+  <select id="size">
+    <option value="M">M</option>
+    <option value="L">L</option>
+    <option value="XL">XL</option>
+  </select>
+
+  <input type="number" id="stock" placeholder="Stock" min="1" class="form-control mb-1"  />
+  <small id="variantError" class="text-danger"></small> 
+  <button type="button" onclick="addVariant()" class="btn btn-sm btn-secondary mt-2">Add Variant</button>
+</div>
+
+
+  <!-- Description -->
+  <div class="form-group">
+    <label for="description">Product Description</label>
+    <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+    <% if(errors && errors.description){ %>
+      <p style="color: tomato;"><%= errors.description %></p>
+    <% } %>
+  </div>
+
+  <!-- Images -->
+  <div class="form-group">
+    <label for="images">Product Images</label>
+    <input 
+      type="file" 
+      class="form-control" 
+      id="images" 
+      name="images" 
+      multiple 
+      accept="image/*"
+    >
+  </div>
+
+  <div class="row" id="imgView"></div>
+
+  <!-- Submit -->
+  <button type="submit" class="btn btn-primary mr-2">Submit</button>
+  <button type="button" class="btn btn-dark" id="cancelBtn">Cancel</button>
+</form>
+
                               
                               
                         
@@ -151,76 +170,256 @@
       <!-- page-body-wrapper ends -->
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Product Edit Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Edit Product</h5>
+        <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
 
-<!-- ... Previous HTML code ... -->
+      <div class="modal-body">
+        <form id="editProductForm" class="forms-sample" enctype="multipart/form-data">
+          <input type="hidden" id="edit_productId" name="productId">
+
+          <!-- Name -->
+          <div class="form-group">
+            <label for="edit_name">Product Name</label>
+            <input type="text" class="form-control bg-secondary text-light" id="edit_name" name="name">
+            <small class="text-danger" id="edit_name_error"></small>
+          </div>
+
+          <!-- Price -->
+          <div class="form-group">
+            <label for="edit_price">Price</label>
+            <input type="number" class="form-control bg-secondary text-light" id="edit_price" name="price" min="1">
+            <small class="text-danger" id="edit_price_error"></small>
+          </div>
+
+          <!-- Category -->
+          <div class="form-group">
+            <label for="edit_category">Category</label>
+            <select class="form-control bg-secondary text-light" id="edit_category" name="category">
+              <% categories.forEach(c => { %>
+                <option value="<%= c._id %>"><%= c.name %></option>
+              <% }); %>
+            </select>
+            <small class="text-danger" id="edit_category_error"></small>
+          </div>
+
+          <!-- Brand -->
+          <div class="form-group">
+            <label for="edit_brand">Brand</label>
+            <select class="form-control bg-secondary text-light" id="edit_brand" name="brand">
+              <% brands.forEach(b => { %>
+                <option value="<%= b._id %>"><%= b.name %></option>
+              <% }); %>
+            </select>
+            <small class="text-danger" id="edit_brand_error"></small>
+          </div>
+
+          <!-- Variants -->
+          <div class="form-group">
+            <label>Variants</label>
+            <div id="edit_variantList"></div>
+            <div class="d-flex">
+              <select id="edit_size" class="form-control w-25 mr-2">
+                <option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
+              </select>
+              <input type="number" id="edit_stock" class="form-control w-25 mr-2" placeholder="Stock" min="1">
+              <button type="button" class="btn btn-sm btn-secondary" onclick="addEditVariant()">Add</button>
+            </div>
+            <small class="text-danger" id="edit_variantError"></small>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label for="edit_description">Description</label>
+            <textarea class="form-control bg-secondary text-light" id="edit_description" name="description" rows="3"></textarea>
+            <small class="text-danger" id="edit_description_error"></small>
+          </div>
+
+          <!-- Images -->
+          <div class="form-group">
+            <label for="edit_images">Images</label>
+            <input type="file" id="edit_images" name="images" multiple accept="image/*" class="form-control bg-secondary text-light">
+          </div>
+          <div class="row" id="edit_imgView"></div>
+
+          <!-- Buttons -->
+          <div class="text-right">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="/javascripts/ajax.js"></script> 
 
 <script>
-  function viewImage(event) {
-    const imageList = document.getElementById('imgView');
-    const files = event.target.files;
-    const fileNames = [];
+let selectedFiles = []; // store files temporarily
 
-    for (let i = 0; i < files.length; i++) {
-      fileNames.push(files[i].name);
+document.getElementById("images").addEventListener("change", function (event) {
+  // convert FileList to array and add to selectedFiles
+  selectedFiles = Array.from(event.target.files);
+  renderPreviews();
+});
 
-      // Create a new container for each image
-      const colDiv = document.createElement('div');
-      colDiv.className = 'col-md-2 mb-2';
+function renderPreviews() {
+  const imageList = document.getElementById("imgView");
+  imageList.innerHTML = ""; // clear previous previews
 
-      const listItem = document.createElement('div');
+  selectedFiles.forEach((file, index) => {
+    const colDiv = document.createElement("div");
+    colDiv.className = "col-md-2 mb-2 position-relative";
 
-      const img = document.createElement('img');
-      img.src = URL.createObjectURL(files[i]);
-      img.alt = 'Product Image';
-      img.style.height = '200px';
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.alt = "Product Image";
+    img.style.height = "150px";
+    img.style.width = "100%";
+    img.className = "img-thumbnail";
 
-      // Attach a click event listener to each image
-      img.addEventListener('click', function() {
-        deleteImage(fileNames.indexOf(files[i].name));
-      });
+    // delete button
+    const btn = document.createElement("button");
+    btn.innerHTML = "&times;";
+    btn.className = "btn btn-danger btn-sm position-absolute top-0 end-0";
+    btn.onclick = function () {
+      deleteImage(index);
+    };
 
-      listItem.appendChild(img);
-      colDiv.appendChild(listItem);
-
-      imageList.appendChild(colDiv);
-    }
-    imageList.setAttribute('data-file-names', JSON.stringify(fileNames));
-  }
-
-  function deleteImage(index) {
-  const imageList = document.getElementById('imgView');
-  const images = imageList.getElementsByClassName('col-md-2');
-  const inputElement = document.getElementById('imageInput');
-
-  if (index >= 0 && index < images.length) {
-    // Retrieve file names from the data attribute
-    const fileNames = JSON.parse(imageList.getAttribute('data-file-names'));
-
-    // Remove the deleted image from the fileNames array
-    fileNames.splice(index, 1);
-
-    // Update the data-file-names attribute
-    imageList.setAttribute('data-file-names', JSON.stringify(fileNames));
-
-    // Remove the corresponding image container
-    images[index].parentNode.removeChild(images[index]);
-
-    // Update the input files to remove the deselected image
-    const newFiles = Array.from(inputElement.files);
-    newFiles.splice(index, 1);
-
-    // Create a new FileList and assign it to the input files
-    const newFileList = new DataTransfer();
-    newFiles.forEach(file => newFileList.items.add(file));
-
-    inputElement.files = newFileList.files;
-  }
+    colDiv.appendChild(img);
+    colDiv.appendChild(btn);
+    imageList.appendChild(colDiv);
+  });
 }
 
+function deleteImage(index) {
+  selectedFiles.splice(index, 1); // remove from array
+  renderPreviews();
+
+  // also reset the input’s FileList
+  const dataTransfer = new DataTransfer();
+  selectedFiles.forEach((file) => dataTransfer.items.add(file));
+  document.getElementById("images").files = dataTransfer.files;
+}
 </script>
 
 
+<script>
+let variants = []; // store added variants
+
+function addVariant() {
+  const size = document.getElementById("size").value;
+  const stock = parseInt(document.getElementById("stock").value);
+
+  const errorBox = document.getElementById("variantError");
+  errorBox.textContent = ""; // clear previous errors
+
+  if (!stock || stock <= 0) {
+    errorBox.textContent = "Please enter a valid stock!";
+    return;
+  }
+
+  const existing = variants.find(v => v.size === size);
+
+  if (existing) {
+    // update existing stock
+    existing.stock = stock;
+  } else {
+    variants.push({ size, stock });
+  }
+
+  refreshVariantList();
+  console.log("Current Variants:", variants);
+}
+
+function deleteVariant(size) {
+  variants = variants.filter(v => v.size !== size);
+  refreshVariantList();
+}
+
+function refreshVariantList() {
+  const list = document.getElementById("variantList");
+  list.innerHTML = ""; // clear old list
+
+  variants.forEach(v => {
+    const div = document.createElement("div");
+    div.className = "d-flex justify-content-between align-items-center border p-2 mb-1 rounded";
+
+    div.innerHTML = `
+      <span>${v.size} : ${v.stock}</span>
+      <button type="button" class="btn btn-sm btn-danger">Delete</button>
+    `;
+
+    // Add delete button functionality
+    div.querySelector("button").addEventListener("click", () => deleteVariant(v.size));
+
+    list.appendChild(div);
+  });
+}
+</script>
+
+<!-- data submition -->
+<script>
+  document.getElementById("productForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  // Add variants manually
+  formData.append("variants", JSON.stringify(variants));
+
+  // Ensure correct files
+  formData.delete("images");
+  selectedFiles.forEach((file) => formData.append("images", file));
+
+  const result = await ajaxRequest("/admin/products", "POST", formData, true);
+
+  if (result.success) {
+    // ✅ Redirect manually on frontend
+    window.location.href = "/admin/productDetails";
+  } else if (result.errors) {
+    // Show validation errors
+    document.querySelectorAll(".text-danger").forEach((el) => el.remove());
+
+    Object.keys(result.errors).forEach((key) => {
+      const errorMsg = result.errors[key];
+      const input = document.getElementById(key);
+
+      if (input) {
+        let errorEl = document.createElement("small");
+        errorEl.className = "text-danger d-block mt-1";
+        errorEl.textContent = errorMsg;
+        input.insertAdjacentElement("afterend", errorEl);
+      } else {
+        if (key === "variants") {
+          document.getElementById("variantError").textContent = errorMsg;
+        } else if (key === "images") {
+          const imgInput = document.getElementById("images");
+          let errorEl = document.createElement("small");
+          errorEl.className = "text-danger d-block mt-1";
+          errorEl.textContent = errorMsg;
+          imgInput.insertAdjacentElement("afterend", errorEl);
+        }
+      }
+    });
+  } else {
+    alert(result.message || "❌ Something went wrong");
+  }
+});
+
+</script>
 
 <!-- ... Remaining HTML code ... -->
 

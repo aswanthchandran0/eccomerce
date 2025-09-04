@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ref } = require('pdfkit');
 
 
 const variantSchema = new mongoose.Schema({
@@ -40,16 +41,18 @@ const productSchema = new mongoose.Schema({
     default: '',
   },
   category: {
-    type: String, // Use String for category_name (as in your banners)
+    type:  mongoose.Schema.Types.ObjectId, // Use String for category_name (as in your banners)
     required: true,
     trim: true,
     index: true, // For filtering
+    ref: 'Category'
   },
   brand: {
-    type: String, // Use String for brand_name
+    type:  mongoose.Schema.Types.ObjectId, // Use String for brand_name
     required: true,
     trim: true,
     index: true, // For filtering
+    ref: 'Brand'
   },
   variants: {
     type: [variantSchema],
@@ -69,18 +72,18 @@ const productSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['active', 'inactive', 'out_of_stock'],
+    enum: ['active','inactive', 'out_of_stock'],
     default: 'active',
   },
+
+    isActive: {
+    type: Boolean,
+    default: true, // true = visible to users, false = blocked
+  },
+
 },
 {timestamps:true}
 );
-
-// Update updatedAt on save
-productSchema.pre('save', function (next) {
-  this.updatedAt = Date.now();
-  next();
-});
 
 
 

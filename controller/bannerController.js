@@ -30,6 +30,14 @@ const banner = {
 
    addBanner: async (req, res, next) => {
     try {
+     const bannerCount = await Banner.countDocuments()
+
+       if(bannerCount >=5){
+        return res.status(400).json({
+        sucess:false,
+        message:"Maximum 5 banners are allowed. Please remove an existing banner first."
+        })
+       }
         if (req.file) {
       req.body.image = `/uploads/banners/${req.file.filename}`;
     }
@@ -50,7 +58,6 @@ const banner = {
 
         return res.status(400).json({
           success: false,
-          errors: formattedErrors,
         });
       }
 
@@ -71,6 +78,7 @@ const banner = {
 
  editBanner:async (req, res, next) => {
   try {
+    console.log('request reaching ')
     const bannerId = req.params.id; // assuming URL: /admin/banners/:id
     const banner = await Banner.findById(bannerId);
 
@@ -89,6 +97,9 @@ const banner = {
     });
 
     if (error) {
+      console.log(
+      "errors",error
+      )
       const formattedErrors = error.details.reduce((acc, err) => {
         const field = err.path.join(".");
         acc[field] = err.message;
@@ -112,8 +123,41 @@ const banner = {
     err.function = "editBanner";
     next(err);
   }
-}
+},
+ deleteBanner: async(req,res,next)=>{
+  try{
+   const bannerId = req.params.id
+   const banner = await Banner.findById(bannerId)
 
+   if(!banner){
+    return res.status(404).json({
+        success: false,
+        message: "Banner not found"
+      });
+   }
+
+   if(banner.image){
+    const imagePath = path.join(__dirname,banner.image)
+    fs.unlink(imagePath,(err)=>{
+      if(err){
+         console.error("Failed to delete banner image:", err.message);
+      
+      }
+    })
+   }
+
+   await Banner.findByIdAndDelete(bannerId)
+
+       req.flash("success", `Banner "${banner.headline}" deleted successfully`);
+         res.json({ success: true});
+
+
+
+  }catch(err){
+    err.function = 'deleteBanner'
+     next(err)
+  }
+ }
   // bannerPage: async(req,res)=>{
   //     try{
   //         let bannerAdded = '';

@@ -3,192 +3,162 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-Cnqt0n8e6F5v2mKRA1VT3O42XjzqstTxwabylgh+IbpgrvuJh0tN17ABX4nvmTvjG1yWmlG6h7Qq5ROJdgy0mA==" crossorigin="anonymous" />
 
     <div class="container-scroller">
-      <!-- partial:partials/_sidebar.html -->
-    <%- include('./layout/sideBar.ejs') -%>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_navbar.html -->
-       
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-           
-            <div class="row">
-             
-              <div class="col-md-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex flex-row justify-content-between">
-                      <h4 class="card-title mb-1">Product add</h4>
-                      <p class="text-muted mb-1"></p>
-                    </div>
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="preview-list">
-                          <!---->
-                          
-                              
-                              <p class="card-description">  </p>
-                              <p class="card-description">  </p>
-                              <form class="forms-sample" action="/admin/updateProduct" method="post" enctype="multipart/form-data" >
-                                <div class="form-group">
-                                  <label for="exampleInputName1"> Product Name</label>
-                                  <input type="text" class="form-control" id="exampleInputName1" name="ProductName" value="<%=product.ProductName %>"   placeholder=" Product Name">
-                                  <input type="hidden" name="productId" value="<%= productId %>">
-                                  <% if(errors && errors.ProductName){%>
-                                    <p style="color: tomato;"><%=errors.ProductName %></p>
-                                    <%} %>
-                                </div>
-                                <div class="form-group">
-                                  <label for="exampleInputEmail3">Product Price</label>
-                                  <input type="number" class="form-control" id="exampleInputEmail3"  value="<%= product.ProductPrice %>" name="ProductPrice" placeholder="₹:0.00" min="1">
-                                  <% if(errors && errors.ProductPrice){%>
-                                    <p style="color: tomato;"><%=errors.ProductPrice %></p>
-                                    <%} %>
-                                </div>
-                                <div class="form-group">
-                                  <label for="exampleInputPassword4">Product Expense</label>
-                                  <input type="number" class="form-control" id="exampleInputPassword4"  value="<%= product.ProductExpense %>" name="ProductExpense" placeholder="₹:0.00" >
-                                  <% if(errors && errors.ProductExpense){%>
-                                    <p style="color: tomato;"><%=errors.ProductExpense %></p>
-                                    <%} %>
-                                </div>
-                                <div class="form-group">
-                                  <label for="exampleSelectGender">Catagory</label>
-                                  <select class="form-control" id="exampleSelectGender" name="Catagory">
-                                    <% Catagories.forEach(category => { %>
-                                      <option value="<%= category.name %>"><%= category.name %></option>
-                                  <% }); %>
-                                
-                                  </select>
-                                  <% if(errors && errors.category){%>
-                                    <p style="color: tomato;"><%=errors.category %></p>
-                                    <%} %>
-                                  <br>
+  <%- include('./layout/sideBar.ejs') -%>
+  <div class="container-fluid page-body-wrapper">
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title mb-3">Edit Product</h4>
 
-                                  <label for="selectsize">Size</label>
-                                  <select  class="form-control" name="ProductSize">
-                                    <option value="XS">XS</option>
-                                    <option value="S">S</option>
-                                    <option value="M">M</option>
-                                    <option value="L">L</option>
-                                    <option value="XL">XL</option>
-                                    <option value="XXL">XXL</option>
-                                  </select>
-                                    <br>
-                                  <label for="brands">Brands</label>
-                                  <select class="form-control" name="SelectedBrand" >
-                                    <% brands.forEach(brands => { %>
-                                      <option value="<%= brands.Brand %>"><%=  brands.Brand  %></option>
-                                  <% }); %>  
-                                  </select>
-                                
+                <form id="editProductForm" class="forms-sample" enctype="multipart/form-data">
+                  <input type="hidden" name="productId" value="<%= product._id %>">
 
-                                </div>
-                                <div class="form-group">
-                                  <label for="exampleInputPassword4">Product Count</label>
-                                  <input style="width: 10%;" type="number" class="form-control" id="exampleInputPassword4"  value="<%= product.ProductCount %>" name="ProductCount"  min="1">
-                                  <% if(errors && errors.ProductCount){%>
-                                    <p style="color: tomato;"><%=errors.ProductCount %></p>
-                                    <%} %>
-                                </div>
-                              
-                                <div class="row">
-                                <% if(product !== null && product !== undefined){%>
-                                <% product.images.forEach(image => { %>
-                                  
-                                    <div class="col-md-2 mb-2">
-                                        <div>
-                                            <img src="http://localhost:3000/<%= image %>" alt="Product Image" style="height: 200px;">
-                                            <button type="button" class="btn btn-danger" onclick="deleteExistingImage('<%= productId %>', '<%= image %>')">Delete</button>
-                                        </div>
-                                    </div>
-                                <% }); %>
-                                
-                                <%}%>
-                            </div>
+                  <!-- Name -->
+                  <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" class="form-control" name="name" value="<%= product.name %>">
+                    <% if(errors && errors.name){%>
+                      <p style="color: tomato;"><%= errors.name %></p>
+                    <% } %>
+                  </div>
 
-                                <!-- Display new images -->
-<div class="form-group">
-  <label>Additional Images</label>
-  <div class="input-group col-xs-12" style="width: 50%;">
-      <input type="file" class="form-control" id="imageInput" placeholder="Upload Image" name="images" class="file-upload-default" multiple onchange="viewImage(event)" accept="image/*">
-      <span class="input-group-append"></span>
-  </div>
-</div>
-                                <!-- Display images in a separate container below the input field -->
-                                <div class="form-group">
-                                  <label>Image Preview</label>
-                                  <div class="row" id="imgView" class="existing-images list-unstyled d-flex flex-wrap"></div>
-                                </div>
-                                
-                              
-                                <div class="form-group">
-                                  <label for="exampleTextarea1">Product Discription</label>
-                                  <textarea class="form-control" id="exampleTextarea1" name="ProductDiscription"   rows="4">    <%= product.ProductDiscription %>
-                                  </textarea>
-                                  <% if(errors && errors.ProductDiscription){%>
-                                    <p style="color: tomato;"><%=errors.ProductDiscription %></p>
-                                    <%} %>
-                                </div>
-                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                <button type="button" class="btn btn-dark  " id="cancelBtn">Cancel</button>
-                              </form>
-                               
-                              
-                              
-                        
-                          
-                          
-                            
-            
-                         <!---->
+                  <!-- Price -->
+                  <div class="form-group">
+                    <label>Price (₹)</label>
+                    <input type="number" class="form-control" name="price" value="<%= product.price %>" min="0">
+                    <% if(errors && errors.price){%>
+                      <p style="color: tomato;"><%= errors.price %></p>
+                    <% } %>
+                  </div>
 
+                  <!-- Description -->
+                  <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" name="description" rows="3"><%= product.description %></textarea>
+                    <% if(errors && errors.description){%>
+                      <p style="color: tomato;"><%= errors.description %></p>
+                    <% } %>
+                  </div>
+
+                  <!-- Category -->
+                  <div class="form-group">
+                    <label>Category</label>
+                    <select class="form-control" name="category">
+                      <% categories.forEach(cat => { %>
+                        <option value="<%= cat._id %>" <%= product.category.toString() === cat._id.toString() ? 'selected' : '' %>>
+                          <%= cat.name %>
+                        </option>
+                      <% }) %>
+                    </select>
+                  </div>
+
+                  <!-- Brand -->
+                  <div class="form-group">
+                    <label>Brand</label>
+                   
+                    
+                    <select class="form-control" name="brand">
+                    
+                      <% brands.forEach(b => { %>
+                        <option value="<%= b._id %>" <%= product.brand.toString() === b._id.toString() ? 'selected' : '' %>>
+                          <%= b.name %>
+                        </option>
+                      <% }) %>
+                    </select>
+                  </div>
+
+                  <!-- Variants -->
+                  <div class="form-group">
+                    <label>Variants (Size + Stock)</label>
+                    <div id="variants-container">
+                      <% product.variants.forEach((variant, i) => { %>
+                        <div class="d-flex mb-2">
+                          <select class="form-control mr-2" name="variants[<%= i %>][size]">
+                            <option <%= variant.size === 'XS' ? 'selected' : '' %>>XS</option>
+                            <option <%= variant.size === 'S' ? 'selected' : '' %>>S</option>
+                            <option <%= variant.size === 'M' ? 'selected' : '' %>>M</option>
+                            <option <%= variant.size === 'L' ? 'selected' : '' %>>L</option>
+                            <option <%= variant.size === 'XL' ? 'selected' : '' %>>XL</option>
+                            <option <%= variant.size === 'XXL' ? 'selected' : '' %>>XXL</option>
+                          </select>
+                          <input type="number" class="form-control" name="variants[<%= i %>][stock]" value="<%= variant.stock %>" min="0">
                         </div>
-                      </div>
+                      <% }) %>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="addVariant()">+ Add Variant</button>
+                  </div>
+
+                  <!-- Existing Images -->
+                  <div class="form-group">
+                    <label>Existing Images</label>
+                    <div class="row">
+                      <% product.images.forEach(image => { %>
+                        <div class="col-md-2 mb-2">
+                          <img src="/<%= image %>" style="height: 120px; width: 100px; object-fit: cover;">
+                          <button type="button" class="btn btn-danger btn-sm mt-1"
+                            onclick="deleteExistingImage('<%= product._id %>', '<%= image %>')">Delete</button>
+                        </div>
+                      <% }) %>
                     </div>
                   </div>
-                </div>
+
+                  <!-- Upload New Images -->
+                  <div class="form-group">
+                    <label>Upload New Images</label>
+                    <input type="file" class="form-control" name="images" multiple accept="image/*">
+                  </div>
+
+              
+
+                  <!-- Submit -->
+                  <button type="submit" class="btn btn-primary mr-2">Update</button>
+                  <a href="/admin/productDetails" class="btn btn-dark">Cancel</a>
+                </form>
+
               </div>
             </div>
-           
-           
-
-
           </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:partials/_footer.html -->
-         
-          <!-- partial -->
         </div>
-        <!-- main-panel ends -->
       </div>
-      <!-- page-body-wrapper ends -->
     </div>
+  </div>
+</div>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="/javascripts/ajax.js"></script>
 
-  <script>
-  function deleteExistingImage(productId, fileName) {
-    console.log('productID', productId);
-    console.log('fileName', fileName);
-    var $j = jQuery.noConflict();
-    $j.ajax({
-        url: `/admin/deleteUpdatingImage?productId=${productId}&fileName=${fileName}`,
-        method: 'DELETE',
-        success: function (response) {
-            console.log(response);
-            $j(`img[src="http://localhost:3000/${fileName}"]`).parent().parent().remove();
-            
-            
-        },
-        error: function (error) {
-            console.error(error);
-        }
-    });
+    <script>
+function addVariant() {
+  const container = document.getElementById("variants-container");
+  const index = container.children.length;
+  const div = document.createElement("div");
+  div.className = "d-flex mb-2";
+  div.innerHTML = `
+    <select class="form-control mr-2" name="variants[${index}][size]">
+      <option>XS</option><option>S</option><option>M</option>
+      <option>L</option><option>XL</option><option>XXL</option>
+    </select>
+    <input type="number" class="form-control" name="variants[${index}][stock]" value="0" min="0">
+  `;
+  container.appendChild(div);
 }
 
-  </script>
+function deleteExistingImage(productId, fileName) {
+  fetch(`/admin/products/${productId}/images?fileName=${fileName}`, {
+    method: 'DELETE'
+  })
+  .then(res => res.json())
+  .then(data => {
+  if (data.success) {
+      document.querySelector(`img[src="/${fileName}"]`).parentElement.remove();
+    }
+  })
+  .catch(err => console.error(err));
+}
+</script>
 
 
     <script>
@@ -278,6 +248,56 @@
       
       </script>
       
+
+      <script>
+  document.getElementById("editProductForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+  console.log("the submition was working ")
+    const form = e.target;
+    const formData = new FormData(form);
+    const productId = formData.get("productId");
+
+    const result = await ajaxRequest(`/admin/products/${productId}`, "PUT", formData, true);
+
+    if (result.success) {
+        window.location.href = "/admin/productDetails";
+    } else {
+      if (result.errors && typeof result.errors === "object") {
+        // Clear previous errors first
+        document.querySelectorAll(".error-msg").forEach(el => el.innerText = "");
+
+        if (result.errors.name) {
+          document.getElementById("productNameError").innerText = result.errors.name;
+        }
+        if (result.errors.price) {
+          document.getElementById("productPriceError").innerText = result.errors.price;
+        }
+        if (result.errors.description) {
+          document.getElementById("productDescriptionError").innerText = result.errors.description;
+        }
+        if (result.errors.category) {
+          document.getElementById("productCategoryError").innerText = result.errors.category;
+        }
+        if (result.errors.brand) {
+          document.getElementById("productBrandError").innerText = result.errors.brand;
+        }
+        if (result.errors.images) {
+          document.getElementById("productImagesError").innerText = result.errors.images;
+        }
+      } else {
+        Toastify({
+          text: result.message || "Something went wrong",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "red",
+          stopOnFocus: true
+        }).showToast();
+      }
+    }
+  });
+</script>
+
       
       
       <!-- ... Remaining HTML code ... -->

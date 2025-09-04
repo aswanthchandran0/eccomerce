@@ -6,7 +6,7 @@ const {
     isValidExpireDate,
     isValidCreteria,
     isValidDiscountAmount,
-} = require('../validators/adminValidation');
+} = require('../validators/productValidators');
 const moment = require('moment');
 const Coupon = require('../models/couponModel');
 

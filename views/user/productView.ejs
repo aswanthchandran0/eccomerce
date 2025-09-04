@@ -54,11 +54,11 @@
 
                             <div class="col-md-6">
                                 <div class="product-details">
-                                    <h1 class="product-title"><%= product.ProductName %></h1><!-- End .product-title -->
+                                    <h1 class="product-title"><%= product.name %></h1><!-- End .product-title -->
 
                                     
                                     <div class="product-price">
-                                        ₹<%= product.ProductPrice %>
+                                        ₹<%= product.price %>
                                     </div><!-- End .product-price -->
 
 
@@ -77,17 +77,17 @@
 
                                     <div class="product-details-footer">
                                         <div class="product-cat">
-                                            <span>Category:</span>
-                                            <a href="#"><%= product.Catagory %></a>
+                                            <span>Category:<%= product.category.name %></span>
+                                       
                                             
                                            
                                         </div><!-- End .product-cat --> 
                                        
                                     
                                     </div>
-                                    <span>Brand: <%= product.Brand %></span> <br>
+                                    <span>Brand: <%= product.brand.name %></span> <br>
                                     <span>Discription:</span>
-                                    <span><%= product.ProductDiscription %></span><!-- End .product-details-footer -->
+                                    <span><%= product.description %></span><!-- End .product-details-footer -->
                                 </div><!-- End .product-details -->
                             </div><!-- End .col-md-6 -->
                         </div><!-- End .row -->
@@ -204,11 +204,11 @@
 
                             <div class="product-body">
                                 <div class="product-cat">
-                                    <a href="#"><%= product.ProductName %></a>
+                                    <a href="#"><%= product.name %></a>
                                 </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html"><%= product.ProductDiscription %></a></h3><!-- End .product-title -->
+                                <h3 class="product-title"><a href="product.html"><%= product.description %></a></h3><!-- End .product-title -->
                                 <div class="product-price">
-                                    <span class="out-price">₹<%= product.ProductPrice %></span>
+                                    <span class="out-price">₹<%= product.price %></span>
                                 </div><!-- End .product-price -->
                                
                             
@@ -236,12 +236,12 @@
                             <img src="<%= product.images[0] %>" alt="Product image">
                         </a>
                     </figure><!-- End .product-media -->
-                    <h4 class="product-title"><a href="product.html"><%= product.ProductName %></a></h4><!-- End .product-title -->
+                    <h4 class="product-title"><a href="product.html"><%= product.name %></a></h4><!-- End .product-title -->
                 </div><!-- End .col-6 -->
 
                 <div class="col-6 justify-content-end">
                     <div class="product-price">
-                        ₹<%= product.ProductPrice %>
+                        ₹<%= product.price %>
                     </div><!-- End .product-price -->
                     
 

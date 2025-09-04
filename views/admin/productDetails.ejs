@@ -14,84 +14,122 @@
            
             <div class="row">
              
-              <div class="col-md-10 grid-margin stretch-card">
+              <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
                       <h4 class="card-title mb-1">Products</h4>
-                      <p class="text-muted mb-1"></p>
+                  
+                            <div class="badge badge-outline-success"><a href="/admin/productAdd" style="color:rgba(107, 235, 164, 1); " >Add</a></div>
+
+                    
                     </div>
                     <div class="row">
                       <div class="col-12">
                         <div class="preview-list">
                           <!---->
-                         
-                          <div class="table-responsive">
-                            <table class="table">
-                              <thead>
-                                <tr>
-                                  <th> # </th>
-                                  <th> ProductName </th>
-                                  <th> Price </th>
-                                  <th> Expense </th>
-                                  <th> Catagory </th>
-                                  
-                                  <th>Stock</th>
-                                 
-                                  <th>
-                                    <div class="badge badge-outline-success"><a href="/admin/productAdd" style="color:rgba(107, 235, 164, 1); " >Add</a></div>
+                          
+                         <div  class="container-fluid mt-4" style="height: 80vh; overflow-x:auto;">
+  <h2 class="mb-4">Product Details</h2>
+   
+  <table class="table table-bordered table-hover align-middle text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Sl.No</th>
+        <th>Product Name</th>
+        <th>Images</th>
+        <th>Category</th>
+        <th>Brand</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Variants</th>
+        <th>Status</th>
+           <th>Block Status</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (products && products.length > 0) { %>
+        <% products.forEach((product, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= product.name %></td>
+             <td>
+                <img src="/<%=product.images[0] %>" alt="Product Image" width="300px" height="100px" class="rounded border ">
+            </td>
+            <td><%= product.category.name %></td>
+            <td><%= product.brand.name %></td>
+            <td>₹<%= product.price.toString() %></td>
+            <td><%= product.description || "-" %></td>
 
-                                    </th>
-                                  <th>  </th>
-                                  <th>  </th>
-                                  <th>  </th>
-                                  <th>  </th>
-                              
-                                </tr>
-                              </thead>
-                              <tbody id="#list" >
-                                  <% productData.forEach((product, index) => { %>
-                                    
-                                      <tr class="user-row">
-                                        <td id="displayedIndex"><%= index + 1 %>  </td>
-                                        <td id="name"><%= product.ProductName %></td>
-                                        <td >₹<%= product.ProductPrice %></td>
-                                        <td>₹<%= product.ProductExpense %></td>
-                                        <td><%= product.Catagory %></td>
+            <!-- Variants Section -->
+            <td>
+              <table class="table table-sm table-bordered mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Size</th>
+                    <th>Stock</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% product.variants.forEach(variant => { %>
+                    <tr>
+                      <td><%= variant.size %></td>
+                      <td><%= variant.stock %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </td>
 
-                                        <td>
-                                          <% if (product.ProductCount > 15) { %>
-                                              <span style="color:rgba(107, 235, 164, 1); ">&nbsp&nbsp&nbsp&nbsp<%= product.ProductCount %></span>
-                                          <% } else if (product.ProductCount > 0) { %>
-                                              <span style="color: rgb(214, 144, 12);">&nbsp&nbsp&nbsp&nbsp&nbsp<%= product.ProductCount %></span>
-                                          <% } else { %>
-                                              <span style="color: rgba(245, 37, 37, 1); ">Out of Stock</span>
-                                          <% } %>
-                                      </td>
-                                        
-                                         
-                                       
-                   
-                                  <td>
-                                    <div class="badge badge-outline-success"> <a href="./editProduct/?id=<%= product._id %>" style="color:rgba(107, 235, 164, 1); background: none; border: none;">Edit</a>      </div>
-                                   
-                                      </td>                  
-                                      <td>
-                                          <form data-product-id="<%= product._id %>"  action="/admin/productDetails/delete/<%= product._id %>" method="POST" style="display: inline;">
-                                            <div class="badge badge-outline-danger"><button type="button"style="color: rgba(245, 37, 37, 1); background: none; border: none;" onclick=" return confirmDelete('<%= product._id %>', '<%= product.productName %>')">Delete</button></div>
+            <!-- Images Section -->
+           
 
-                                             
-                                             
-                                            </form>
-                                       
-                                      
-                                        </td>
-                                        
-                                      </tr>
-                                      <% }); %>
-                              </tbody>
-                            </table>
-                          </div>
+            <td>
+              <span class="badge 
+                <%= product.status === 'active' ? 'bg-success' : product.status === 'inactive' ? 'bg-secondary' : 'bg-danger' %>">
+                <%= product.status %>
+              </span>
+            </td>
+
+            <td>
+  <!-- Admin control (blocked/unblocked) -->
+  <span class="badge <%= !product.isActive ? 'bg-danger' : 'bg-success' %>">
+    <%= !product.isActive ? 'Blocked' : 'Unblocked' %>
+  </span>
+</td>
+
+
+            <td><%= new Date(product.createdAt).toLocaleDateString() %></td>
+            <td><%= new Date(product.updatedAt).toLocaleDateString() %></td>
+
+            <!-- Actions -->
+            <td>
+              <a href="/admin/products/<%= product._id %>" class="btn btn-sm btn-primary mb-1">Edit</a>
+               <!-- Block Product Button (example inside your actions column) -->
+<button 
+  class="btn btn-sm btn-warning toggle-product-btn" 
+  data-id="<%= product._id %>" 
+  data-status="<%= product.isActive %>" 
+  data-bs-toggle="modal" 
+  data-bs-target="#blockProductModal">
+  <%= product.isActive ? "Block" : "Unblock" %>
+</button>
+            </td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="12" class="text-center text-muted">No products found</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+                      
                       
                     
                   
@@ -109,30 +147,22 @@
                     
                   </div>
 
-                  <div class="pagination mx-auto">
-                    <% if (currentPage > 1) { %>
-                      <a href="?page=<%= currentPage - 1 %>" class="pagination__arrow pagination__arrow--left ">
-                        <span class="pagination__arrow-half "><i class="fa-solid fa-chevron-left"></i></span>
-                        <span class="pagination__arrow-half "></span>
-                      </a>
-                    <% } %>
-                    
-                    <span class="pagination__number-indicator"></span>
-                    
-                    <% for (let i = 1; i <= totalPages; i++) { %> 
-                      <a href="?page=<%= i %>" class="pagination__number <%= i === currentPage ? 'pagination__number--active' : '' %>">
-                        <%= i %>
-                      </a>
-                    <% } %>
-                    
-                    <% if (currentPage < totalPages) { %>
-                      <a href="?page=<%= currentPage + 1 %>" class="pagination__arrow pagination__arrow--right">
-                        <span class="pagination__arrow-half"></span>
-                        <span class="pagination__arrow-half"><i class="fa-solid fa-chevron-left"></i></span>
-                      </a>
-                    <% } %>
-                  </div>
+                <!-- Pagination -->
+<div>
+  <% if (pagination.currentPage > 1) { %>
+    <a href="?page=<%= pagination.currentPage - 1 %>">Previous</a>
+  <% } %>
 
+  <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+    <a href="?page=<%= i %>" <%= i === pagination.currentPage ? 'style="font-weight:bold;"' : '' %> >
+      <%= i %>
+    </a>
+  <% } %>
+
+  <% if (pagination.currentPage < pagination.totalPages) { %>
+    <a href="?page=<%= pagination.currentPage + 1 %>">Next</a>
+  <% } %>
+</div>
                 </div>
                 
               </div>
@@ -154,7 +184,41 @@
     </div>
 
   
+<!-- Block/Unblock Product Modal -->
+<div class="modal fade" id="blockProductModal" tabindex="-1" aria-labelledby="blockProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white border-0 shadow-lg rounded-3">
+      
+      <!-- Modal Header -->
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title fw-bold text-warning" id="blockProductModalLabel">
+          <i class="bi bi-slash-circle me-2 text-danger"></i> Confirm Action
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
+      <!-- Modal Body -->
+      <div class="modal-body" id="blockModalBody">
+        <!-- Dynamic text will be inserted via JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i> Cancel
+        </button>
+        <button type="button" id="confirmBlockProduct" class="btn btn-warning">
+          <i class="bi bi-slash-circle-fill me-1"></i> Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script src="/javascripts/ajax.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <!-- Include your custom styles and script -->
     <style>
@@ -167,36 +231,47 @@
 
 
 <script>
-function confirmDelete(productId, productName) {
-  console.log('Delete function called with productId:', productId);
+  let selectedProductId = null;
+  let selectedProductStatus = null; // true = active, false = blocked
 
-  Swal.fire({
-    title: 'Delete Confirmation',
-    text: `Are you sure you want to delete ${productName}?`,
-    showCancelButton: true,
-    confirmButtonColor: '#f44336',
-    cancelButtonColor: '#2196f3',
-    confirmButtonText: 'Yes, delete it!',
-    customContainerClass: 'custom-swal',
-    customClass: {
-      popup: 'custom-swal-popup',
-      content: 'custom-swal-content',
-      confirmButton: 'custom-swal-confirm-button'
-    }
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // Use the data-product-id attribute to select the form
-      const deleteForm = document.querySelector(`form[data-product-id="${productId}"]`);
-      
-      if (deleteForm) {
-        deleteForm.submit();
-      } else {
-        console.error('Form not found.');
-      }
+  // Handle product block/unblock button click
+  document.querySelectorAll(".toggle-product-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+      selectedProductId = this.getAttribute("data-id");
+      selectedProductStatus = this.getAttribute("data-status") === "true";
+
+      // Update modal body dynamically
+      const modalBody = document.getElementById("blockModalBody");
+      modalBody.innerHTML = selectedProductStatus
+        ? `<p class="mb-0">Are you sure you want to <span class="fw-bold text-danger">block</span> this product?  
+           Customers will <span class="text-warning">no longer see it</span>.</p>`
+        : `<p class="mb-0">Do you want to <span class="fw-bold text-success">unblock</span> this product?  
+           Customers will <span class="text-success">be able to see and purchase it</span>.</p>`;
+    });
+  });
+
+  // Confirm block/unblock action
+  document.getElementById("confirmBlockProduct").addEventListener("click", async function () {
+    console.log("button clicked")
+    if (!selectedProductId) return;
+
+    const response = await ajaxRequest(`/admin/productDetails/${selectedProductId}/toggle-block`, "PUT");
+
+    if (response.success) {
+      const modal = bootstrap.Modal.getInstance(document.getElementById("blockProductModal"));
+      modal.hide();
+      window.location.href = '/admin/productDetails' // Refresh table
+    } else {
+      Toastify({
+        text: "Failed to update product status.",
+        duration: 4000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "red",
+        stopOnFocus: true
+      }).showToast();
     }
   });
-}
-
 </script>
 
 
@@ -233,6 +308,8 @@ function confirmDelete(productId, productName) {
     })
     </script>
     
+
+
     
     <script src="/assets/js/pagination.js"></script>  
 

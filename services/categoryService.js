@@ -1,4 +1,4 @@
-const Brand = require('../models/catagoryModel')
+const Brand = require('../models/categoryModel')
 const mockCategory = require('../mock/category')
 const paginate = require("../utils/pagination")
 

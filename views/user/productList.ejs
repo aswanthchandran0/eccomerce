@@ -46,6 +46,7 @@
 
                     <div class="products">
                         <div id="product-list" class="row">
+                            <% if (products && products.length > 0) { %>
                             <% products.forEach(product => { %>
                             <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
                                 <div class="product">
@@ -83,7 +84,10 @@
                             </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
           
 <% }); %>
-                            
+                
+<% } else { %>
+    <p class="text-center text-muted">No products available</p>
+<% } %>
                         </div><!-- End .row -->
 
                      
@@ -106,8 +110,8 @@
                                 <div class="collapse show" id="widget-1">
                                     <div class="widget-body">
                                         <div class="filter-items filter-items-count">
-                                            <% if(category !==null && category !== undefined){%>
-                                                <% category.forEach((category,index)=>{%>
+                                            <% if(categories && categories>0){%>
+                                                <% categories.forEach((category,index)=>{%>
                                             <div class="filter-item">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input filter-checkbox" id="category-<%=index %>" data-category="<%= category.name %>">
