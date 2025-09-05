@@ -2,7 +2,7 @@ const fs = require("fs").promises;
 const sharp = require("sharp");
 const Product = require("../models/productModel");
 const Category = require("../models/categoryModel");
-const brandData = require("../models/brandModel");
+const brandData = require("../models/BrandModel");
 const mongoose = require("mongoose");
 
 const {
