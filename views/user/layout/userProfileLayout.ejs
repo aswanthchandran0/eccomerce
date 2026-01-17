@@ -1,0 +1,198 @@
+ class="row">
+                        <!-- Sidebar -->
+                        <div class="col-lg-3 mb-4 mb-lg-0">
+                            <div class="user-sidebar p-4">
+                                <div class="text-center mb-4">
+                                    <div class="position-relative d-inline-block">
+                                        <img src="<%= user.profileImage || '/assets/images/default-avatar.jpg' %>" 
+                                             alt="<%= user.Fname %>" 
+                                             class="user-avatar">
+                                        <div class="position-absolute bottom-0 end-0 bg-primary rounded-circle p-1 border border-3 border-white">
+                                            <i class="fas fa-pencil-alt text-white" style="font-size: 12px;"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="user-name mt-3"><%= user.Fname %> <%= user.Lname %></h4>
+                                    <p class="user-email"><%= user.Email %></p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <span class="badge bg-primary">Member</span>
+                                        <span class="badge bg-success">Verified</span>
+                                    </div>
+                                </div>
+                                
+                                <ul class="sidebar-menu">
+                                    <li>
+                                        <a href="/userProfile" class="<%= currentPage === 'dashboard' ? 'active' : '' %>">
+                                            <i class="icon-home"></i>
+                                            Dashboard
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/userProfile/orders" class="<%= currentPage === 'orders' ? 'active' : '' %>">
+                                            <i class="icon-shopping-cart"></i>
+                                            My Orders
+                                            <% if(orderCount && orderCount > 0) { %>
+                                                <span class="menu-badge"><%= orderCount %></span>
+                                            <% } %>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/userProfile/wallet" class="<%= currentPage === 'wallet' ? 'active' : '' %>">
+                                            <i class="icon-credit-card"></i>
+                                            Wallet & Payments
+                                            <span class="menu-badge">₹<%= wallet || '0' %></span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/userProfile/offers" class="<%= currentPage === 'offers' ? 'active' : '' %>">
+                                            <i class="icon-tag"></i>
+                                            Offers & Coupons
+                                            <% if(couponCount && couponCount > 0) { %>
+                                                <span class="menu-badge"><%= couponCount %></span>
+                                            <% } %>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/userProfile/addresses" class="<%= currentPage === 'addresses' ? 'active' : '' %>">
+                                            <i class="icon-map-marker"></i>
+                                            Addresses
+                                            <% if(addressCount && addressCount > 0) { %>
+                                                <span class="menu-badge"><%= addressCount %></span>
+                                            <% } %>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/userProfile/wishlist" class="<%= currentPage === 'wishlist' ? 'active' : '' %>">
+                                            <i class="icon-heart"></i>
+                                            Wishlist
+                                            <% if(wishlistCount && wishlistCount > 0) { %>
+                                                <span class="menu-badge"><%= wishlistCount %></span>
+                                            <% } %>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/userProfile/settings" class="<%= currentPage === 'settings' ? 'active' : '' %>">
+                                            <i class="icon-cog"></i>
+                                            Account Settings
+                                        </a>
+                                    </li>
+                                    <li class="mt-4">
+                                        <form action="/userProfile/signout" method="post" class="d-grid">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="icon-power-off"></i> Sign Out
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Main Content -->
+                        <div class="col-lg-9">
+                            <div class="user-content">
+                                <%- body %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <button id="scroll-top" title="Back to Top">
+        <i class="icon-arrow-up"></i>
+    </button>
+    
+    <%- include('../layout/navBarMobile.ejs') %>
+    <%- include('../layout/footer.ejs') %>
+    
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/assets/js/main.js"></script>
+    
+    <script>
+        // Sidebar active link highlighting
+        $(document).ready(function() {
+            // Add active class based on current page
+            const currentPath = window.location.pathname;
+            $('.sidebar-menu a').each(function() {
+                if ($(this).attr('href') === currentPath) {
+                    $(this).addClass('active');
+                }
+            });
+            
+            // Smooth transitions
+            $('.sidebar-menu a').on('click', function(e) {
+                if ($(this).attr('href').startsWith('/userProfile')) {
+                    e.preventDefault();
+                    const url = $(this).attr('href');
+                    
+                    // Add loading state
+                    $('.user-content').addClass('loading');
+                    
+                    // Load content via AJAX
+                    $.ajax({
+                        url: url,
+                        method: 'GET',
+                        success: function(response) {
+                            $('.user-content').html(response);
+                            $('.user-content').removeClass('loading');
+                            
+                            // Update active link
+                            $('.sidebar-menu a').removeClass('active');
+                            $(`a[href="${url}"]`).addClass('active');
+                            
+                            // Update browser history
+                            history.pushState(null, '', url);
+                        },
+                        error: function() {
+                            window.location.href = url;
+                        }
+                    });
+                }
+            });
+            
+            // Handle browser back/forward
+            window.onpopstate = function() {
+                const url = window.location.pathname;
+                if (url.startsWith('/userProfile')) {
+                    $.ajax({
+                        url: url,
+                        method: 'GET',
+                        success: function(response) {
+                            $('.user-content').html(response);
+                            $('.sidebar-menu a').removeClass('active');
+                            $(`a[href="${url}"]`).addClass('active');
+                        },
+                        error: function() {
+                            window.location.href = url;
+                        }
+                    });
+                }
+            };
+            
+            // Copy coupon code functionality
+            $(document).on('click', '.copy-coupon', function() {
+                const couponCode = $(this).data('code');
+                navigator.clipboard.writeText(couponCode).then(function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Copied!',
+                        text: 'Coupon code copied to clipboard',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                });
+            });
+            
+            // Address edit toggle
+            $(document).on('click', '.edit-address-btn', function() {
+                const addressId = $(this).data('address-id');
+                $(`#address-${addressId}`).toggle();
+            });
+        });
+    </script>
+</body>
+</html>

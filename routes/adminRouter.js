@@ -44,8 +44,11 @@ adminRoute.post('/adminLogin',middlewares.middlewares.AuthenticationMiddleware,a
 
 // Admin Order Routes
 adminRoute.get('/adminOrder', adminOrderController.orderStatus.orderStatusPage);
-adminRoute.get('/adminOrder/selectedValue/:selectedValue/orderId/:orderId', adminOrderController.orderStatus.updateOrderStatus);
 adminRoute.get('/adminProductView',adminOrderController.orderStatus.adminProductView)
+adminRoute.post('/update-order-status', adminOrderController.orderStatus.updateOrderStatus);
+adminRoute.get('/order-stats', adminOrderController.orderStatus.getOrderStats);
+adminRoute.delete('/delete-order/:orderId', adminOrderController.orderStatus.deleteOrder);
+adminRoute.get('/order-details/:orderId', adminOrderController.orderStatus.getOrderDetails); //
 // Branding Routes
 adminRoute.post('/brands',brandingController.branding.addBrand)
 adminRoute.put('/brands/:id',brandingController.branding.editBrand)
@@ -113,42 +116,12 @@ adminRoute.get(
   productController.productEditPage
 )
 
-// READ all products (list)
-// adminRoute.get('/products', productController.getAllProducts);
-
-// READ one product (edit page / details)
-// adminRoute.get('/products/:id', productController.getProductById);
-
-
-
-// DELETE a product
-// adminRoute.delete('/products/:id', productController.deleteProduct);
-
-// // DELETE a specific image from a product
-// adminRoute.delete(
-//   '/products/:id/images/:imageId',
-//   productController.deleteProductImage
-// );
-
-
-
-// adminRoute.post('/addProduct', upload.array('images', 4), productController.addproduct);  
-// adminRoute.delete('/deleteImage', productController.deleteImage);
-
-
-// // deteting images from product add
-
-
-
-// //product edit
-// adminRoute.get('/editProduct',productController.editProductPage)
-
-// adminRoute.post('/updateProduct', upload.array('images', 4), productController.updateProduct);
-
 //coupon router
  
 adminRoute.get('/coupon',adminCouponController.couponController.couponPage);
 adminRoute.post('/addCoupon',adminCouponController.couponController.couponAdd);
+adminRoute.post('/coupon/:id/toggle', adminCouponController.couponController.toggleCouponStatus);
+adminRoute.delete('/coupon/:id/delete', adminCouponController.couponController.deleteCoupon);
 
 // banner 
 

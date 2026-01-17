@@ -1,206 +1,414 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="en">
 <head>
-    <title>DISEE - Invoice HTML5 Template</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-
-    <!-- External CSS libraries -->
-    <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="assets/fonts/font-awesome/css/font-awesome.min.css">
-
-    <!-- Favicon icon -->
-    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" >
-
-    <!-- Google fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900">
-
-    <!-- Custom Stylesheet -->
-    <link type="text/css" rel="stylesheet" href="/stylesheets/invoice.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice - Order #<%= order._id.toString().slice(-6).toUpperCase() %></title>
+    <style>
+        /* Invoice Styles - Optimized for printing */
+        @page {
+            margin: 20px;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background: white;
+        }
+        
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4361ee;
+        }
+        
+        .company-info h1 {
+            color: #4361ee;
+            margin: 0;
+            font-size: 28px;
+        }
+        
+        .invoice-title {
+            text-align: right;
+        }
+        
+        .invoice-title h2 {
+            color: #333;
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .invoice-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .meta-box {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .meta-box h3 {
+            color: #4361ee;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .meta-box p {
+            margin: 5px 0;
+        }
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .items-table th {
+            background: #4361ee;
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+        
+        .items-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        
+        .items-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .items-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .item-name {
+            font-weight: 600;
+        }
+        
+        .item-price {
+            text-align: right;
+        }
+        
+        .total-section {
+            margin-left: auto;
+            width: 300px;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .total-row:last-child {
+            border-bottom: 2px solid #4361ee;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        
+        .invoice-footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status-active { background: #d4edda; color: #155724; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        .status-shipped { background: #d1ecf1; color: #0c5460; }
+        .status-processing { background: #cce5ff; color: #004085; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+        
+        .print-only {
+            display: none;
+        }
+        
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            .print-only {
+                display: block !important;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .invoice-container {
+                border: none;
+                box-shadow: none;
+                padding: 0;
+            }
+            
+            .items-table th {
+                background: #4361ee !important;
+                -webkit-print-color-adjust: exact;
+                color: white !important;
+            }
+            
+            .status-badge {
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- Invoice 1 start -->
-<div class="invoice-1 invoice-content">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <% if(order !== null && order !==undefined ){%>
-                <div class="invoice-inner clearfix">
-                    <div class="invoice-info clearfix" id="invoice_wrapper">
-                        <div class="invoice-headar">
-                            <div class="row g-0">
-                                <div class="col-sm-6">
-                                    <div class="invoice-logo">
-                                        <!-- logo started -->
-                                        <div class="logo">
-                                         <div class="h2">LEXXIVE</div>
-                                        </div>
-                                        <!-- logo ended -->
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 invoice-id">
-                                    <div class="info">
-                                        <h1 class="color-white inv-header-1">Invoice</h1>
-                                        <p class="color-white mb-1">Order Id: <span><%= order._id %></span></p>
-                                        <p class="color-white mb-0">Date <span><%= order.orderDate.toLocaleDateString(); %></span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="invoice-top">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="invoice-number mb-30">
-                                        <h4 class="inv-title-1">Invoice To</h4>
-                                        <h2 class="name mb-10"><%= user.Fname %></h2>
-                                        <p class="invo-addr-1">
-                                            
-                                            <%=order.address.Email %>
-                                             <br/>
-                                             No:<%=order.address.PhoneNumber %>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="invoice-number mb-30">
-                                        <div class="invoice-number-inner">
-                                            <h4 class="inv-title-1">Invoice From</h4>
-                                            <h2 class="name mb-10">Lexxive</h2>
-                                            <p class="invo-addr-1">
-                                    
-                                                aswanthc26@gmail.com<br/>
-                                            
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                       
-                        <div class="invoice-center">
-                            <div class="table-responsive">
-                                <table class="table mb-0 table-striped invoice-table">  
-                                    <thead class="bg-active">
-                                    <tr class="tr">
-                                        <th>No.</th>
-                                        <th class="pl0 text-start">ProductName</th>
-                                        <th class="text-center">Price</th>
-                                        <th class="text-center">Quantity</th>
-                                        <th class="text-end">Amount</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% order.productDetails.forEach((product,index)=>{%>
-                                    <tr class="tr">
-                                        <td>
-                                            <div class="item-desc-1">
-                                                <span><%= index+1 %></span>
-                                            </div>
-                                        </td>
-                                        <td class="pl0"><%=product.productId.ProductName %></td>
-                                        <td class="text-center">₹<%=product.productId.ProductPrice %></td>
-                                        <td class="text-center"><%= product.purchasedCount %></td>
-                                        <td class="text-end">₹<%= product.productId.ProductPrice * product.purchasedCount %></td>
-                                    </tr>
-                                    <%})%>
-                                   
-                                    <tr class="tr2">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-center">SubTotal</td>
-                                        <td class="text-end">₹<%= order.Total - order.shippingPrice %></td>
-                                    </tr>
-                                    <tr class="tr2">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-center">Shipping Charge</td>
-                                        <td class="text-end">₹<%= order.shippingPrice %></td>
-                                    </tr>
-                                    <tr class="tr2">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-center f-w-600 active-color">Grand Total</td>
-                                        <td class="f-w-600 text-end active-color">₹<%= order.Total %></td>
-                                    </tr>
-
-                                   
-                                  
-                                  
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                       
-                        <div class="invoice-bottom">
-                            <div class="row">
-                                <div class="col-lg-6 col-md-8 col-sm-7">
-                                    <div class="mb-30 dear-client">
-                                        <h3 class="inv-title-1">Address</h3>
-                                        <p>Name: <%=order.address.Fname %>&nbsp
-                                            Email: <%=order.address.Email %><br>
-                                            phone Number:<%=order.address.PhoneNumber %> &nbsp
-                                            Address: <%=order.address.Address %><br>
-                                            Place: <%=order.address.Place %>&nbsp
-                                            state: <%=order.address.state %> <br>
-                                            LandMark: <%=order.address.LandMark %> &nbsp 
-                                            secondNumber: <%=order.address.AphoneNumber %> <br>
-                                            AddressType: <%= order.address.AddressType %> &nbsp								
-                                        </p>
-
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-4 col-sm-5">
-                                    <div class="mb-30 payment-method">
-                                        <h3 class="inv-title-1">Payment</h3>
-                                        <ul class="payment-method-list-1 text-14">
-                                            <li><strong>Method:</strong> <%= order.paymentMethod %></li>
-                                            <li><strong>Received From:</strong> <%= user.Fname %></li>
-                                           
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="invoice-contact clearfix">
-                            <div class="row g-0">
-                                <div class="col-lg-9 col-md-11 col-sm-12">
-                                    <div class="contact-info">
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="invoice-btn-section clearfix d-print-none">
-                        <a href="/orderDetails" class="btn btn-lg btn-print">
-                            <i class="fa fa-print"></i> Back
-                        </a>
-                        <a href="#" onclick="invoiceDownload()" class="btn btn-lg btn-print">
-                            <i class="fa fa-print"></i> Download
-                        </a>
-                    </div>
-                </div>
-                <%}%>
+    <div class="invoice-container">
+        <!-- Header -->
+        <div class="invoice-header">
+            <div class="company-info">
+                <h1>Lexxive</h1>
+                <p>123 Business Street, City, State 12345</p>
+                <p>Phone: (123) 456-7890 | Email: info@lexivestore.com</p>
+                <p>GSTIN: 12ABCDE3456F7Z8</p>
+            </div>
+            <div class="invoice-title">
+                <h2>INVOICE</h2>
+                <p>Invoice #: <strong><%= order._id.toString().slice(-6).toUpperCase() %></strong></p>
+                <p>Date: <%= new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                <span class="status-badge status-<%= order.orderStatus.toLowerCase() %>">
+                    <%= order.orderStatus %>
+                </span>
             </div>
         </div>
+        
+        <!-- Customer and Order Info -->
+        <div class="invoice-meta">
+            <div class="meta-box">
+                <h3>Billed To</h3>
+                <p><strong><%= user.Fname %> <%= user.Lname %></strong></p>
+                <p>Email: <%= user.Email %></p>
+                <p>Phone: <%= user.PhoneNumber %></p>
+            </div>
+            
+            <div class="meta-box">
+                <h3>Shipping Address</h3>
+                <p><strong><%= order.address.Fname %></strong></p>
+                <p><%= order.address.Address %></p>
+                <p><%= order.address.Place %>, <%= order.address.state %> - <%= order.address.Pincode %></p>
+                <p>Phone: <%= order.address.PhoneNumber %></p>
+                <% if(order.address.AphoneNumber) { %>
+                    <p>Alt Phone: <%= order.address.AphoneNumber %></p>
+                <% } %>
+            </div>
+            
+            <div class="meta-box">
+                <h3>Order Details</h3>
+                <p><strong>Order ID:</strong> <%= order._id %></p>
+                <p><strong>Order Date:</strong> <%= new Date(order.orderDate).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                }) %></p>
+                <p><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
+                <p><strong>Payment Status:</strong> <%= order.paymentStatus %></p>
+            </div>
+        </div>
+        
+        <!-- Items Table -->
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Item Description</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% 
+                let itemCounter = 1;
+                let subtotal = 0;
+                order.productDetails.forEach((item, index) => { 
+                    const product = item.productId;
+                    const itemTotal = product ? product.price * item.purchasedCount : 0;
+                    subtotal += itemTotal;
+                %>
+                <tr>
+                    <td><%= itemCounter++ %></td>
+                    <td>
+                        <div class="item-name"><%= product ? product.name : 'Product Not Found' %></div>
+                        <% if(product && product.description) { %>
+                            <div class="text-muted" style="font-size: 12px;"><%= product.description.substring(0, 100) %>...</div>
+                        <% } %>
+                    </td>
+                    <td>₹<%= product ? product.price : 0 %></td>
+                    <td><%= item.purchasedCount %></td>
+                    <td class="item-price">₹<%= itemTotal.toFixed(2) %></td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        
+        <!-- Totals -->
+        <div class="total-section">
+            <div class="total-row">
+                <span>Subtotal:</span>
+                <span>₹<%= subtotal.toFixed(2) %></span>
+            </div>
+            <div class="total-row">
+                <span>Shipping:</span>
+                <span>₹<%= order.shippingPrice.toFixed(2) %></span>
+            </div>
+            <% if(order.discount) { %>
+            <div class="total-row">
+                <span>Discount:</span>
+                <span>-₹<%= order.discount.toFixed(2) %></span>
+            </div>
+            <% } %>
+            <div class="total-row">
+                <span>Grand Total:</span>
+                <span>₹<%= order.Total.toFixed(2) %></span>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="invoice-footer">
+            <p><strong>Terms & Conditions</strong></p>
+            <p>1. Goods once sold will not be taken back.<br>
+               2. Interest @18% p.a. will be charged on overdue payments.<br>
+               3. Subject to Mumbai Jurisdiction only.</p>
+            <p class="print-only">*** This is a computer generated invoice and does not require a signature ***</p>
+            <p>Thank you for your business!</p>
+        </div>
+        
+        <!-- Print Button -->
+        <div class="no-print" style="margin-top: 30px; text-align: center;">
+            <button onclick="window.print()" style="
+                background: #4361ee;
+                color: white;
+                border: none;
+                padding: 12px 30px;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                margin-right: 10px;
+            ">
+                <i class="fas fa-print"></i> Print Invoice
+            </button>
+            <button onclick="downloadPDF()" style="
+                background: #28a745;
+                color: white;
+                border: none;
+                padding: 12px 30px;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+            ">
+                <i class="fas fa-download"></i> Download as PDF
+            </button>
+        </div>
     </div>
-</div>
-<!-- Invoice 1 end -->
-
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/jspdf.min.js"></script>
-<script src="assets/js/html2canvas.js"></script>
-<script src="assets/js/app.js"></script>
-
-<script>
-    function invoiceDownload(){
-        window.print()
-    }
-</script>
+    
+    <!-- Include jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        // Function to download as PDF
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const element = document.querySelector('.invoice-container');
+            
+            // Show loading
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+            button.disabled = true;
+            
+            try {
+                // Convert HTML to canvas
+                const canvas = await html2canvas(element, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                });
+                
+                const imgData = canvas.toDataURL('image/png');
+                
+                // Calculate dimensions
+                const imgWidth = 190; // A4 width in mm
+                const pageHeight = 280; // A4 height in mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                
+                let heightLeft = imgHeight;
+                let position = 10;
+                
+                // Add first page
+                doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight - 20;
+                
+                // Add additional pages if needed
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                
+                // Download the PDF
+                doc.save(`invoice-${'<%= order._id.toString().slice(-6).toUpperCase() %>'}.pdf`);
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                alert('Error generating PDF. Please try printing instead.');
+            } finally {
+                // Restore button
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+        
+        // Auto-print option (uncomment if needed)
+        // window.onload = function() {
+        //     setTimeout(function() {
+        //         window.print();
+        //     }, 1000);
+        // };
+    </script>
 </body>
 </html>

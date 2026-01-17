@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - User Profile</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        /* Orders Page Specific Styles */
+        .user-dashboard {
+            background-color: #f8f9fa;
+            min-height: calc(100vh - 150px);
+            padding: 30px 0;
+        }
+        
+        .user-sidebar {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .avatar-initials {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            border: 4px solid #007bff;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 0 auto;
+        }
+        
+        .user-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin: 15px 0 5px;
+        }
+        
+        .user-email {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            color: #495057;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu a.active {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-badge {
+            margin-left: auto;
+            background: #6c757d;
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            min-width: 25px;
+            text-align: center;
+        }
+        
+        .sidebar-menu a.active .menu-badge {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .user-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            min-height: 500px;
+        }
+        
+        .content-header {
+            border-bottom: 2px solid #f8f9fa;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .content-header h3 {
+            color: #333;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Orders Table Styles */
+        .transaction-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .transaction-table thead th {
+            background-color: #f8f9fa;
+            border: none;
+            padding: 15px 20px;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #e9ecef;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .transaction-table tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        .transaction-table tbody tr:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .transaction-table tbody td {
+            padding: 20px;
+            border-bottom: 1px solid #eaeaea;
+            vertical-align: middle;
+            color: #495057;
+        }
+        
+        .transaction-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Status Badges */
+        .badge {
+            padding: 6px 12px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            border-radius: 20px;
+        }
+        
+        .bg-success { background-color: #d4edda !important; color: #155724 !important; }
+        .bg-danger { background-color: #f8d7da !important; color: #721c24 !important; }
+        .bg-warning { background-color: #fff3cd !important; color: #856404 !important; }
+        .bg-info { background-color: #cce5ff !important; color: #004085 !important; }
+        .bg-secondary { background-color: #e2e3e5 !important; color: #383d41 !important; }
+        
+        /* Action Buttons */
+        .btn-outline-primary {
+            border: 2px solid #007bff;
+            color: #007bff;
+            font-weight: 500;
+            padding: 6px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,123,255,0.2);
+        }
+        
+        /* Pagination */
+        .pagination {
+            margin-top: 30px;
+        }
+        
+        .page-link {
+            border: none;
+            color: #495057;
+            margin: 0 5px;
+            border-radius: 8px !important;
+            padding: 8px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .page-link:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .page-item.active .page-link {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h4 {
+            color: #6c757d;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        /* Order Items Count */
+        .items-count {
+            background: #f8f9fa;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        /* Order Amount */
+        .order-amount {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .user-dashboard {
+                padding: 15px 0;
+            }
+            
+            .user-sidebar {
+                position: static;
+                margin-bottom: 20px;
+            }
+            
+            .avatar-initials {
+                width: 80px;
+                height: 80px;
+                font-size: 28px;
+            }
+            
+            .user-content {
+                padding: 20px 15px;
+            }
+            
+            .transaction-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .transaction-table thead th,
+            .transaction-table tbody td {
+                padding: 12px 15px;
+            }
+            
+            .btn-outline-primary {
+                padding: 5px 10px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Order Status Colors */
+        .status-pending { background-color: #fff3cd; color: #856404; }
+        .status-processing { background-color: #cce5ff; color: #004085; }
+        .status-shipped { background-color: #d1ecf1; color: #0c5460; }
+        .status-delivered { background-color: #d4edda; color: #155724; }
+        .status-cancelled { background-color: #f8d7da; color: #721c24; }
+        .status-returned { background-color: #e2e3e5; color: #383d41; }
+        
+        /* Order ID Styling */
+        .order-id {
+            font-weight: 600;
+            color: #007bff;
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* Date Styling */
+        .order-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header and Navbar -->
+    <%- include('../layout/header.ejs') %>
+    <%- include('../layout/navBar.ejs') %>
+
+    <div class="user-dashboard">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                    <div class="user-sidebar p-4">
+                        <div class="text-center mb-4">
+                            <!-- Avatar with Initials -->
+                            <% 
+                                // Get user initials
+                                const firstName = user.Fname || '';
+                                const lastName = user.Lname || '';
+                                const firstInitial = firstName.charAt(0).toUpperCase();
+                                const lastInitial = lastName.charAt(0).toUpperCase();
+                                const initials = (firstInitial + (lastInitial || '')) || 'U';
+                                
+                                // Function to generate consistent color from name
+                                function stringToColor(str) {
+                                    let hash = 0;
+                                    for (let i = 0; i < str.length; i++) {
+                                        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                                    }
+                                    
+                                    const colors = [
+                                        '#4361ee', '#3a0ca3', '#7209b7', '#f72585', 
+                                        '#4cc9f0', '#4895ef', '#560bad', '#b5179e',
+                                        '#2a9d8f', '#e9c46a', '#e76f51', '#264653',
+                                        '#ef476f', '#06d6a0', '#118ab2', '#073b4c'
+                                    ];
+                                    
+                                    const index = Math.abs(hash) % colors.length;
+                                    return colors[index];
+                                }
+                                
+                                const avatarColor = stringToColor(firstName + lastName);
+                            %>
+                            
+                            <div class="avatar-initials" style="background-color: <%= avatarColor %>;">
+                                <%= initials %>
+                            </div>
+                            
+                            <h4 class="user-name mt-3"><%= user.Fname %> <%= user.Lname %></h4>
+                            <p class="user-email"><%= user.Email %></p>
+                        </div>
+                        
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/userProfile" class="<%= currentPage === 'dashboard' ? 'active' : '' %>">
+                                    <i class="fas fa-home"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/orders" class="<%= currentPage === 'orders' ? 'active' : '' %>">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    My Orders
+                                    <% if(orderCount && orderCount > 0) { %>
+                                        <span class="menu-badge"><%= orderCount %></span>
+                                    <% } %>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/wallet" class="<%= currentPage === 'wallet' ? 'active' : '' %>">
+                                    <i class="fas fa-wallet"></i>
+                                    Wallet & Payments
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/offers" class="<%= currentPage === 'offers' ? 'active' : '' %>">
+                                    <i class="fas fa-tag"></i>
+                                    Offers & Coupons
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/addresses" class="<%= currentPage === 'addresses' ? 'active' : '' %>">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Addresses
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/wishlist" class="<%= currentPage === 'wishlist' ? 'active' : '' %>">
+                                    <i class="fas fa-heart"></i>
+                                    Wishlist
+                                </a>
+                            </li>
+                          
+                            </li>
+                            <li class="mt-4">
+                                <form action="/userProfile/signout" method="post" class="d-grid">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <div class="user-content">
+                        <div class="content-header">
+                            <h3><i class="fas fa-shopping-cart me-2"></i> My Orders</h3>
+                            <p class="text-muted mb-0">View and track all your orders</p>
+                        </div>
+                        
+                        <div class="content-body">
+                            <!-- Orders Table -->
+                            <% if(orders && orders.length > 0) { %>
+                                <div class="table-responsive">
+                                    <table class="table transaction-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Order ID</th>
+                                                <th>Date</th>
+                                                <th>Items</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% orders.forEach(order => { 
+                                                // Determine status class
+                                                let statusClass = 'bg-secondary';
+                                                if (order.status === 'Delivered') statusClass = 'bg-success';
+                                                else if (order.status === 'Cancelled') statusClass = 'bg-danger';
+                                                else if (order.status === 'Processing') statusClass = 'bg-info';
+                                                else if (order.status === 'Pending') statusClass = 'bg-warning';
+                                                else if (order.status === 'Shipped') statusClass = 'bg-info';
+                                            %>
+                                            <tr>
+                                                <td>
+                                                    <span class="order-id">#<%= order.orderId %></span>
+                                                </td>
+                                                <td>
+                                                    <span class="order-date"><%= order.date %></span>
+                                                </td>
+                                                <td>
+                                                    <span class="items-count"><%= order.items %> items</span>
+                                                </td>
+                                                <td>
+                                                    <span class="order-amount">₹<%= order.amount %></span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge <%= statusClass %>">
+                                                        <%= order.status %>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a href="/orderDetails?id=<%= order._id %>" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-eye me-1"></i> View Details
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <!-- Pagination -->
+                                <% if(totalPages > 1) { %>
+                                    <nav aria-label="Order pagination">
+                                        <ul class="pagination justify-content-center">
+                                            <% if(currentPageNum > 1) { %>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="/userProfile/orders?page=<%= currentPageNum - 1 %>">
+                                                        <i class="fas fa-chevron-left"></i>
+                                                    </a>
+                                                </li>
+                                            <% } %>
+                                            
+                                            <% for(let i = 1; i <= totalPages; i++) { %>
+                                                <li class="page-item <%= currentPageNum === i ? 'active' : '' %>">
+                                                    <a class="page-link" href="/userProfile/orders?page=<%= i %>"><%= i %></a>
+                                                </li>
+                                            <% } %>
+                                            
+                                            <% if(currentPageNum < totalPages) { %>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="/userProfile/orders?page=<%= currentPageNum + 1 %>">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                    </a>
+                                                </li>
+                                            <% } %>
+                                        </ul>
+                                    </nav>
+                                <% } %>
+                            <% } else { %>
+                                <div class="empty-state">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <h4 class="mt-3">No orders yet</h4>
+                                    <p class="text-muted">You haven't placed any orders yet</p>
+                                    <a href="/productList" class="btn btn-primary mt-3">
+                                        <i class="fas fa-shopping-bag me-2"></i> Start Shopping
+                                    </a>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Mobile Navbar and Footer -->
+    <%- include('../layout/navBarMobile.ejs') %>
+    <%- include('../layout/footer.ejs') %>
+    
+    <!-- JavaScript -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/main.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Highlight active sidebar link
+            const currentPath = window.location.pathname;
+            $('.sidebar-menu a').each(function() {
+                if ($(this).attr('href') === currentPath) {
+                    $(this).addClass('active');
+                }
+            });
+            
+            // Add hover effects to table rows
+            $('.transaction-table tbody tr').hover(
+                function() {
+                    $(this).css('transform', 'translateY(-2px)');
+                },
+                function() {
+                    $(this).css('transform', 'translateY(0)');
+                }
+            );
+        });
+    </script>
+</body>
+</html>

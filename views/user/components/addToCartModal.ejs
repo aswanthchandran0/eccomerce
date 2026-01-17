@@ -1,0 +1,152 @@
+<div class="modal fade" id="addToCartModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add to Cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <div class="modal-body text-center">
+                <img id="modal-product-image" src="" class="img-fluid mb-3" style="max-height:200px;">
+                <h5 id="modal-product-name"></h5>
+                <p id="modal-product-category" class="text-muted mb-1"></p>
+                <h4 id="modal-product-price" class="text-success mb-3"></h4>
+                
+                <!-- Size Selection -->
+                <div id="modal-size-section" style="display: none;">
+                    <h6 class="section-title mb-2">Select Size:</h6>
+                    <div id="modal-size-options" class="size-options d-flex justify-content-center flex-wrap gap-2 mb-3">
+                        <!-- Size options will be populated here -->
+                    </div>
+                    <p id="modal-size-error" class="text-danger" style="display: none; font-size: 14px;">
+                        Please select a size
+                    </p>
+                </div>
+                
+                <!-- Stock Status -->
+                <p id="modal-stock-status" class="mb-3"></p>
+                
+                <!-- Quantity Selection -->
+                <div class="quantity-container mb-4" style="display: none;">
+                    <h6 class="section-title mb-2">Quantity:</h6>
+                    <div class="quantity-input d-inline-flex align-items-center border rounded">
+                        <button type="button" class="btn qty-btn minus border-end">-</button>
+                        <input type="number" id="modal-quantity" 
+                               class="form-control text-center border-0" 
+                               value="1" min="1" style="width: 60px;">
+                        <button type="button" class="btn qty-btn plus border-start">+</button>
+                    </div>
+                    <p id="modal-max-quantity" class="text-muted small mt-2"></p>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" id="modal-confirm-add" class="btn btn-success">
+                    <i class="icon-shopping-cart mr-2"></i>Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    /* Add to Cart Modal Styles */
+#addToCartModal .size-options {
+    gap: 8px;
+}
+
+#addToCartModal .size-option {
+    padding: 8px 15px;
+    border: 2px solid #ddd;
+    background: white;
+    color: #333;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 50px;
+}
+
+#addToCartModal .size-option:hover {
+    border-color: #28a745;
+    color: #28a745;
+    transform: translateY(-2px);
+}
+
+#addToCartModal .size-option.active {
+    background: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+#addToCartModal .size-option:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: #ccc;
+    color: #999;
+}
+
+#addToCartModal .quantity-input {
+    width: auto;
+    border-radius: 4px;
+}
+
+#addToCartModal .qty-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border: none;
+    color: #333;
+    font-size: 18px;
+    padding: 0;
+}
+
+#addToCartModal .qty-btn:hover {
+    background: #e9ecef;
+}
+
+#addToCartModal .qty-btn:active {
+    background: #dee2e6;
+}
+
+#addToCartModal #modal-quantity {
+    height: 40px;
+    font-weight: 600;
+}
+
+#addToCartModal #modal-quantity::-webkit-outer-spin-button,
+#addToCartModal #modal-quantity::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#addToCartModal #modal-quantity {
+    -moz-appearance: textfield;
+}
+
+#addToCartModal .modal-footer .btn {
+    min-width: 120px;
+    padding: 10px 20px;
+}
+
+#addToCartModal .modal-footer .btn-success {
+    background: #28a745;
+    border-color: #28a745;
+}
+
+#addToCartModal .modal-footer .btn-success:hover {
+    background: #218838;
+    border-color: #218838;
+}
+
+#addToCartModal .modal-footer .btn-success:disabled {
+    background: #6c757d;
+    border-color: #6c757d;
+}
+</style>

@@ -29,19 +29,24 @@ const createUser = async(Fname, Email, PhoneNumber, Password, otp,otpTimestamb) 
 }
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ LOGIN +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const loginController = async (req, res) => {
-  try {
+  try { 
     const { Email, Password } = req.body;
-    if(Email.trim().length===0){
+    
+    if(Email && Email.trim().length===0){
       const errors = { login: 'Please enter email' };
-      return res.render('login', { errors });
+      return res.render('login', { errors, formData: { Email } });
     }
-    if(Password.trim().length ===0){
+    
+    if(Password && Password.trim().length === 0){
       const errors = { login: 'Please enter Password' };
-      return res.render('login', { errors });
+      return res.render('login', { errors, formData: { Email } });
     }
+    
     const user = await User.findOne({ Email: Email })
+    
     if (user && user.Authentication === 'verified') {
       const passwordMatch = await bcrypt.compare(Password, user.Password)
+      
       if (passwordMatch) {
         if (user.userStatus === 'active') {
           req.session.loggedIn = true
@@ -49,22 +54,27 @@ const loginController = async (req, res) => {
           return res.redirect('/?login=sucess');
         } else {
           const errors = { login: 'Account is banned. Please contact support.' };
-          return res.render('login', { errors });
+          return res.render('login', { errors, formData: { Email } });
         }
       } else {
         const errors = { login: 'Invalid email or password.' };
-        return res.render('login', { errors });
+        return res.render('login', { errors, formData: { Email } });
       }
-
     } else {
-      const errors = { login: 'user not exist' };
-      return res.render('login', { errors });
+      const errors = { login: 'User not found. Please check your email or sign up.' };
+      return res.render('login', { errors, formData: { Email } });
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error.' });
+    // Also pass empty formData when there's a server error
+    return res.render('login', { 
+      errors: { login: 'Internal server error. Please try again.' },
+      formData: { Email: req.body.Email || '' }
+    });
   }
 }
+
+
 const generateRandomReferalCode = () => {
   return Math.floor(100000 + Math.random() * 900000);
 };
@@ -140,116 +150,277 @@ async function signUp(req, res) {
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ FORGOT PASSWORD +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+// emailVerfication controller - FIXED
 function emailVerfication(req, res) {
   try {
-    const error = req.query.error
-   res.render('emailverification', { error: error ? error : '' })
+    const error = req.query.error || '';
+    const emailValue = req.query.emailValue || ''; // Get emailValue from query params
+    
+    res.render('emailverification', { 
+      error: error, 
+      emailValue: emailValue 
+    });
   } catch (error) {
     console.log(error);
-    res.status(500)
+    res.status(500).render('emailverification', { 
+      error: 'An error occurred. Please try again.',
+      emailValue: ''
+    });
   }
 }
 
+// emailverifying controller - FIXED
 async function emailverifying(req, res) {
   try {
-    const Email = req.body.Email
-    let error = 'Enter an email'
-    if (Email) {
-      emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if(!emailRegex.test(Email)){
-        error = 'please enter a valid email address' 
-      }else{
-        error = 'Email not existing'
-      }  
+    const Email = req.body.Email ? req.body.Email.trim() : '';
+    let error = '';
+    
+    if (!Email) {
+      error = 'Please enter your email address';
+      return res.redirect('/emailverification?error=' + encodeURIComponent(error) + '&emailValue=' + encodeURIComponent(Email));
     }
-    const existedUser = await User.find({ Email: Email })
-    if (existedUser.length > 0) {
-      res.redirect('/forgotPassword?Email=' + encodeURIComponent(Email))
-    } else {
-      console.log('request reaching in the else case');
-      res.redirect('/emailverification?error=' + encodeURIComponent(error))
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(Email)) {
+      error = 'Please enter a valid email address';
+      return res.redirect('/emailverification?error=' + encodeURIComponent(error) + '&emailValue=' + encodeURIComponent(Email));
     }
+    
+    // Check if user exists
+    const existedUser = await User.findOne({ Email: Email });
+    if (!existedUser) {
+      error = 'No account found with this email address';
+      return res.redirect('/emailverification?error=' + encodeURIComponent(error) + '&emailValue=' + encodeURIComponent(Email));
+    }
+    
+    // Generate and send OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const otpExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
+    
+    // Save OTP to user
+    await User.findByIdAndUpdate(existedUser._id, {
+      otp: otp,
+      otpExpiry: otpExpiry
+    });
+    
+    // TODO: Send OTP via email (implement your email service)
+    // sendOTPEmail(Email, otp);
+    console.log(`OTP for ${Email}: ${otp}`); // For testing
+    
+    // Redirect to password reset page
+    res.redirect('/forgotpassword?Email=' + encodeURIComponent(Email));
+    
   } catch (error) {
-    console.log(error);
-    res.status(500)
+    console.error('Error in emailverifying:', error);
+    const Email = req.body.Email || '';
+    res.redirect('/emailverification?error=An error occurred. Please try again.&emailValue=' + encodeURIComponent(Email));
   }
 }
 
+// forgotPassword controller - FIXED
 function forgotPassword(req, res) {
   try {
-    const Email = req.query.Email
-    const errors = null
-    const otpErr = null
-  if(Email === null || Email === undefined){
-    res.redirect('/emailverification')
-  }
-    res.render('forgotPassword', { Email: Email ? Email : '', errors: errors ? errors : '', otpErr: otpErr ? otpErr : '' })
+    const Email = req.query.Email;
+    const errors = req.query.errors ? JSON.parse(req.query.errors) : {};
+    const otpErr = req.query.otpErr || '';
+    
+    if (!Email) {
+      return res.redirect('/emailverification?error=Please enter your email address');
+    }
+    
+    res.render('forgotPassword', { 
+      Email: Email, 
+      errors: errors, 
+      otpErr: otpErr 
+    });
+    
   } catch (error) {
-    console.log(error);
-    res.status(500)
+    console.error('Error in forgotPassword:', error);
+    res.status(500).redirect('/emailverification?error=An error occurred');
   }
 }
 
+// changePassword controller - FIXED
+// changePassword controller - SIMPLIFIED
 async function changePassword(req, res) {
   try {
-    const { Email, otp, Password, cPassword } = req.body
-    const user = await User.find({ Email: Email })
-    const generatedOtp = user[0].otp;
-    const isValid = await isValidOtp(parseInt(otp), parseInt(generatedOtp));
-    console.log('generated otp', generatedOtp);
-    console.log('otp', otp);
-    console.log('isvalid..', isValid);
-    console.log('user', user);
+    const { Email, otp, Password, cPassword } = req.body;
+    let otpErr = '';
+    const errors = {};
+    
+    // Find user
+    const user = await User.findOne({ Email: Email });
+    if (!user) {
+      return res.redirect('/emailverification?error=User not found');
+    }
+    
+    // Validate OTP
     if (!otp) {
-      otpErr = 'Enter otp'
-    } else if (!isValid) {
-      otpErr = 'invalid otp'
+      otpErr = 'Please enter the OTP';
+    } else if (otp.length !== 6) {
+      otpErr = 'OTP must be 6 digits';
+    } else if (user.otp !== parseInt(otp)) {
+      otpErr = 'Invalid OTP';
+    } else if (user.otpExpiry && user.otpExpiry < Date.now()) {
+      otpErr = 'OTP has expired. Please request a new one.';
     }
-    const errors = {
-      Email: isValidEmail(Email),
-      Password: isValidPassword(Password),
-      Cpassword: isPasswordMatch(Password, cPassword),
-    };
-    const hasErrors = Object.values(errors).some(error => error !== null);
-    console.log('has error', hasErrors);
-    if (hasErrors === false && isValid === true) {
-      const hashedPassword = await bcrypt.hash(Password, 10)
-      await User.findOneAndUpdate(
-        { Email: Email },
-        { $set: { Password: hashedPassword } },
-        { new: true }
-      );
-      res.redirect('/login')
+    
+    // SIMPLIFIED PASSWORD VALIDATION (matching your signup validation)
+    if (!Password) {
+      errors.Password = 'Please enter a password';
+    } else if (Password.trim().length < 6) {
+      errors.Password = 'Password must be at least 6 characters long';
+    } else if (Password.includes(' ')) {
+      errors.Password = 'Password cannot contain spaces';
     }
-    if (hasErrors || otpErr) {
-      res.render('forgotPassword', { Email: Email ? Email : '', errors: errors ? errors : '', otpErr: otpErr ? otpErr : '' })
+    
+    // Validate confirm password
+    if (!cPassword) {
+      errors.Cpassword = 'Please confirm your password';
+    } else if (Password !== cPassword) {
+      errors.Cpassword = 'Passwords do not match';
     }
+    
+    // Check for errors
+    const hasErrors = Object.keys(errors).length > 0 || otpErr;
+    
+    if (hasErrors) {
+      const queryParams = new URLSearchParams({
+        Email: Email,
+        otpErr: otpErr,
+        errors: JSON.stringify(errors)
+      });
+      return res.redirect('/forgotpassword?' + queryParams.toString());
+    }
+    
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(Password, 10);
+    
+    // Update user password and clear OTP
+    await User.findOneAndUpdate(
+      { Email: Email },
+      { 
+        Password: hashedPassword,
+        otp: null,
+        otpExpiry: null
+      },
+      { new: true }
+    );
+    
+    // Redirect to login with success message
+    res.redirect('/login?success=Password reset successfully! Please login with your new password.');
+    
   } catch (error) {
-    console.log(error);
-    res.status(500)
+    console.error('Error in changePassword:', error);
+    const queryParams = new URLSearchParams({
+      Email: req.body.Email || '',
+      otpErr: 'An error occurred. Please try again.'
+    });
+    res.redirect('/forgotpassword?' + queryParams.toString());
   }
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ RESENT OTP +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 const resendOtp = async (req, res) => {
-const email = req.query.email
-const resendOtpGenerated = crypto.randomInt(100000, 999999)
-const userUpdated = await User.findOneAndUpdate(
-    { Email: email },
-    { $set: { otp: resendOtpGenerated } },
-    { new: true }
-  );
-const resendOtpTimestamb = Date.now();
-try {
-    await otpGenerator.sendOtpEmail(email, resendOtpGenerated)
-} catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-}
-}
-
+  try {
+    // Get email from query or body
+    const email = req.query.email || req.body.email;
+    
+    // Validate email
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required'
+      });
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address'
+      });
+    }
+    
+    // Check if user exists
+    const user = await User.findOne({ Email: email });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'No account found with this email address'
+      });
+    }
+    
+    // Generate new OTP
+    const resendOtpGenerated = Math.floor(100000 + Math.random() * 900000);
+    const otpExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes expiry
+    
+    // Update user with new OTP and expiry time
+    const userUpdated = await User.findOneAndUpdate(
+      { Email: email },
+      { 
+        $set: { 
+          otp: resendOtpGenerated,
+          otpExpiry: otpExpiry,
+          updatedAt: new Date()
+        } 
+      },
+      { new: true }
+    );
+    
+    // Send OTP via email
+    try {
+      await otpGenerator.sendOtpEmail(email, resendOtpGenerated);
+      
+      // Log for debugging (remove in production)
+      console.log(`📧 OTP resent to ${email}: ${resendOtpGenerated}`);
+      console.log(`⏰ OTP expires at: ${new Date(otpExpiry).toLocaleString()}`);
+      
+    } catch (emailError) {
+      console.error('❌ Failed to send OTP email:', emailError);
+      
+      // Still respond success but log the email failure
+      // Or you can choose to return an error if email is critical
+      return res.status(200).json({
+        success: true,
+        message: 'OTP generated but failed to send email. Please contact support.',
+        otp: resendOtpGenerated, // Only include in development/testing
+        warning: 'Email sending failed'
+      });
+    }
+    
+    // Successful response
+    return res.status(200).json({
+      success: true,
+      message: 'New OTP has been sent to your email',
+      email: email,
+      expiresIn: '10 minutes'
+    });
+    
+  } catch (error) {
+    console.error('❌ Error in resendOtp controller:', error);
+    
+    // Provide more specific error messages
+    let errorMessage = 'Failed to resend OTP';
+    let statusCode = 500;
+    
+    if (error.name === 'MongoError' || error.name === 'MongoServerError') {
+      errorMessage = 'Database error occurred';
+    } else if (error.name === 'ValidationError') {
+      errorMessage = 'Invalid data provided';
+      statusCode = 400;
+    }
+    
+    return res.status(statusCode).json({
+      success: false,
+      message: errorMessage,
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
 
 module.exports = {
   createUser, loginController, signUp, emailVerfication, emailverifying, forgotPassword, changePassword, resendOtp

@@ -5,84 +5,841 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="stylesheets/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="shortcut icon" href="/images/mainLogo.png" />
-    <title>signin-signup</title>
+    <title>Sign Up - Lexxive</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: url('https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 182, 193, 0.1), rgba(216, 191, 216, 0.1));
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease;
+        }
+
+        /* Signup Card */
+        .signup-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 35px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .signup-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
+        }
+
+        /* Brand Header */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin-bottom: 15px;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .brand-header h1 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-header p {
+            color: #666;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* Form Styles */
+        .signup-form {
+            width: 100%;
+        }
+
+        .title {
+            text-align: center;
+            color: #444;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        /* Input Fields */
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .input-field {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-field i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #333;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-field input:focus {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-field input:focus + i {
+            color: #764ba2;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .input-field input.error {
+            border-color: #ff6b6b;
+            background: #fff5f5;
+            animation: shake 0.3s ease;
+        }
+
+        .input-field input.error::placeholder {
+            color: #ff6b6b;
+            opacity: 0.8;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: slideDown 0.3s ease;
+        }
+
+        /* Password Strength Indicator */
+        .password-strength {
+            margin-top: 10px;
+            height: 4px;
+            background: #e1e5e9;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-weak { background: #ff6b6b; width: 25%; }
+        .strength-fair { background: #ffa500; width: 50%; }
+        .strength-good { background: #4ecdc4; width: 75%; }
+        .strength-strong { background: #2ecc71; width: 100%; }
+
+        .strength-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        /* Submit Button */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        /* Login Link */
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+            font-size: 15px;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .login-link a:hover {
+            color: #764ba2;
+        }
+
+        .login-link a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #764ba2;
+            transition: width 0.3s ease;
+        }
+
+        .login-link a:hover::after {
+            width: 100%;
+        }
+
+        /* Home Link */
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .home-link a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .home-link a:hover {
+            background: #f8f9fa;
+            color: #667eea;
+        }
+
+        /* Password Toggle */
+        .password-toggle {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 16px;
+            transition: color 0.3s ease;
+            z-index: 1;
+        }
+
+        .password-toggle:hover {
+            color: #667eea;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                padding: 0 15px;
+            }
+
+            .signup-card {
+                padding: 30px 25px;
+            }
+
+            .brand-header h1 {
+                font-size: 24px;
+            }
+
+            .input-field input {
+                padding: 14px 18px 14px 45px;
+            }
+        }
+
+        /* Loading State */
+        .btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn.loading::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* Decorative Elements */
+        .floating-element {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .circle-1 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            top: -50px;
+            right: -50px;
+        }
+
+        .circle-2 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            border-radius: 50%;
+            bottom: -50px;
+            left: -50px;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Decorative Elements -->
+    <div class="floating-element circle-1"></div>
+    <div class="floating-element circle-2"></div>
+
     <div class="container">
-        <div class="signin-signup">
-            <form action="/signin" method="post">
-                <h2 class="title">Sign up</h2>
-                <div class="input-field">
-                    <i class="fas fa-user"></i>
-                    <% if (errors.Fname) { %>
-                        <input type="text" placeholder="<%= errors.Fname %>" name="Fname" class="error">
-                      <% }else{%>
-                    <input type="text" placeholder="Username" name="Fname">
-                    <%} %>
+        <div class="signup-card">
+            <!-- Brand Header -->
+            <div class="brand-header">
+                <div class="logo">
+                    <i class="fas fa-tshirt"></i>
                 </div>
-                <div class="input-field">
-                    <i class="fas fa-envelope"></i>
-                    <% if (errors.Email) { %>
-                        <input type="text" placeholder="<%= errors.Email %>" name="Email" class="error">
-                      <% }else{%>
-                        <input type="text" placeholder="Email" name="Email">
-                    <%} %>
-                    
+                <h1>Lexxive</h1>
+                <p>Join our fashion community</p>
+            </div>
+
+            <!-- Signup Form -->
+            <form action="/signin" method="post" class="signup-form" id="signupForm">
+                <h2 class="title">Create Account</h2>
+
+                <!-- Full Name Field -->
+                <div class="input-group">
+                    <label class="input-label">Full Name</label>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" 
+                               name="Fname" 
+                               placeholder="Enter your full name"
+                               value=""
+                               required>
+                    </div>
+                    <% if (errors && errors.Fname) { %>
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <%= errors.Fname %>
+                        </div>
+                    <% } %>
                 </div>
-                <div class="input-field">
-                    <i class="fa-solid fa-phone"></i>
-                    <% if (errors.PhoneNumber) { %>
-                        <input type="text" placeholder="<%= errors.PhoneNumber %>"  name="PhoneNumber" class="error">
-                      <% }else{%>
-                        <input type="text" placeholder="Phone Number"  name="PhoneNumber">
-                    <%} %>
-                    
+
+                <!-- Email Field -->
+                <div class="input-group">
+                    <label class="input-label">Email Address</label>
+                    <div class="input-field">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" 
+                               name="Email" 
+                               placeholder="Enter your email address"
+                               value=""
+                               required>
+                    </div>
+                    <% if (errors && errors.Email) { %>
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <%= errors.Email %>
+                        </div>
+                    <% } %>
                 </div>
-                <div class="input-field">
-                    <i class="fas fa-lock"></i>
-                    <% if (errors.Password) { %>
-                        <input type="password" placeholder="<%= errors.Password %>" name="Password" class="error">
-                      <% }else{%>
-                        <input type="password" placeholder="Password" name="Password">
-                    <%} %>
-                    
+
+                <!-- Phone Number Field -->
+                <div class="input-group">
+                    <label class="input-label">Phone Number</label>
+                    <div class="input-field">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" 
+                               name="PhoneNumber" 
+                               placeholder="Enter your phone number"
+                               value=""
+                               required>
+                    </div>
+                    <% if (errors && errors.PhoneNumber) { %>
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <%= errors.PhoneNumber %>
+                        </div>
+                    <% } %>
                 </div>
-                <div class="input-field">
-                    <i class="fas fa-lock"></i>
-                    <% if (errors.Cpassword) { %>
-                        <input type="password" placeholder="<%= errors.Cpassword %>"   name="Cpassword" class="error">
-                      <% }else{%>
-                        <input type="password" placeholder=" Conform Password"   name="Cpassword">
-                    <%} %>
-                   
+
+                <!-- Password Field -->
+                <div class="input-group">
+                    <label class="input-label">Password</label>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" 
+                               name="Password" 
+                               id="passwordInput"
+                               placeholder="Create a strong password"
+                               required>
+                        <button type="button" class="password-toggle" id="passwordToggle">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <% if (errors && errors.Password) { %>
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <%= errors.Password %>
+                        </div>
+                    <% } %>
+                    <div class="password-strength">
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                    <div class="strength-text" id="strengthText"></div>
                 </div>
-                <div class="input-field">
-                    <i class="fas fa-lock"></i>
-                    <% if (errors && errors.enteredReferalCode) { %>
-                        <input type="text" placeholder="<%= errors.enteredReferalCode %>" name="enteredReferalCode" class="error">
-                      <% }else{%>
-                        <input type="text" placeholder="REFERAL CODE" name="enteredReferalCode">
-                    <%} %>
+
+                <!-- Confirm Password Field -->
+                <div class="input-group">
+                    <label class="input-label">Confirm Password</label>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" 
+                               name="Cpassword" 
+                               id="confirmPasswordInput"
+                               placeholder="Re-enter your password"
+                               required>
+                        <button type="button" class="password-toggle" id="confirmPasswordToggle">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <% if (errors && errors.Cpassword) { %>
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <%= errors.Cpassword %>
+                        </div>
+                    <% } %>
+                    <div class="error-message" id="passwordMatchError" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Passwords do not match
+                    </div>
                 </div>
-                <input type="submit" value="Sign up" class="btn">
-                <p>Already have an account? <a href="/login" class="account-text" id="sign-in-link">Sign in</a></p>
-                <h2><a href="/">Home</a></h2>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn" id="submitBtn">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </button>
+
+                <!-- Login Link -->
+                <div class="login-link">
+                    Already have an account? 
+                    <a href="/login" id="sign-in-link">Sign In</a>
+                </div>
+
+                <!-- Home Link -->
+                <div class="home-link">
+                    <a href="/">
+                        <i class="fas fa-home"></i>
+                        Back to Home
+                    </a>
+                </div>
             </form>
         </div>
     </div>
 
-    <style>
-       .input-field input.error::placeholder {
-    color: red; /* Set the placeholder text color to red */
-    font-size: 14px;  /* Add any other styles you want for the error state */
-}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password toggle functionality
+            const passwordToggle = document.getElementById('passwordToggle');
+            const passwordInput = document.getElementById('passwordInput');
+            const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
+            const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+            
+            // Toggle password visibility
+            function setupPasswordToggle(toggleBtn, inputField) {
+                toggleBtn.addEventListener('click', function() {
+                    const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    inputField.setAttribute('type', type);
+                    
+                    // Toggle eye icon
+                    const eyeIcon = this.querySelector('i');
+                    if (type === 'text') {
+                        eyeIcon.classList.remove('fa-eye');
+                        eyeIcon.classList.add('fa-eye-slash');
+                    } else {
+                        eyeIcon.classList.remove('fa-eye-slash');
+                        eyeIcon.classList.add('fa-eye');
+                    }
+                });
+            }
+            
+            setupPasswordToggle(passwordToggle, passwordInput);
+            setupPasswordToggle(confirmPasswordToggle, confirmPasswordInput);
 
-    </style>
+            // Password strength indicator
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                const strength = checkPasswordStrength(password);
+                
+                // Update strength bar
+                strengthBar.className = 'strength-bar ' + strength.class;
+                strengthBar.style.width = strength.width;
+                
+                // Update strength text
+                strengthText.textContent = strength.text;
+                strengthText.style.color = strength.color;
+                
+                // Check password match
+                checkPasswordMatch();
+            });
+            
+            confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+            // Form validation
+            const signupForm = document.getElementById('signupForm');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            signupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate all fields
+                let isValid = true;
+                
+                // Clear previous errors
+                document.querySelectorAll('.error-message').forEach(error => {
+                    if (error.id !== 'passwordMatchError') {
+                        error.style.display = 'none';
+                    }
+                });
+                
+                document.querySelectorAll('input').forEach(input => {
+                    input.classList.remove('error');
+                });
+                
+                // Validate required fields
+                const requiredFields = ['Fname', 'Email', 'PhoneNumber', 'Password', 'Cpassword'];
+                requiredFields.forEach(fieldName => {
+                    const field = this.elements[fieldName];
+                    if (!field.value.trim()) {
+                        showFieldError(field, `Please enter your ${fieldName.toLowerCase().replace('fname', 'full name').replace('cpassword', 'confirm password')}`);
+                        isValid = false;
+                    }
+                });
+                
+                // Validate email format
+                const emailField = this.elements['Email'];
+                if (emailField.value && !isValidEmail(emailField.value)) {
+                    showFieldError(emailField, 'Please enter a valid email address');
+                    isValid = false;
+                }
+                
+                // Validate phone number
+                const phoneField = this.elements['PhoneNumber'];
+                if (phoneField.value && !isValidPhone(phoneField.value)) {
+                    showFieldError(phoneField, 'Please enter a valid 10-digit phone number');
+                    isValid = false;
+                }
+                
+                // Validate password strength
+                const password = this.elements['Password'].value;
+                if (password && checkPasswordStrength(password).score < 2) {
+                    showFieldError(this.elements['Password'], 'Password is too weak. Please use a stronger password');
+                    isValid = false;
+                }
+                
+                // Validate password match
+                const confirmPassword = this.elements['Cpassword'].value;
+                if (password && confirmPassword && password !== confirmPassword) {
+                    document.getElementById('passwordMatchError').style.display = 'flex';
+                    this.elements['Cpassword'].classList.add('error');
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                    // Show loading state
+                    submitBtn.classList.add('loading');
+                    submitBtn.innerHTML = '';
+                    
+                    // Submit the form after a brief delay to show loading state
+                    setTimeout(() => {
+                        this.submit();
+                    }, 500);
+                }
+            });
+
+            // Helper functions
+            function showFieldError(field, message) {
+                field.classList.add('error');
+                
+                // Create error message element if it doesn't exist
+                let errorElement = field.parentElement.nextElementSibling;
+                if (!errorElement || !errorElement.classList.contains('error-message')) {
+                    errorElement = document.createElement('div');
+                    errorElement.className = 'error-message';
+                    field.parentElement.parentElement.appendChild(errorElement);
+                }
+                
+                errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+                errorElement.style.display = 'flex';
+            }
+            
+            function checkPasswordStrength(password) {
+                let score = 0;
+                let text = 'Very Weak';
+                let color = '#ff6b6b';
+                let className = 'strength-weak';
+                let width = '25%';
+                
+                if (!password) {
+                    return { score, text, color, className, width };
+                }
+                
+                // Length check
+                if (password.length >= 8) score++;
+                if (password.length >= 12) score++;
+                
+                // Complexity checks
+                if (/[A-Z]/.test(password)) score++;
+                if (/[0-9]/.test(password)) score++;
+                if (/[^A-Za-z0-9]/.test(password)) score++;
+                
+                // Determine strength
+                if (score >= 5) {
+                    text = 'Very Strong';
+                    color = '#2ecc71';
+                    className = 'strength-strong';
+                    width = '100%';
+                } else if (score >= 4) {
+                    text = 'Strong';
+                    color = '#2ecc71';
+                    className = 'strength-good';
+                    width = '75%';
+                } else if (score >= 3) {
+                    text = 'Good';
+                    color = '#4ecdc4';
+                    className = 'strength-good';
+                    width = '75%';
+                } else if (score >= 2) {
+                    text = 'Fair';
+                    color = '#ffa500';
+                    className = 'strength-fair';
+                    width = '50%';
+                } else if (score >= 1) {
+                    text = 'Weak';
+                    color = '#ff6b6b';
+                    className = 'strength-weak';
+                    width = '25%';
+                }
+                
+                return { score, text, color, className, width };
+            }
+            
+            function checkPasswordMatch() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                const matchError = document.getElementById('passwordMatchError');
+                
+                if (password && confirmPassword && password !== confirmPassword) {
+                    confirmPasswordInput.classList.add('error');
+                    matchError.style.display = 'flex';
+                    return false;
+                } else {
+                    confirmPasswordInput.classList.remove('error');
+                    matchError.style.display = 'none';
+                    return true;
+                }
+            }
+            
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+            
+            function isValidPhone(phone) {
+                const phoneRegex = /^[0-9]{10}$/;
+                return phoneRegex.test(phone);
+            }
+            
+            // Auto-focus first field
+            const firstField = document.querySelector('input[name="Fname"]');
+            if (firstField && !firstField.value) {
+                firstField.focus();
+            }
+            
+            // Add animation to form elements
+            const formElements = document.querySelectorAll('.input-group, .btn, .login-link');
+            formElements.forEach((element, index) => {
+                element.style.animationDelay = `${index * 0.1}s`;
+                element.style.animation = 'fadeIn 0.5s ease forwards';
+                element.style.opacity = '0';
+            });
+        });
+    </script>
 </body>
-
 </html>

@@ -1,70 +1,93 @@
-function isValidFname( Fname){
+// userAddressValidator.js - FIXED with null checks
+function isValidFname(Fname) {
+    if (!Fname || Fname.trim().length === 0) {
+        return 'Please enter your first name.';
+    }
     const nameRegex = /^[a-zA-Z\s]+$/;
-    if(Fname.trim().length===0){
-      return 'please enter your first name.'
-    }else if(!nameRegex.test(Fname)){
-      return 'name should only contain letter'
+    if (!nameRegex.test(Fname)) {
+        return 'Name should only contain letters.';
     }
-    return null
+    return null;
 }
 
-function isValidEmail(Email){
+function isValidEmail(Email) {
+    if (!Email) {
+        return 'Email is required.';
+    }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(!emailRegex.test(Email)){
-      return 'please enter a valid email address' 
+    if (!emailRegex.test(Email)) {
+        return 'Please enter a valid email address.';
     }
-    return null
+    return null;
 }
 
-function isValidPhoneNumber(PhoneNumber){
-    if(!/^\d{10}$/.test(PhoneNumber) || PhoneNumber ==='0000000000'){
-        return 'please enter a valid 10-digit phone number'
-      }
-      return null
-}
-
-
-function isValidPincode(Pincode){
-
-    if(Pincode.trim().length === 0){
-        return 'pincode is required'
+function isValidPhoneNumber(PhoneNumber) {
+    if (!PhoneNumber) {
+        return 'Phone number is required.';
     }
-    return null
-}
-
-function isValidAddress(Address){
-    if(Address.trim().length ===0){
-        return 'address is required'
+    if (!/^\d{10}$/.test(PhoneNumber) || PhoneNumber === '0000000000') {
+        return 'Please enter a valid 10-digit phone number.';
     }
-    return null
+    return null;
 }
 
-function isValidPlace(Place){
-    if(Place.trim().length ===0){
-        return 'place is required'
+function isValidPincode(Pincode) {
+    if (!Pincode || Pincode.trim().length === 0) {
+        return 'Pincode is required.';
     }
-    return null
-}
-
-function isValidstate(state){
-    if(state.trim().length ===0){
-        return 'state is required'
+    if (!/^\d{6}$/.test(Pincode)) {
+        return 'Please enter a valid 6-digit pincode.';
     }
-    return null
+    return null;
 }
 
-function isValidLandMark(LandMark){
-    if(LandMark.trim().length ===0){
-        return 'landmark is required'
+function isValidAddress(Address) {
+    if (!Address || Address.trim().length === 0) {
+        return 'Address is required.';
     }
-    return null
-}
-
-function isValidAphoneNumber(AphoneNumber){
-    if(!/^\d{10}$/.test(AphoneNumber) || AphoneNumber ==='0000000000' ){
-        return 'valid phonenumber is required'
+    if (Address.trim().length < 5) {
+        return 'Address must be at least 5 characters.';
     }
-    return null
+    return null;
 }
 
-module.exports = {isValidFname,isValidEmail,isValidPhoneNumber,isValidPincode,isValidAddress,isValidPlace,isValidstate,isValidLandMark,isValidAphoneNumber} 
+function isValidPlace(Place) {
+    if (!Place || Place.trim().length === 0) {
+        return 'City/Town is required.';
+    }
+    return null;
+}
+
+function isValidstate(state) {
+    if (!state || state.trim().length === 0) {
+        return 'State is required.';
+    }
+    return null;
+}
+
+function isValidLandMark(LandMark) {
+    // Landmark is optional, so no validation needed
+    return null;
+}
+
+function isValidAphoneNumber(AphoneNumber) {
+    // Alternate phone is optional, but if provided, validate it
+    if (AphoneNumber && AphoneNumber.trim().length > 0) {
+        if (!/^\d{10}$/.test(AphoneNumber) || AphoneNumber === '0000000000') {
+            return 'Please enter a valid 10-digit alternate phone number.';
+        }
+    }
+    return null;
+}
+
+module.exports = {
+    isValidFname,
+    isValidEmail,
+    isValidPhoneNumber,
+    isValidPincode,
+    isValidAddress,
+    isValidPlace,
+    isValidstate,
+    isValidLandMark,
+    isValidAphoneNumber
+};

@@ -9,6 +9,9 @@ const session = require('express-session')
 require('dotenv').config();
 const userRouter = require('./routes/userRouter')
 const adminRouter = require('./routes/adminRouter');
+const cartCountMiddleware = require('./middlewares/cartCount');
+
+
 const createError = require('http-errors');
 const flash = require("connect-flash")
 const app = express();
@@ -64,6 +67,9 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   next();
 });
+
+
+app.use(cartCountMiddleware);
 
 app.use('/', userRouter) 
 app.use('/admin', adminRouter);

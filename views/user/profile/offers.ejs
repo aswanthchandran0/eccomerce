@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offers & Coupons - User Profile</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        /* Offers Page Specific Styles */
+        .user-dashboard {
+            background-color: #f8f9fa;
+            min-height: calc(100vh - 150px);
+            padding: 30px 0;
+        }
+        
+        .user-sidebar {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .avatar-initials {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            border: 4px solid #4361ee;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 0 auto;
+        }
+        
+        .user-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin: 15px 0 5px;
+        }
+        
+        .user-email {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            color: #495057;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover {
+            background-color: #f8f9fa;
+            color: #4361ee;
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu a.active {
+            background-color: #4361ee;
+            color: white;
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-badge {
+            margin-left: auto;
+            background: #6c757d;
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            min-width: 25px;
+            text-align: center;
+        }
+        
+        .sidebar-menu a.active .menu-badge {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .user-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            min-height: 500px;
+        }
+        
+        .content-header {
+            border-bottom: 2px solid #f8f9fa;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .content-header h3 {
+            color: #333;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Tab Navigation */
+        .coupon-tabs {
+            border-bottom: 2px solid #eaeaea;
+            margin-bottom: 30px;
+        }
+        
+        .coupon-tabs .nav-link {
+            color: #6c757d;
+            font-weight: 500;
+            padding: 10px 20px;
+            border: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .coupon-tabs .nav-link:hover {
+            color: #4361ee;
+        }
+        
+        .coupon-tabs .nav-link.active {
+            color: #4361ee;
+            border-bottom-color: #4361ee;
+            background: transparent;
+        }
+        
+        /* Coupon Card Styles */
+        .coupon-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #eaeaea;
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .coupon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: #4361ee;
+        }
+        
+        .coupon-card.expired {
+            opacity: 0.7;
+            filter: grayscale(0.5);
+        }
+        
+        .coupon-card.expired:hover {
+            transform: none;
+            border-color: #eaeaea;
+        }
+        
+        .coupon-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4361ee, #3a0ca3, #7209b7);
+        }
+        
+        .coupon-card.expired::before {
+            background: linear-gradient(90deg, #6c757d, #495057);
+        }
+        
+        .coupon-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .coupon-title {
+            margin: 0;
+            color: #333;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .coupon-card.expired .coupon-title {
+            color: #6c757d;
+        }
+        
+        .coupon-code {
+            background: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #4361ee;
+            border: 1px dashed #4361ee;
+        }
+        
+        .coupon-card.expired .coupon-code {
+            color: #6c757d;
+            border-color: #6c757d;
+        }
+        
+        /* FIXED: White text on blue background */
+        .coupon-discount {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white; /* Changed to white */
+            padding: 15px 20px; /* Increased padding */
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.2);
+        }
+        
+        .coupon-card.expired .coupon-discount {
+            background: linear-gradient(135deg, #6c757d, #495057);
+        }
+        
+        .coupon-discount h3 {
+            margin: 0;
+            font-weight: 700;
+            color: white; /* Ensure text is white */
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Add text shadow for better readability */
+        }
+        
+        .coupon-details {
+            margin-bottom: 20px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .detail-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .coupon-card.expired .detail-label {
+            color: #adb5bd;
+        }
+        
+        .detail-value {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .coupon-card.expired .detail-value {
+            color: #6c757d;
+        }
+        
+        /* Status Badge */
+        .coupon-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-expired {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-used {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        /* Used Info */
+        .used-info {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid #ff6b6b;
+        }
+        
+        .used-info i {
+            color: #ff6b6b;
+            margin-right: 5px;
+        }
+        
+        .copy-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .copy-btn:hover {
+            background: #3a0ca3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+        
+        .copy-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .copy-btn.copied {
+            background: #28a745;
+        }
+        
+        .usage-progress {
+            margin: 20px 0;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+            background-color: #e9ecef;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            border-radius: 10px;
+        }
+        
+        .coupon-footer {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f1f1f1;
+            text-align: center;
+        }
+        
+        .terms-text {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h4 {
+            color: #6c757d;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .user-dashboard {
+                padding: 15px 0;
+            }
+            
+            .user-sidebar {
+                position: static;
+                margin-bottom: 20px;
+            }
+            
+            .avatar-initials {
+                width: 80px;
+                height: 80px;
+                font-size: 28px;
+            }
+            
+            .user-content {
+                padding: 20px 15px;
+            }
+            
+            .coupon-card {
+                padding: 20px;
+            }
+            
+            .coupon-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .copy-btn {
+                width: 100%;
+            }
+            
+            .coupon-status {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header and Navbar -->
+    <%- include('../layout/header.ejs') %>
+    <%- include('../layout/navBar.ejs') %>
+
+    <div class="user-dashboard">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                    <div class="user-sidebar p-4">
+                        <div class="text-center mb-4">
+                            <!-- Avatar with Initials -->
+                            <% 
+                                // Get user initials
+                                const firstName = user.Fname || '';
+                                const lastName = user.Lname || '';
+                                const firstInitial = firstName.charAt(0).toUpperCase();
+                                const lastInitial = lastName.charAt(0).toUpperCase();
+                                const initials = (firstInitial + (lastInitial || '')) || 'U';
+                                
+                                // Function to generate consistent color from name
+                                function stringToColor(str) {
+                                    let hash = 0;
+                                    for (let i = 0; i < str.length; i++) {
+                                        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                                    }
+                                    
+                                    const colors = [
+                                        '#4361ee', '#3a0ca3', '#7209b7', '#f72585', 
+                                        '#4cc9f0', '#4895ef', '#560bad', '#b5179e',
+                                        '#2a9d8f', '#e9c46a', '#e76f51', '#264653',
+                                        '#ef476f', '#06d6a0', '#118ab2', '#073b4c'
+                                    ];
+                                    
+                                    const index = Math.abs(hash) % colors.length;
+                                    return colors[index];
+                                }
+                                
+                                const avatarColor = stringToColor(firstName + lastName);
+                            %>
+                            
+                            <div class="avatar-initials" style="background-color: <%= avatarColor %>;">
+                                <%= initials %>
+                            </div>
+                            
+                            <h4 class="user-name mt-3"><%= user.Fname %> <%= user.Lname %></h4>
+                            <p class="user-email"><%= user.Email %></p>
+                        </div>
+                        
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/userProfile" class="<%= currentPage === 'dashboard' ? 'active' : '' %>">
+                                    <i class="fas fa-home"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/orders" class="<%= currentPage === 'orders' ? 'active' : '' %>">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    My Orders
+                                    <% if(orderCount && orderCount > 0) { %>
+                                        <span class="menu-badge"><%= orderCount %></span>
+                                    <% } %>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/wallet" class="<%= currentPage === 'wallet' ? 'active' : '' %>">
+                                    <i class="fas fa-wallet"></i>
+                                    Wallet & Payments
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/offers" class="<%= currentPage === 'offers' ? 'active' : '' %>">
+                                    <i class="fas fa-tag"></i>
+                                    Offers & Coupons
+                                    <% if(couponCount && couponCount > 0) { %>
+                                        <span class="menu-badge"><%= couponCount %></span>
+                                    <% } %>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/addresses" class="<%= currentPage === 'addresses' ? 'active' : '' %>">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Addresses
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/wishlist" class="<%= currentPage === 'wishlist' ? 'active' : '' %>">
+                                    <i class="fas fa-heart"></i>
+                                    Wishlist
+                                </a>
+                            </li>
+                           
+                            <li class="mt-4">
+                                <form action="/userProfile/signout" method="post" class="d-grid">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <div class="user-content">
+                        <div class="content-header">
+                            <h3><i class="fas fa-tag me-2"></i> Offers & Coupons</h3>
+                            <p class="text-muted mb-0">Available coupons and special offers</p>
+                        </div>
+                        
+                        <!-- Tab Navigation -->
+                        <ul class="nav coupon-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#active-coupons">
+                                    <i class="fas fa-bolt me-2"></i> Active Coupons
+                                    <span class="badge bg-primary ms-2"><%= couponCount || 0 %></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#expired-coupons">
+                                    <i class="fas fa-clock me-2"></i> Expired/Used
+                                    <span class="badge bg-secondary ms-2"><%= expiredCoupons ? expiredCoupons.length : 0 %></span>
+                                </a>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content">
+                            <!-- Active Coupons Tab -->
+                            <div class="tab-pane fade show active" id="active-coupons">
+                                <div class="content-body">
+                                    <% if(activeCoupons && activeCoupons.length > 0) { %>
+                                        <div class="row">
+                                            <% activeCoupons.forEach(coupon => { %>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="coupon-card">
+                                                    <% if(coupon.status === 'active') { %>
+                                                        <span class="coupon-status status-active">
+                                                            <i class="fas fa-check-circle me-1"></i> Active
+                                                        </span>
+                                                    <% } %>
+                                                    
+                                                    <div class="coupon-header">
+                                                        <div>
+                                                            <h5 class="coupon-title"><%= coupon.couponName %></h5>
+                                                            <p class="text-muted mb-0">Use code: <span class="coupon-code"><%= coupon.couponCode %></span></p>
+                                                        </div>
+                                                        <button class="copy-btn" data-code="<%= coupon.couponCode %>">
+                                                            Copy Code
+                                                        </button>
+                                                    </div>
+                                                    
+                                                    <!-- FIXED: White text on blue background -->
+                                                    <div class="coupon-discount">
+                                                        <h3><%= coupon.discountText %></h3>
+                                                    </div>
+                                                    
+                                                    <!-- Show usage info if user has used this coupon -->
+                                                    <% if(coupon.timesUsedByUser > 0) { %>
+                                                        <div class="used-info">
+                                                            <i class="fas fa-info-circle"></i>
+                                                            <small>You've used this <%= coupon.timesUsedByUser %> time(s). 
+                                                            <% if(coupon.timesUsedByUser >= coupon.userLimit) { %>
+                                                                Limit reached.
+                                                            <% } else { %>
+                                                                You can use it <%= coupon.userLimit - coupon.timesUsedByUser %> more time(s).
+                                                            <% } %>
+                                                            </small>
+                                                        </div>
+                                                    <% } %>
+                                                    
+                                                    <div class="coupon-details">
+                                                        <div class="detail-row">
+                                                            <span class="detail-label">Minimum Purchase</span>
+                                                            <span class="detail-value">₹<%= coupon.Creteria %></span>
+                                                        </div>
+                                                        <div class="detail-row">
+                                                            <span class="detail-label">Valid Until</span>
+                                                            <span class="detail-value"><%= coupon.ExpireDate %></span>
+                                                        </div>
+                                                        <div class="detail-row">
+                                                            <span class="detail-label">Max Discount</span>
+                                                            <span class="detail-value">₹<%= coupon.maxDiscount %></span>
+                                                        </div>
+                                                        <div class="detail-row">
+                                                            <span class="detail-label">Usage Limit</span>
+                                                            <span class="detail-value">
+                                                                <% if(coupon.userLimit) { %>
+                                                                    <%= coupon.userLimit %> time(s) per user
+                                                                <% } else { %>
+                                                                    Unlimited
+                                                                <% } %>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <% if(coupon.usageLimit) { %>
+                                                        <div class="usage-progress">
+                                                            <div class="progress-text">
+                                                                <span>Overall Usage: <%= coupon.usedCount %>/<%= coupon.usageLimit %></span>
+                                                                <span><%= coupon.usagePercentage %>% used</span>
+                                                            </div>
+                                                            <div class="progress">
+                                                                <div class="progress-bar" style="width: <%= coupon.usagePercentage %>%"></div>
+                                                            </div>
+                                                        </div>
+                                                    <% } %>
+                                                    
+                                                    <div class="coupon-footer">
+                                                        <p class="terms-text">Terms & Conditions apply. Valid on minimum purchase of ₹<%= coupon.Creteria %></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% }); %>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="empty-state">
+                                            <i class="fas fa-tag"></i>
+                                            <h4 class="mt-3">No active coupons</h4>
+                                            <p class="text-muted">You don't have any active coupons at the moment</p>
+                                            <a href="/productList" class="btn btn-primary mt-3">
+                                                <i class="fas fa-shopping-bag me-2"></i> Shop Now
+                                            </a>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                            
+                            <!-- Expired/Used Coupons Tab -->
+                            <div class="tab-pane fade" id="expired-coupons">
+                                <div class="content-body">
+                                    <% if(expiredCoupons && expiredCoupons.length > 0) { %>
+                                        <div class="row">
+                                            <% expiredCoupons.forEach(coupon => { %>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="coupon-card expired">
+                                                    <% if(coupon.isUsedByUser) { %>
+                                                        <span class="coupon-status status-used">
+                                                            <i class="fas fa-times-circle me-1"></i> Used
+                                                        </span>
+                                                    <% } else if(coupon.isExpiredForUser) { %>
+                                                        <span class="coupon-status status-expired">
+                                                            <i class="fas fa-clock me-1"></i> Expired
+                                                        </span>
+                                                    <% } %>
+                                                    
+                                                    <div class="coupon-header">
+                                                        <div>
+                                                            <h5 class="coupon-title"><%= coupon.couponName %></h5>
+                                                            <p class="text-muted mb-0">Code: <span class="coupon-code"><%= coupon.couponCode %></span></p>
+                                                        </div>
+                                                        <button class="copy-btn" data-code="<%= coupon.couponCode %>" disabled>
+                                                            Expired
+                                                        </button>
+                                                    </div>
+                                                    
+                                                    <div class="coupon-discount">
+                                                        <h3><%= coupon.discountText %></h3>
+                                                    </div>
+                                                    
+                                                    <% if(coupon.isUsedByUser) { %>
+                                                        <div class="used-info">
+                                                            <i class="fas fa-info-circle"></i>
+                                                            <small>You've used this coupon <%= coupon.timesUsedByUser %> time(s). Usage limit reached.</small>
+                                                        </div>
+                                                    <% } %>
+                                                    
+                                                    <div class="coupon-details">
+                                                        <div class="detail-row">
+                                                            <span class="detail-label">Minimum Purchase</span>
+                                                            <span class="detail-value">₹<%= coupon.Creteria %></span>
+                                                        </div>
+                                                        <div class="detail-row">
+                                                            <span class="detail-label">Valid Until</span>
+                                                            <span class="detail-value"><%= coupon.ExpireDate %></span>
+                                                        </div>
+                                                        <div class="detail-row">
+                                                            <span class="detail-label">Max Discount</span>
+                                                            <span class="detail-value">₹<%= coupon.maxDiscount %></span>
+                                                        </div>
+                                                        <div class="detail-row">
+                                                            <span class="detail-label">Status</span>
+                                                            <span class="detail-value">
+                                                                <% if(coupon.isUsedByUser) { %>
+                                                                    <span class="text-danger">Used by you</span>
+                                                                <% } else { %>
+                                                                    <span class="text-danger">Expired</span>
+                                                                <% } %>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="coupon-footer">
+                                                        <p class="terms-text text-danger">
+                                                            <i class="fas fa-exclamation-circle me-1"></i>
+                                                            <% if(coupon.isUsedByUser) { %>
+                                                                You've reached the usage limit for this coupon.
+                                                            <% } else { %>
+                                                                This coupon is no longer valid.
+                                                            <% } %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% }); %>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="empty-state">
+                                            <i class="fas fa-history"></i>
+                                            <h4 class="mt-3">No expired or used coupons</h4>
+                                            <p class="text-muted">You don't have any expired or used coupons</p>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Mobile Navbar and Footer -->
+    <%- include('../layout/navBarMobile.ejs') %>
+    <%- include('../layout/footer.ejs') %>
+    
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Highlight active sidebar link
+            const currentPath = window.location.pathname;
+            $('.sidebar-menu a').each(function() {
+                if ($(this).attr('href') === currentPath) {
+                    $(this).addClass('active');
+                }
+            });
+            
+            // Initialize Bootstrap tabs
+            $('.coupon-tabs a').on('click', function(e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+            
+            // Copy coupon code functionality (only for active coupons)
+            $('.coupon-card:not(.expired) .copy-btn:not(:disabled)').on('click', function() {
+                const couponCode = $(this).data('code');
+                const originalText = $(this).text();
+                
+                // Copy to clipboard
+                navigator.clipboard.writeText(couponCode).then(function() {
+                    // Change button text and style
+                    $(this).text('Copied!');
+                    $(this).addClass('copied');
+                    
+                    // Show success message
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Coupon Copied!',
+                        text: `Coupon code "${couponCode}" copied to clipboard`,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+                    
+                    // Revert button after 2 seconds
+                    setTimeout(() => {
+                        $(this).text(originalText);
+                        $(this).removeClass('copied');
+                    }, 2000);
+                }.bind(this));
+            });
+            
+            // Show tooltip for disabled expired coupon buttons
+            $('.copy-btn:disabled').hover(function() {
+                $(this).attr('title', 'This coupon is no longer available');
+            });
+        });
+    </script>
+</body>
+</html>

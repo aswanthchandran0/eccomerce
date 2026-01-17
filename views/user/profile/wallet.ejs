@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet - User Profile</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        /* Wallet Page Specific Styles */
+        .user-dashboard {
+            background-color: #f8f9fa;
+            min-height: calc(100vh - 150px);
+            padding: 30px 0;
+        }
+        
+        .user-sidebar {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .avatar-initials {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            border: 4px solid #007bff;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 0 auto;
+        }
+        
+        .user-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin: 15px 0 5px;
+        }
+        
+        .user-email {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            color: #495057;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu a.active {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-badge {
+            margin-left: auto;
+            background: #6c757d;
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            min-width: 25px;
+            text-align: center;
+        }
+        
+        .sidebar-menu a.active .menu-badge {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .user-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            min-height: 500px;
+        }
+        
+        .content-header {
+            border-bottom: 2px solid #f8f9fa;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .content-header h3 {
+            color: #333;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Wallet Balance Card */
+        .wallet-balance-card {
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,123,255,0.2);
+        }
+        
+        .wallet-balance-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .wallet-balance-card .balance {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+        
+        .wallet-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .wallet-btn {
+            flex: 1;
+            min-width: 120px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .wallet-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-3px);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .wallet-btn i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        
+        .wallet-btn span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Transaction History */
+        .transaction-history {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border: 1px solid #eaeaea;
+        }
+        
+        .transaction-history h5 {
+            color: #333;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .transaction-history h5 i {
+            color: #007bff;
+            margin-right: 10px;
+        }
+        
+        .transaction-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f1f1f1;
+            transition: all 0.3s ease;
+        }
+        
+        .transaction-item:hover {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .transaction-icon.credit {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+        
+        .transaction-icon.debit {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+        
+        .transaction-details {
+            flex: 1;
+        }
+        
+        .transaction-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .transaction-meta {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .transaction-amount {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .transaction-amount.credit {
+            color: #28a745;
+        }
+        
+        .transaction-amount.debit {
+            color: #dc3545;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: #dee2e6;
+            margin-bottom: 15px;
+        }
+        
+        .empty-state h5 {
+            color: #6c757d;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .user-dashboard {
+                padding: 15px 0;
+            }
+            
+            .user-sidebar {
+                position: static;
+                margin-bottom: 20px;
+            }
+            
+            .avatar-initials {
+                width: 80px;
+                height: 80px;
+                font-size: 28px;
+            }
+            
+            .user-content {
+                padding: 20px 15px;
+            }
+            
+            .wallet-balance-card {
+                padding: 20px;
+            }
+            
+            .wallet-balance-card .balance {
+                font-size: 2.5rem;
+            }
+            
+            .wallet-actions {
+                flex-direction: column;
+            }
+            
+            .wallet-btn {
+                width: 100%;
+            }
+            
+            .transaction-item {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px 15px;
+            }
+            
+            .transaction-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .transaction-details {
+                margin-bottom: 10px;
+            }
+        }
+        
+        /* Transaction Status */
+        .transaction-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Add Money Modal */
+        .modal-header {
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+        }
+        
+        .amount-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .amount-option {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px;
+            border: 2px solid #eaeaea;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .amount-option:hover {
+            border-color: #007bff;
+            background-color: #f8f9fa;
+        }
+        
+        .amount-option.selected {
+            border-color: #007bff;
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header and Navbar -->
+    <%- include('../layout/header.ejs') %>
+    <%- include('../layout/navBar.ejs') %>
+
+    <div class="user-dashboard">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                    <div class="user-sidebar p-4">
+                        <div class="text-center mb-4">
+                            <!-- Avatar with Initials -->
+                            <% 
+                                // Get user initials
+                                const firstName = user.Fname || '';
+                                const lastName = user.Lname || '';
+                                const firstInitial = firstName.charAt(0).toUpperCase();
+                                const lastInitial = lastName.charAt(0).toUpperCase();
+                                const initials = (firstInitial + (lastInitial || '')) || 'U';
+                                
+                                // Function to generate consistent color from name
+                                function stringToColor(str) {
+                                    let hash = 0;
+                                    for (let i = 0; i < str.length; i++) {
+                                        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                                    }
+                                     const colors = [
+                                        '#4361ee', '#3a0ca3', '#7209b7', '#f72585', 
+                                        '#4cc9f0', '#4895ef', '#560bad', '#b5179e',
+                                        '#2a9d8f', '#e9c46a', '#e76f51', '#264653',
+                                        '#ef476f', '#06d6a0', '#118ab2', '#073b4c'
+                                    ];
+                                    const index = Math.abs(hash) % colors.length;
+                                    return colors[index];
+                                }
+                                
+                                const avatarColor = stringToColor(firstName + lastName);
+                            %>
+                            
+                            <div class="avatar-initials" style="background-color: <%= avatarColor %>;">
+                                <%= initials %>
+                            </div>
+                            
+                            <h4 class="user-name mt-3"><%= user.Fname %> <%= user.Lname %></h4>
+                            <p class="user-email"><%= user.Email %></p>
+                            <div class="d-flex justify-content-center gap-2 mt-2">
+                                <span class="badge bg-primary">Member Since <%= memberSince %></span>
+                            </div>
+                        </div>
+                        
+                        <ul class="sidebar-menu">
+                            <li>
+                                <a href="/userProfile" class="<%= currentPage === 'dashboard' ? 'active' : '' %>">
+                                    <i class="fas fa-home"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/orders" class="<%= currentPage === 'orders' ? 'active' : '' %>">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    My Orders
+                                    <% if(orderCount && orderCount > 0) { %>
+                                        <span class="menu-badge"><%= orderCount %></span>
+                                    <% } %>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/wallet" class="<%= currentPage === 'wallet' ? 'active' : '' %>">
+                                    <i class="fas fa-wallet"></i>
+                                    Wallet & Payments
+                                    <span class="menu-badge">₹<%= wallet || '0' %></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/offers" class="<%= currentPage === 'offers' ? 'active' : '' %>">
+                                    <i class="fas fa-tag"></i>
+                                    Offers & Coupons
+                                    <% if(couponCount && couponCount > 0) { %>
+                                        <span class="menu-badge"><%= couponCount %></span>
+                                    <% } %>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/addresses" class="<%= currentPage === 'addresses' ? 'active' : '' %>">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Addresses
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/userProfile/wishlist" class="<%= currentPage === 'wishlist' ? 'active' : '' %>">
+                                    <i class="fas fa-heart"></i>
+                                    Wishlist
+                                    <% if(wishlistCount && wishlistCount > 0) { %>
+                                        <span class="menu-badge"><%= wishlistCount %></span>
+                                    <% } %>
+                                </a>
+                            </li>
+                    
+                            <li class="mt-4">
+                                <form action="/userProfile/signout" method="post" class="d-grid">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="col-lg-9">
+                    <div class="user-content">
+                        <div class="content-header">
+                            <h3><i class="fas fa-wallet me-2"></i> Wallet & Payments</h3>
+                            <p class="text-muted mb-0">Manage your wallet balance and view transaction history</p>
+                        </div>
+                        
+                        <div class="content-body">
+                            <!-- Wallet Balance Card -->
+                            <div class="wallet-balance-card">
+                                <h4>Your Wallet Balance</h4>
+                                <div class="balance">₹<%= wallet || '0' %></div>
+                                
+                                <!-- <div class="wallet-actions">
+                                    <a href="#" class="wallet-btn" data-bs-toggle="modal" data-bs-target="#addMoneyModal">
+                                        <i class="fas fa-plus-circle"></i>
+                                        <span>Add Money</span>
+                                    </a>
+                                    <a href="/userProfile/orders" class="wallet-btn">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <span>Use for Orders</span>
+                                    </a>
+                                    <a href="#" class="wallet-btn" data-bs-toggle="modal" data-bs-target="#withdrawModal">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <span>Withdraw</span>
+                                    </a>
+                                </div> -->
+                            </div>
+                            
+                            <!-- Transaction History -->
+                            <div class="transaction-history">
+                                <h5><i class="fas fa-history me-2"></i> Transaction History</h5>
+                                
+                                <% if(walletTransactions && walletTransactions.length > 0) { %>
+                                    <div class="transaction-list">
+                                        <% walletTransactions.forEach(transaction => { %>
+                                        <div class="transaction-item">
+                                            <div class="transaction-icon <%= transaction.type === 'credited' ? 'credit' : 'debit' %>">
+                                                <i class="fas fa-<%= transaction.icon %>"></i>
+                                            </div>
+                                            <div class="transaction-details">
+                                                <div class="transaction-title">
+                                                    <%= transaction.description %>
+                                                    <span class="transaction-status status-completed">Completed</span>
+                                                </div>
+                                                <div class="transaction-meta">
+                                                    <%= transaction.timestamp %> • <%= transaction.transactionId %>
+                                                </div>
+                                            </div>
+                                            <div class="transaction-amount <%= transaction.type === 'credited' ? 'credit' : 'debit' %>">
+                                                <%= transaction.type === 'credited' ? '+' : '-' %>₹<%= transaction.amount %>
+                                            </div>
+                                        </div>
+                                        <% }); %>
+                                    </div>
+                                <% } else { %>
+                                    <div class="empty-state">
+                                        <i class="fas fa-exchange-alt"></i>
+                                        <h5>No transactions yet</h5>
+                                        <p class="text-muted">Your transaction history will appear here</p>
+                                        <a href="#" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addMoneyModal">
+                                            <i class="fas fa-plus me-2"></i> Add Money to Wallet
+                                        </a>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Money Modal -->
+    <div class="modal fade" id="addMoneyModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Money to Wallet</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addMoneyForm">
+                        <div class="mb-4">
+                            <label class="form-label">Select Amount</label>
+                            <div class="amount-options">
+                                <div class="amount-option" data-amount="100">₹100</div>
+                                <div class="amount-option" data-amount="500">₹500</div>
+                                <div class="amount-option" data-amount="1000">₹1000</div>
+                                <div class="amount-option" data-amount="2000">₹2000</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="customAmount" class="form-label">Or Enter Custom Amount</label>
+                            <input type="number" class="form-control" id="customAmount" placeholder="Enter amount (Min: ₹100)" min="100">
+                            <div class="form-text">Minimum amount: ₹100</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Select Payment Method</label>
+                            <div class="list-group">
+                                <label class="list-group-item">
+                                    <input class="form-check-input me-2" type="radio" name="paymentMethod" value="upi" checked>
+                                    <i class="fas fa-mobile-alt me-2"></i> UPI
+                                </label>
+                                <label class="list-group-item">
+                                    <input class="form-check-input me-2" type="radio" name="paymentMethod" value="card">
+                                    <i class="fas fa-credit-card me-2"></i> Credit/Debit Card
+                                </label>
+                                <label class="list-group-item">
+                                    <input class="form-check-input me-2" type="radio" name="paymentMethod" value="netbanking">
+                                    <i class="fas fa-university me-2"></i> Net Banking
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="proceedToPay">Proceed to Pay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal fade" id="withdrawModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Withdraw Money</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted">Withdrawals are currently not available. Please contact customer support for assistance.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Mobile Navbar and Footer -->
+    <%- include('../layout/navBarMobile.ejs') %>
+    <%- include('../layout/footer.ejs') %>
+    
+    <!-- JavaScript -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/assets/js/main.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Highlight active sidebar link
+            const currentPath = window.location.pathname;
+            $('.sidebar-menu a').each(function() {
+                if ($(this).attr('href') === currentPath) {
+                    $(this).addClass('active');
+                }
+            });
+            
+            // Amount selection
+            let selectedAmount = 0;
+            
+            $('.amount-option').on('click', function() {
+                $('.amount-option').removeClass('selected');
+                $(this).addClass('selected');
+                selectedAmount = $(this).data('amount');
+                $('#customAmount').val('');
+            });
+            
+            // Custom amount input
+            $('#customAmount').on('input', function() {
+                $('.amount-option').removeClass('selected');
+                selectedAmount = $(this).val();
+            });
+            
+            // Proceed to payment
+            $('#proceedToPay').on('click', function() {
+                const amount = selectedAmount || $('#customAmount').val();
+                const paymentMethod = $('input[name="paymentMethod"]:checked').val();
+                
+                if (!amount || amount < 100) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Amount',
+                        text: 'Please enter a valid amount (minimum ₹100)',
+                        confirmButtonColor: '#007bff'
+                    });
+                    return;
+                }
+                
+                // Show loading
+                $(this).html('<span class="spinner-border spinner-border-sm me-2"></span> Processing...');
+                $(this).prop('disabled', true);
+                
+                // Simulate API call
+                setTimeout(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Payment Successful!',
+                        text: '₹' + amount + ' has been added to your wallet',
+                        confirmButtonColor: '#007bff'
+                    }).then(() => {
+                        location.reload(); // Reload to show updated balance
+                    });
+                }, 1500);
+            });
+            
+            // Close modal reset
+            $('#addMoneyModal').on('hidden.bs.modal', function() {
+                $('.amount-option').removeClass('selected');
+                $('#customAmount').val('');
+                $('#proceedToPay').html('Proceed to Pay').prop('disabled', false);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,6 +1,4 @@
 <header class="header">
-    
-
     <div class="header-middle sticky-header">
         <div class="container">
             <div class="header-left">
@@ -9,61 +7,55 @@
                     <i class="icon-bars"></i>
                 </button>
 
-                <a href=" " class="logo">
-                    <img src="images/Lexxive.png" alt="Lexxive Logo" width="130" height="30">
+                <a href="/" class="logo">
+                    <img src="/images/Lexxive.png" alt="Lexxive Logo" width="130" height="30">
                 </a>
 
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
-                        <li class="megamenu-container <%= currentPage === 'home'?'active': '' %>">
-                            <a href="./" >Home</a>
+                        <li class="<%= currentPage === 'home' ? 'active' : '' %>">
+                            <a href="/">Home</a>
                         </li>
-                        <li class="<%= currentPage === 'products'?'active':''%>">
-                            <a href="./productList" class="">Shop</a>
+                        <li class="<%= currentPage === 'products' ? 'active' : '' %>">
+                            <a href="/productList">Shop</a>
                         </li>
-                        <li>
-                           
-                        </li>
-                        <li>
-                           
-                        </li>
-                    </ul><!-- End .menu -->
-                </nav><!-- End .main-nav -->
-            </div><!-- End .header-left -->
+                    </ul>
+                </nav>
+            </div>
 
             <div class="header-right">
                 <div class="header-search">
-                    <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                    <a href="#" class="search-toggle" role="button" title="Search">
+                        <i class="icon-search"></i>
+                    </a>
                     <form action="#" method="get">
                         <div class="header-search-wrapper">
                             <label for="q" class="sr-only">Search</label>
                             <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
-                        </div><!-- End .header-search-wrapper -->
+                        </div>
                     </form>
-                </div><!-- End .header-search -->
+                </div>
                 
-                <a href="/wishlist" class="wishlist-link active-link <%= currentPage==='wishlist'?'active':''%>">
+                <a href="/wishlist" class="wishlist-link <%= currentPage === 'wishlist' ? 'active' : '' %>">
                     <i class="icon-heart-o"></i>
                 </a>
 
                 <div class="dropdown cart-dropdown">
-                    <a href="/cart" class="dropdown-toggle active-link <%= currentPage ==='cart'?'active':''%>" role="button"  aria-haspopup="true" aria-expanded="false" data-display="static">
+                    <a href="/cart" class="dropdown-toggle <%= currentPage === 'cart' ? 'active' : '' %>" role="button">
                         <i class="icon-shopping-cart"></i>
-               <!--  <span class="cart-count" id="cartCount">2</span> -->
+                        <% if(numberOfProduct && numberOfProduct > 0) { %>
+                            <span class="cart-count"><%= numberOfProduct %></span>
+                        <% } %>
                     </a>
-                </div><!-- End .cart-dropdown -->
+                </div>
                 
-                <a href="/userProfile" style="margin-bottom: -4px;" class="wishlist-link active-link <%= currentPage ==='profile'?'active':''%>"> 
+                <a href="/userProfile" class="wishlist-link <%= currentPage === 'profile' ? 'active' : '' %>">
                     <i class="fa-regular fa-user fa-xs"></i>
-                    
-                </a> 
-               
-                  
-               
-            </div><!-- End .header-right -->
-        </div><!-- End .container -->
-    </div><!-- End .header-middle -->
-</header><!-- End .header -->
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
@@ -73,28 +65,41 @@
         $('#q').on('input', function(){
             clearTimeout(timeout);
 
-            // Set a delay of 500 milliseconds (adjust as needed)
             timeout = setTimeout(function() {
                 var searchQuery = $('#q').val();
-                $.ajax({
-                    url:'/productSearch',
-                    method:'POST',
-                    data:{q:searchQuery},
-                    success: function(response){
-                       
-                        window.location.href = '/searchedProduct?searchResults=' + encodeURIComponent(JSON.stringify(response.searchResults));
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
+                if(searchQuery.trim() !== '') {
+                    $.ajax({
+                        url:'/productSearch',
+                        method:'POST',
+                        data:{q:searchQuery},
+                        success: function(response){
+                            window.location.href = '/searchedProduct?searchResults=' + encodeURIComponent(JSON.stringify(response.searchResults));
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                }
             }, 800);
         });
     });
 </script>
 
 <style>
-    .active-link.active {
-    color: tomato  /* Your desired active color */
-}
+    .active {
+        color: tomato !important;
+    }
+    .cart-count {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background-color: tomato;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+    }
+    .dropdown.cart-dropdown {
+        position: relative;
+    }
 </style>

@@ -1,0 +1,86 @@
+<% 
+  // Use a different variable name for the parameter to avoid conflict
+  const paginationBaseUrl = typeof baseUrl !== 'undefined' ? baseUrl : '';
+  const showItemsPerPage = typeof ITEMS_PER_PAGE !== 'undefined' ? ITEMS_PER_PAGE : false;
+%>
+
+<% if(totalPages > 1) { %>
+<div class="pagination-container">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <%# Previous button %>
+            <% if(currentPage > 1) { %>
+                <li class="page-item">
+                    <a class="page-link" href="<%= paginationBaseUrl %>?page=<%= currentPage - 1 %>">&laquo;</a>
+                </li>
+            <% } else { %>
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            <% } %>
+
+            <%# Page numbers %>
+            <% 
+                let startPage = Math.max(1, currentPage - 2);
+                let endPage = Math.min(totalPages, currentPage + 2);
+                
+                if(currentPage <= 3) endPage = Math.min(totalPages, 5);
+                if(currentPage >= totalPages - 2) startPage = Math.max(1, totalPages - 4);
+            %>
+                
+                <%# Show first page with ellipsis if needed %>
+                <% if(startPage > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="<%= paginationBaseUrl %>?page=1">1</a>
+                    </li>
+                    <% if(startPage > 2) { %>
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    <% } %>
+                <% } %>
+                
+                <%# Numbered pages %>
+                <% for (let i = startPage; i <= endPage; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="<%= paginationBaseUrl %>?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+                
+                <%# Show last page with ellipsis if needed %>
+                <% if(endPage < totalPages) { %>
+                    <% if(endPage < totalPages - 1) { %>
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    <% } %>
+                    <li class="page-item">
+                        <a class="page-link" href="<%= paginationBaseUrl %>?page=<%= totalPages %>"><%= totalPages %></a>
+                    </li>
+                <% } %>
+
+            <%# Next button %>
+            <% if(currentPage < totalPages) { %>
+                <li class="page-item">
+                    <a class="page-link" href="<%= paginationBaseUrl %>?page=<%= currentPage + 1 %>">&raquo;</a>
+                </li>
+            <% } else { %>
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+            <% } %>
+        </ul>
+    </nav>
+    
+    <%# Page info %>
+    <div class="pagination-info text-center mt-2">
+        <p class="text-muted mb-0">
+            Page <%= currentPage %> of <%= totalPages %> 
+            <% if(showItemsPerPage && ITEMS_PER_PAGE) { %>
+                <span class="mx-2">|</span> 
+                Showing <%= ITEMS_PER_PAGE %> products per page
+            <% } %>
+        </p>
+    </div>
+</div>
+<% } %>
